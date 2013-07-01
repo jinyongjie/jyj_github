@@ -1,0 +1,5 @@
+TARGETNAME=process_killer
+TARGETTYPE=DRIVER
+
+SOURCES=entry.c uninst_360.c
+

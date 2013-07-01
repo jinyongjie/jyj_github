@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xbase", "xbase\xbase.vcproj", "{8A84D837-7067-4BD5-85A9-67910D9C1C4C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jiege_browser", "jiege_browser\jiege_browser.vcproj", "{AF6287BC-E8A1-403A-927B-A290C03B8463}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A84D837-7067-4BD5-85A9-67910D9C1C4C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8A84D837-7067-4BD5-85A9-67910D9C1C4C}.Debug|Win32.Build.0 = Debug|Win32
+		{8A84D837-7067-4BD5-85A9-67910D9C1C4C}.Release|Win32.ActiveCfg = Release|Win32
+		{8A84D837-7067-4BD5-85A9-67910D9C1C4C}.Release|Win32.Build.0 = Release|Win32
+		{AF6287BC-E8A1-403A-927B-A290C03B8463}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AF6287BC-E8A1-403A-927B-A290C03B8463}.Debug|Win32.Build.0 = Debug|Win32
+		{AF6287BC-E8A1-403A-927B-A290C03B8463}.Release|Win32.ActiveCfg = Release|Win32
+		{AF6287BC-E8A1-403A-927B-A290C03B8463}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
