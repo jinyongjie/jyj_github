@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nanshan.myimage.ctrl.DirItem xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
+   <com.nanshan.myimage.ctrl.MyImageView
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:id = "@+id/image"
+       ></com.nanshan.myimage.ctrl.MyImageView>
+   <LinearLayout 
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:orientation="horizontal"
+       >
+       
+       <TextView android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textColor="@color/white"
+           android:id="@+id/name"
+           android:textSize="16sp"
+           ></TextView>
+              <TextView android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textColor="#808080"
+           android:id ="@+id/count"
+           android:textSize="16sp"
+           ></TextView>
+   </LinearLayout>
+</com.nanshan.myimage.ctrl.DirItem>
