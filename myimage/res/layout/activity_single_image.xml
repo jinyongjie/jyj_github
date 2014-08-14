@@ -44,14 +44,14 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:visibility="visible"
-            android:background="@drawable/selector_button_del2" />
+            android:background="@drawable/selector_button_show" />
 
         <Button
             android:id="@+id/button_rotate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/selector_button_rotate" />
     </RelativeLayout>
 

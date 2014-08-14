@@ -45,6 +45,7 @@ public class ImageLoader {
 	ArrayList<ReleaseBitmapListener> mReleaseListeners = new ArrayList<ReleaseBitmapListener>();
 
 	class ImageTask {
+		public int type;//0 load 1rotae
 		public int id;
 		public String path;
 		public int width;
@@ -87,6 +88,7 @@ public class ImageLoader {
 			}
 
 			ImageTask task = new ImageTask();
+			task.type = 1;
 			task.path = path;
 			task.width = width;
 			task.height = height;
@@ -338,6 +340,7 @@ public class ImageLoader {
 				bitmap = BitmapFactory.decodeFileDescriptor(is.getFD(), null,
 						options);
 
+				
 				if (digree != 0 && bitmap != null) {
 					// Ðý×ªÍ¼Æ¬
 					Matrix m = new Matrix();

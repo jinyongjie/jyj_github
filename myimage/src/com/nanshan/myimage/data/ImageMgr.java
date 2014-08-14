@@ -2,6 +2,9 @@ package com.nanshan.myimage.data;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -47,6 +50,7 @@ public class ImageMgr {
 		add_like,
 		delete_like,
 		set_tag,
+		rotate,
 	}
 	public interface ImageMgrListener {
 		public void OnDataChange(change_type type,int id);
@@ -85,6 +89,11 @@ public class ImageMgr {
 	}
 
 	public void Init(Context context) {
+		
+		mArrayImage.clear();
+		mArrayTime.clear();;
+		mArrayDir.clear();
+		mArrayLike.clear();
 		
 		mDb = SQLiteDatabase.openOrCreateDatabase(context.getFilesDir()
 				.toString() + "/data.db3" , null);
@@ -171,12 +180,14 @@ public class ImageMgr {
 	}
 
 	public int AddImage(String path) {
+		if(path == null)
+			return -1;
 		if(path.contains("file://"))
 		{
 			path = path.substring(8);	
 		}
 		File file = new File(path);
-		if (!file.exists()) {
+		if (file == null || !file.exists()) {
 			return -1;
 		}
 		for(int i = 0;i<mArrayImage.size();i++)
@@ -404,5 +415,52 @@ public class ImageMgr {
 			}
 		}
 		
+	}
+	public void RotateImage(int id)
+	{
+		ImageInfo info = this.GetImage(id);
+		if(info == null)
+		{
+			return;
+		}
+		try {
+			FileInputStream is = new FileInputStream(info.path);
+			Bitmap bitmap;
+			
+				bitmap = BitmapFactory.decodeFileDescriptor(is.getFD(), null,
+						null);
+
+
+			if (bitmap != null) {
+				// Ðý×ªÍ¼Æ¬
+				Matrix m = new Matrix();
+				m.postRotate(90);
+				bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+						bitmap.getWidth(), bitmap.getHeight(), m, true);
+			}
+			
+			FileOutputStream out = new FileOutputStream(info.path);
+	
+			if(info.path.toLowerCase().endsWith(".png") == true)
+			{
+				bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+				   out.flush();
+			}
+			else
+			{
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				   out.flush();
+			}
+			out.close();
+			this.NotifyListeners(change_type.rotate, info.id);
+		} catch (OutOfMemoryError err) {
+			err.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -65,7 +65,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 	int mArray[];
 	// private List<ImageView> mViews;
 	private final int mViewCount = 10;
-	LinkedHashMap<Integer, MySingleView> mViewMap = new LinkedHashMap<Integer, MySingleView>();
+	LinkedHashMap<Integer, MySingleView> mViewMap;
 
 	// private int mCurIndex;
 
@@ -73,6 +73,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		mViewMap = new LinkedHashMap<Integer, MySingleView>();
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -216,13 +217,17 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 
 			ImageInfo imageInfo = ImageMgr.GetInstance().GetImage(mArray[arg1]);
 
-			DisplayMetrics dm = new DisplayMetrics();
-			getWindowManager().getDefaultDisplay().getMetrics(dm);
+			if(imageInfo != null)
+			{
+				DisplayMetrics dm = new DisplayMetrics();
+				getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-			view.SetPath(imageInfo.id, imageInfo.path, dm.widthPixels,
-					dm.heightPixels);
+				view.SetPath(imageInfo.id, imageInfo.path, dm.widthPixels,
+						dm.heightPixels);
 
-			mViewMap.put(arg1, view);
+				mViewMap.put(arg1, view);
+			}
+
 			return view;
 		}
 
@@ -279,6 +284,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		if (v == mButtonReturn) {
 			finish();
 		} else if (v == mButtonRotate) {
+			RotateImage();
 
 		} else if (v == mButtonShow) {
 			ShowDelDialog();
@@ -293,6 +299,17 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 
 		}
 
+	}
+	void RotateImage()
+	{
+		ImageMgr.GetInstance().RotateImage(mArray[mIndex]);
+		MySingleView view = mViewMap.get(mIndex);
+		if (view != null) {
+			 {
+				ClearAllBitmap();
+				view.UpdateImage();
+			}
+		}
 	}
 	protected void ShowDelDialog() {
 		AlertDialog.Builder builder = new Builder(this);
