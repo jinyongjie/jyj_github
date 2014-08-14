@@ -32,11 +32,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 public class ImageMgr {
-	private ArrayList<ImageInfo> mArrayImage;
-	private ArrayList<TimeInfo> mArrayTime;
-	private LinkedHashMap<String, DirInfo> mArrayDir;
+	
+	private ArrayList<ImageInfo> mArrayImage = new ArrayList<ImageInfo>();
+	private ArrayList<TimeInfo> mArrayTime = new ArrayList<TimeInfo>();
+	private LinkedHashMap<String, DirInfo> mArrayDir = new LinkedHashMap<String, DirInfo>();
 	private static ImageMgr instance = null;
-	private ArrayList<ImageInfo> mArrayLike;
+	private ArrayList<ImageInfo> mArrayLike = new ArrayList<ImageInfo>();
 	SQLiteDatabase mDb;
 
 	public enum change_type
@@ -84,11 +85,6 @@ public class ImageMgr {
 	}
 
 	public void Init(Context context) {
-
-		mArrayImage = new ArrayList<ImageInfo>();
-		mArrayTime = new ArrayList<TimeInfo>();
-		mArrayDir = new LinkedHashMap<String, DirInfo>();
-		mArrayLike = new ArrayList<ImageInfo>();
 		
 		mDb = SQLiteDatabase.openOrCreateDatabase(context.getFilesDir()
 				.toString() + "/data.db3" , null);
@@ -174,10 +170,21 @@ public class ImageMgr {
 
 	}
 
-	public void AddImage(String path) {
+	public int AddImage(String path) {
+		if(path.contains("file://"))
+		{
+			path = path.substring(8);	
+		}
 		File file = new File(path);
 		if (!file.exists()) {
-			return;
+			return -1;
+		}
+		for(int i = 0;i<mArrayImage.size();i++)
+		{
+			if(mArrayImage.get(i).path == file.getAbsolutePath())
+			{
+				return mArrayImage.get(i).id;
+			}
 		}
 		ImageInfo info = new ImageInfo();
 		info.id = mArrayImage.size();
@@ -222,6 +229,7 @@ public class ImageMgr {
 		}
 		dirinfo.array.add(0, info);
 		NotifyListeners(change_type.add,info.id);
+		return info.id;
 	}
 
 	public void RemoveImage(int id)

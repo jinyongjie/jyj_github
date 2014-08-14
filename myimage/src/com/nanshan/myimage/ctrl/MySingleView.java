@@ -87,7 +87,7 @@ public class MySingleView extends FrameLayout implements ImageCallback {
 		}
 	}
 
-	void SetPath(int id, String path, int width, int height) {
+	public void SetPath(int id, String path, int width, int height) {
 		if (path != null) {
 			mPath = path;
 			mWidth = width;

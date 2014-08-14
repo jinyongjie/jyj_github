@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.nanshan.myimage.R;
+import com.nanshan.myimage.app.SingleImageActivity;
+import com.nanshan.myimage.ctrl.ListByTime.MyListAdapter.ItemTag;
 import com.nanshan.myimage.data.ImageLoader;
 import com.nanshan.myimage.data.ImageMgr;
 import com.nanshan.myimage.data.ImageLoader.ImageCallback;
@@ -53,7 +55,6 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 		public boolean isTitle;// 0=tile,1=image
 		public int groupid;
 		public int imageid[] = { -1, -1, -1, -1 };
-		public boolean select = false;
 	}
 
 	ArrayList<ItemInfo> mItemInfos = new ArrayList<ItemInfo>();
@@ -187,9 +188,12 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 		 */
 		public class ItemTag {
 			public boolean isTitle;
+			int group;
 			TextView textDate;
 			TextView textWeek;
 			TextView textCount;
+			Button buttonSelAll;
+			
 		}
 
 		@Override
@@ -212,6 +216,8 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 					tag.textDate = (TextView) v.findViewById(R.id.date);
 					tag.textWeek = (TextView) v.findViewById(R.id.week);
 					tag.textCount = (TextView) v.findViewById(R.id.count);
+					tag.buttonSelAll=(Button)v.findViewById(R.id.sel_all);
+					tag.buttonSelAll.setOnClickListener(this);
 				} else {
 					v = mInflator.inflate(R.layout.item_4image, null);
 				}
@@ -220,7 +226,7 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 			} else {
 				tag = (ItemTag) v.getTag();
 			}
-
+			tag.group = info.groupid;
 			if (info.isTitle == true) {// title
 				ImageMgr.TimeInfo group = mGroups.get(info.groupid);
 
@@ -231,6 +237,10 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 
 				tag.textWeek.setText(sdw.format(group.date));
 				tag.textCount.setText(String.format("%d张", group.array.size()));
+				
+				tag.buttonSelAll.setVisibility(mEditMode == true?View.VISIBLE:View.GONE);
+				tag.textCount.setVisibility(mEditMode == true?View.GONE:View.VISIBLE);
+				
 			} else {// 4image
 				ViewGroup viewgroup = (ViewGroup) v;
 				for (int i = 0; i < mColum; i++) {
@@ -255,50 +265,133 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 
 			return v;
 		}
-
+		void SelAll(int group)
+		{
+			boolean sel_already = true;
+			//判断是否已全选
+			for(int i = 0;i<mItemInfos.size();i++)
+			{
+				if(sel_already == true)
+				{
+					ItemInfo info = mItemInfos.get(i);
+					if(info.groupid == group && info.isTitle == false)
+					{
+						for(int j = 0;j<mColum;j++)
+						{
+							if(info.imageid[j] != -1)
+							{
+								if(mSelectItems.contains(info.imageid[j]) == false)
+								{
+									sel_already = false;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+//			if(info.imageid[j] != -1)
+	
+		//	mSelectItems.add(info.imageid[j]);
+			
+			
+			for(int i = 0;i<mListView.getChildCount();i++)
+			{
+				ViewGroup item = (ViewGroup)mListView.getChildAt(i);
+				ItemTag tag = (ItemTag)item.getTag();
+				if(tag != null && tag.group == group && tag.isTitle == false)
+				{
+						for (int j = 0; j < mColum; j++) {
+						MyImageView imageview = (MyImageView) item.getChildAt(j);
+						imageview.SetSelect(!sel_already);	
+						
+					}
+				}
+			
+			}
+			for(int i = 0;i<mItemInfos.size();i++)
+			{
+					ItemInfo info = mItemInfos.get(i);
+					if(info.groupid == group && info.isTitle == false)
+					{
+						for(int j = 0;j<mColum;j++)
+						{
+							if(info.imageid[j] != -1)
+							{
+								if(sel_already == true)
+								{
+									mSelectItems.remove(info.imageid[j]);
+								}
+								else
+								{
+									mSelectItems.add(info.imageid[j]);
+								}
+							}
+						}
+					}
+				
+			}
+				
+			UpdateSelectNum();
+		}
+		void SetImageSelect(MyImageView imageview,boolean sel)
+		{
+			
+		}
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			// TODO Auto-generated method stub
-			MyImageView clickview = (MyImageView) v;
-			if (mEditMode == false) {
-				Intent intent = new Intent();
-				// Bundle data = new Bundle();
+			if(v instanceof MyImageView)
+			{
+				MyImageView clickview = (MyImageView) v;
+				if (mEditMode == false) {
+					Intent intent = new Intent();
+					// Bundle data = new Bundle();
 
-				ArrayList<Integer> array = new ArrayList<Integer>();
-				intent.setClass(v.getContext(), SingleImageActivity.class);
+					ArrayList<Integer> array = new ArrayList<Integer>();
+					intent.setClass(v.getContext(), SingleImageActivity.class);
 
-				for (int i = 0; i < mGroups.size(); i++) {
-					for (int j = 0; j < mGroups.get(i).array.size(); j++) {
-						array.add(mGroups.get(i).array.get(j).id);
+					for (int i = 0; i < mGroups.size(); i++) {
+						for (int j = 0; j < mGroups.get(i).array.size(); j++) {
+							array.add(mGroups.get(i).array.get(j).id);
+						}
 					}
-				}
 
-				int[] idarray = new int[array.size()];
-				int cur = 0;
+					int[] idarray = new int[array.size()];
+					int cur = 0;
 
-				for (int i = 0; i < array.size(); i++) {
-					idarray[i] = array.get(i);
-					if (clickview.GetImageId() == idarray[i])
-						cur = i;
-				}
+					for (int i = 0; i < array.size(); i++) {
+						idarray[i] = array.get(i);
+						if (clickview.GetImageId() == idarray[i])
+							cur = i;
+					}
 
-				intent.putExtra("array", idarray);
-				intent.putExtra("index", cur);
-				intent.putExtra("count", array.size());
+					intent.putExtra("array", idarray);
+					intent.putExtra("index", cur);
+					intent.putExtra("count", array.size());
 
-				v.getContext().startActivity(intent);
-			} else {
-				boolean old = clickview.GetSelect();
-				clickview.SetSelect(!old);
-				if (old == true) {
-					mSelectItems.remove(clickview.GetImageId());
+					v.getContext().startActivity(intent);
 				} else {
-					mSelectItems.add(clickview.GetImageId());
+					boolean old = clickview.GetSelect();
+					clickview.SetSelect(!old);
+					if (old == true) {
+						mSelectItems.remove(clickview.GetImageId());
+					} else {
+						mSelectItems.add(clickview.GetImageId());
+					}
+					UpdateSelectNum();
+					
 				}
-				UpdateSelectNum();
+			}
+			else if(v instanceof Button)
+			{
+				ViewGroup parent =	(ViewGroup)v.getParent();
+				ItemTag tag = (ItemTag)parent.getTag();
+				this.SelAll(tag.group);
 				
 			}
+			
 		}
 
 	}
@@ -320,6 +413,16 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 			} else {
 				CleanSelect();
 				mBarOp.setVisibility(View.GONE);
+			}
+			for(int i = 0;i<mListView.getChildCount();i++)
+			{
+				ItemTag tag = (ItemTag)mListView.getChildAt(i).getTag();
+				if(tag != null && tag.isTitle == true)
+				{
+					tag.buttonSelAll.setVisibility(mEditMode == true?View.VISIBLE:View.GONE);
+					tag.textCount.setVisibility(mEditMode == true?View.GONE:View.VISIBLE);
+				}
+			
 			}
 		}
 	}

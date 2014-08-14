@@ -1,4 +1,4 @@
-package com.nanshan.myimage.ctrl;
+package com.nanshan.myimage.app;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.nanshan.myimage.R;
+import com.nanshan.myimage.ctrl.HackyViewPager;
+import com.nanshan.myimage.ctrl.MySingleView;
+import com.nanshan.myimage.ctrl.PhotoViewAttacher;
+import com.nanshan.myimage.ctrl.SetTagDialog;
 import com.nanshan.myimage.ctrl.PhotoViewAttacher.OnViewTapListener;
 import com.nanshan.myimage.data.ImageLoader;
 import com.nanshan.myimage.data.ImageLoader.ReleaseBitmapListener;
@@ -17,6 +21,7 @@ import com.nanshan.myimage.data.ImageMgr.ImageMgrListener;
 import com.nanshan.myimage.data.ImageMgr.change_type;
 import com.umeng.analytics.MobclickAgent;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.app.Activity;
@@ -95,13 +100,24 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		mViewPager.setAdapter(new MyAdapter(this));
 		
 
-		Intent intent = getIntent();
-		mIndex = intent.getIntExtra("index", 0);
-		mCount = intent.getIntExtra("count", 1);
-		mArray = intent.getIntArrayExtra("array");
-
-		
-		
+		String path = null;
+		Uri tmpUri = (Uri) this.getIntent().getData();
+		if (tmpUri != null) {
+			path = tmpUri.toString();
+			mIndex = 0;
+			mCount = 1;
+			mArray = new int[1];
+			mArray[0] = ImageMgr.GetInstance().AddImage(path);
+			if(mArray[0] == -1)
+			{
+				this.finish();
+			}
+		} else {
+			Intent intent = getIntent();
+			mIndex = intent.getIntExtra("index", 0);
+			mCount = intent.getIntExtra("count", 1);
+			mArray = intent.getIntArrayExtra("array");
+		}	
 
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 

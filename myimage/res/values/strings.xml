@@ -14,5 +14,5 @@
      <string name="add_tag">添加标签</string>
     <string name="title_activity_single_image">SingleImageActivity</string>
     <string name="ok">确定</string>
-
+	<string name="sel_all">全选</string>
 </resources>

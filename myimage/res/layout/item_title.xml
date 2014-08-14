@@ -35,5 +35,20 @@
         android:textColor="@color/gray"
         android:textSize="15sp" >
     </TextView>
+    <Button 
+        android:id="@+id/sel_all"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/sel_all"
+        android:textColor="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/selector_button_sel_all"
+        android:gravity="center"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

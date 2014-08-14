@@ -111,15 +111,16 @@ class MyImageView extends ImageView implements ImageCallback {
 	protected void onDraw(Canvas canvas) {
 		if (this.getDrawable() != null) {
 			super.onDraw(canvas);
-			if (mSelect)
-				canvas.drawBitmap(mBmpSel, mImageWidth - mBmpSel.getWidth(),
-						mImageHeight - mBmpSel.getHeight(), null);
+
 		}
 
 		else {
 
 			canvas.drawRGB(50, 50, 50);
 		}
+		if (mSelect)
+			canvas.drawBitmap(mBmpSel, mImageWidth - mBmpSel.getWidth(),
+					mImageHeight - mBmpSel.getHeight(), null);
 	}
 
 	@Override

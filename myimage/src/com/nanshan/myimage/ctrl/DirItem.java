@@ -10,6 +10,10 @@ import com.nanshan.myimage.data.ImageMgr.DirInfo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -24,7 +28,6 @@ public class DirItem extends LinearLayout {
 	MyImageView mImage;
 	DirInfo mDirInfo;
 	TextView mTextName;
-	TextView mTextCount;
 	int mImageWidth;
 
 	public DirItem(Context context) {
@@ -50,14 +53,15 @@ public class DirItem extends LinearLayout {
 
 	public void SetDirInfo(DirInfo dirinfo) {
 		mTextName = (TextView) findViewById(R.id.name);
-		mTextCount = (TextView) findViewById(R.id.count);
 		mImage = (MyImageView) findViewById(R.id.image);
 		mImage.SetImageSize(mImageWidth, mImageWidth, true);
 
 		mDirInfo = dirinfo;
-		mTextName.setText(mDirInfo.name);
-		mTextCount.setText(String.format("(%d)", mDirInfo.array.size()));
-		if (dirinfo.array.size() > 0)
+		String text = String.format("%s(%d)", mDirInfo.name, mDirInfo.array.size());
+		SpannableString ss = new SpannableString(text);  
+        ss.setSpan(new ForegroundColorSpan(Color.GRAY), mDirInfo.name.length(),text.length() ,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); 
+        mTextName.setText(ss);
+        if (dirinfo.array.size() > 0)
 			mImage.SetImageId(dirinfo.array.get(0).id);
 
 		mImage.setOnClickListener(new OnClickListener() {

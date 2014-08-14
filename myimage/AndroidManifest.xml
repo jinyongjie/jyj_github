@@ -32,7 +32,9 @@
         <activity
             android:name="com.nanshan.myimage.app.MainActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,12 +42,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nanshan.myimage.ctrl.SingleImageActivity"
-            android:label="@string/title_activity_single_image"
+            android:label="@string/app_name"
+            android:name="com.nanshan.myimage.app.SingleImageActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+             <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                 </intent-filter>
         </activity>
         <activity
             android:name="com.nanshan.myimage.app.DirActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
 
