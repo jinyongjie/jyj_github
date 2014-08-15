@@ -143,6 +143,17 @@ class MyImageView extends ImageView implements ImageCallback {
 		return mSelect;
 	}
 
+	@Override
+	public void OnImageRotate(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void UpdateImage()
+	{
+		ImageLoader.GetInstance().GetImage(mImageId, mPath, mImageWidth,
+				mImageHeight, mThumb, this);
+	}
 
 
 }

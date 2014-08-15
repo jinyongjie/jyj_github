@@ -148,4 +148,18 @@ public class MySingleView extends FrameLayout implements ImageCallback {
 		mImageView.setImageDrawable(null);
 	}
 
+	@Override
+	public void OnImageRotate(int id) {
+		// TODO Auto-generated method stub
+		if(id == mImageId)
+		{
+			ImageLoader.GetInstance().GetImage(mImageId, mPath, mWidth, mHeight,
+					false, this);
+		}
+	}
+	public void RotateImage()
+	{
+		mProgressBar.setVisibility(View.VISIBLE);
+		ImageLoader.GetInstance().RotateImage(mImageId, mPath, this);
+	}
 }

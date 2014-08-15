@@ -34,7 +34,10 @@ public class ViewLike extends ListByTime implements ImageMgrListener {
 		if(type == change_type.add || type == change_type.delete ||
 				type == change_type.add_like || type==change_type.delete_like)
 		RereshData();
-
+		else if(type == change_type.rotate)
+		{
+			OnImageRotate(id);
+		}
 
 	}
 	

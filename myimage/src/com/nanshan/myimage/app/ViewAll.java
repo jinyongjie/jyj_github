@@ -27,6 +27,10 @@ public class ViewAll extends ListByTime implements ImageMgrListener {
 		// TODO Auto-generated method stub
 		if(type == change_type.add || type == change_type.delete)
 		this.SetGroups(ImageMgr.GetInstance().GetGroups());
+		else if(type == change_type.rotate)
+		{
+			OnImageRotate(id);
+		}
 
 	}
 

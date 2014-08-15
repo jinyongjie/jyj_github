@@ -302,13 +302,10 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 	}
 	void RotateImage()
 	{
-		ImageMgr.GetInstance().RotateImage(mArray[mIndex]);
+	
 		MySingleView view = mViewMap.get(mIndex);
 		if (view != null) {
-			 {
-				ClearAllBitmap();
-				view.UpdateImage();
-			}
+			view.RotateImage(); 
 		}
 	}
 	protected void ShowDelDialog() {

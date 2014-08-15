@@ -504,4 +504,23 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 		});
 		builder.create().show();
 	}
+	protected void OnImageRotate(int id)
+	{
+		for(int i = 0;i<mListView.getChildCount();i++)
+		{
+			ViewGroup group = (ViewGroup) mListView.getChildAt(i);
+			ItemTag tag = (ItemTag)group.getTag();
+			if(tag.isTitle == false)
+			{
+				for(int j=0;j<mColum;j++)
+				{
+					MyImageView view = (MyImageView) group.getChildAt(j);
+					if(view.GetImageId() == id)
+					{
+						view.UpdateImage();
+					}
+				}
+			}
+		}
+	}
 }

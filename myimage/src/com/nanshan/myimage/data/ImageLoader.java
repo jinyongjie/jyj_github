@@ -19,6 +19,9 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.nanshan.myimage.data.ImageMgr.ImageInfo;
+import com.nanshan.myimage.data.ImageMgr.change_type;
+
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -36,6 +39,7 @@ import android.widget.ImageView;
 public class ImageLoader {
 	public interface ImageCallback {
 		public void OnImageLoad(Bitmap bitmap, String path);
+		public void OnImageRotate(int id);
 	}
 
 	public interface ReleaseBitmapListener {
@@ -45,7 +49,7 @@ public class ImageLoader {
 	ArrayList<ReleaseBitmapListener> mReleaseListeners = new ArrayList<ReleaseBitmapListener>();
 
 	class ImageTask {
-		public int type;//0 load 1rotae
+		public int type;
 		public int id;
 		public String path;
 		public int width;
@@ -53,6 +57,9 @@ public class ImageLoader {
 		public Bitmap bitmap;
 		public boolean thumb;
 		public ImageCallback callback;
+		
+		static final int  type_load = 0;
+		static final int  type_rotate = 1;
 	}
 
 	class CancelTask {
@@ -88,7 +95,7 @@ public class ImageLoader {
 			}
 
 			ImageTask task = new ImageTask();
-			task.type = 1;
+			task.type = ImageTask.type_load;
 			task.path = path;
 			task.width = width;
 			task.height = height;
@@ -156,8 +163,20 @@ public class ImageLoader {
 		public void handleMessage(Message msg) {
 			if (msg.what == 0) {
 				ImageTask task = (ImageTask) msg.obj;
+				
 				if (task.callback != null)
+				{
+					if(task.type == ImageTask.type_load)
 					task.callback.OnImageLoad(task.bitmap, task.path);
+					else if(task.type == ImageTask.type_rotate)
+					{
+						task.callback.OnImageRotate(task.id);
+						ImageMgr.GetInstance().NotifyImageRotate(task.id);
+					}
+						
+					
+				}
+					
 			} else if (msg.what == 1) {
 
 				for (int i = 0; i < mReleaseListeners.size(); i++) {
@@ -203,54 +222,112 @@ public class ImageLoader {
 
 				}
 				if (task != null) {
-					task.bitmap = getBitmap(task.path, task.width, task.height,
-							task.thumb,1);
+					if(task.type == ImageTask.type_load)
+					{
+						task.bitmap = getBitmap(task.path, task.width, task.height,
+								task.thumb,1);
 
-					if (task.bitmap == null) {
+						if (task.bitmap == null) {
 
-						mMemCache.clear();
+							ReleaseMemory();
+							
+							int be = 1;
+							while(be <= 8 && task.bitmap == null)
+							{
+								task.bitmap = getBitmap(task.path, task.width,
+										task.height, task.thumb,be);
+								be*=2;
+							}
+					
+						}
+						if (task.bitmap != null) {
+							String key = GetKey(task.id, task.width, task.height);
+							mMemCache.put(key, task.bitmap);
+						}
 
 						Message message = new Message();
-						message.what = 1;
-						Object lock = new Object();
-						message.obj = lock;
-
-						synchronized (lock) {
-							mHander.sendMessage(message);// 必须放这里,否则hander可能先执行
-							try {
-								lock.wait();
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-
-						System.gc();
-						int be = 1;
-						while(be <= 8 && task.bitmap == null)
+						message.what = 0;
+						message.obj = task;
+						mHander.sendMessage(message);
+					}
+					else if(task.type == ImageTask.type_rotate)
+					{
+						if(RotateImage(task.path) == false)
 						{
-							task.bitmap = getBitmap(task.path, task.width,
-									task.height, task.thumb,be);
-							be*=2;
+							ReleaseMemory();
+							RotateImage(task.path);
 						}
-						
-
+						Message message = new Message();
+						message.what = 0;
+						message.obj = task;
+						mHander.sendMessage(message);
 					}
-					if (task.bitmap != null) {
-						String key = GetKey(task.id, task.width, task.height);
-						mMemCache.put(key, task.bitmap);
-					}
-
-					Message message = new Message();
-					message.what = 0;
-					message.obj = task;
-					mHander.sendMessage(message);
 				}
-
 			}
 		}
 	}
+	void ReleaseMemory()
+	{
+		mMemCache.clear();
 
+		Message message = new Message();
+		message.what = 1;
+		Object lock = new Object();
+		message.obj = lock;
+
+		synchronized (lock) {
+			mHander.sendMessage(message);// 必须放这里,否则hander可能先执行
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		System.gc();
+	}
+	boolean RotateImage(String path)
+	{
+		try {
+			FileInputStream is = new FileInputStream(path);
+			Bitmap bitmap = BitmapFactory.decodeFileDescriptor(is.getFD(), null,
+						null);
+
+
+			if (bitmap != null) {
+				// 旋转图片
+				Matrix m = new Matrix();
+				m.postRotate(90);
+				bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+						bitmap.getWidth(), bitmap.getHeight(), m, true);
+			}
+			
+			FileOutputStream out = new FileOutputStream(path);
+	
+			if(path.toLowerCase().endsWith(".png") == true)
+			{
+				bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+				   out.flush();
+			}
+			else
+			{
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				   out.flush();
+			}
+			out.close();
+		} catch (OutOfMemoryError err) {
+			err.printStackTrace();
+			return false;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
 	public static int getDigree(String imgpath) {
 
 		if (!imgpath.toLowerCase().endsWith(".jpg"))
@@ -451,5 +528,30 @@ public class ImageLoader {
 				return;
 			}
 		}
+	}
+	public void RotateImage(int id, String path,
+			ImageCallback callback) {
+
+		synchronized (mLock) {
+			ImageTask task = new ImageTask();
+			task.type = ImageTask.type_rotate;
+			task.path = path;
+			task.width = 0;
+			task.height = 1;
+			task.callback = callback;
+			task.id = id;
+			task.thumb = false;
+
+			mTaskList.add(task);
+
+			// if (mTaskArray.size() == 1)
+			{
+				// Log.i(TAG,String.format("task add id=%d size=%d",
+				// id,mTaskList.size()));
+				mLock.notifyAll();
+			}
+		}
+
+		
 	}
 }
