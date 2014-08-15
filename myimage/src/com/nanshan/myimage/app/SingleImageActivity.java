@@ -1,5 +1,6 @@
 package com.nanshan.myimage.app;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -297,18 +298,47 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 			RotateImage();
 
 		} else if (v == mButtonShow) {
-			ShowDelDialog();
+			BeginShow();
 		} else if (v == mButtonDel) {
-
+			ShowDelDialog();
 		} else if (v == mButtonShare) {
+			ImageInfo info = ImageMgr.GetInstance().GetImage(mArray.get(mIndex));
+			if(info != null && info.removed == false)
+			{
+				Intent intent = new Intent(Intent.ACTION_SEND);
+				intent.setType("image/*");
+				intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+				//intent.putExtra(Intent.EXTRA_TEXT, "终于可以了!!!");
+				File file = new File(info.path); 
+				intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(Intent.createChooser(intent, getTitle()));	
+			}
 
 		} else if (v == mButtonLike) {
 			AddOrDelLike();
 		} else if (v == mButtonTag) {
-		//	AddTagDialog();
+			// AddTagDialog();
 
 		}
 
+	}
+	void BeginShow()
+	{
+		int[] idarray = new int[mArray.size()-mIndex];
+		int cur = 0;
+
+		for (int i = mIndex; i < mArray.size(); i++) {
+			idarray[i-mIndex] = mArray.get(i);
+		}
+
+		Intent intent = new Intent();
+		intent.setClass(this, ShowActivity.class);
+		intent.putExtra("array", idarray);
+		
+		
+
+		startActivity(intent);
 	}
 	void RotateImage()
 	{
@@ -456,11 +486,11 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 				if (mButtonLike.getVisibility() == View.VISIBLE) {
 					mButtonLike.setVisibility(View.INVISIBLE);
 					mBarTop.setVisibility(View.INVISIBLE);
-				//	mBarBottom.setVisibility(View.INVISIBLE);
+					mBarBottom.setVisibility(View.INVISIBLE);
 				} else {
 					mButtonLike.setVisibility(View.VISIBLE);
 					mBarTop.setVisibility(View.VISIBLE);
-				//	mBarBottom.setVisibility(View.VISIBLE);
+					mBarBottom.setVisibility(View.VISIBLE);
 				}
 			
 		}

@@ -11,8 +11,12 @@
     <string name="delete">删除</string>
     <string name="share">分享</string>
     <string name="tag">标签</string>
-     <string name="add_tag">添加标签</string>
+    <string name="add_tag">添加标签</string>
     <string name="title_activity_single_image">SingleImageActivity</string>
     <string name="ok">确定</string>
-	<string name="sel_all">全选</string>
+    <string name="sel_all">全选</string>
+    <string name="title_activity_show">ShowActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
