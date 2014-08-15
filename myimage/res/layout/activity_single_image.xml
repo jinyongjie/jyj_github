@@ -44,7 +44,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:visibility="visible"
-            android:background="@drawable/selector_button_show" />
+            android:background="@drawable/selector_button_del2" />
 
         <Button
             android:id="@+id/button_rotate"

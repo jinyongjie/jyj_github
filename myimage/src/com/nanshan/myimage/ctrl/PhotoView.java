@@ -179,4 +179,5 @@ public class PhotoView extends ImageView implements IPhotoView {
 		mAttacher.cleanup();
 		super.onDetachedFromWindow();
 	}
+	
 }

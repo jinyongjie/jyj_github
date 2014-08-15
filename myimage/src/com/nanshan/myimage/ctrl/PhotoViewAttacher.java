@@ -379,16 +379,15 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 	@Override
 	public final boolean onTouch(View v, MotionEvent ev) {
 		boolean handled = false;
+
 		ImageView view = this.getImageView();
-		if(view == null || view.getDrawable() == null)
-		{
-			return false;
-		}
+	
 		if (mZoomEnabled) {
 			switch (ev.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 					// First, disable the Parent from intercepting the touch
 					// event
+					if(view != null && view.getDrawable() != null)
 					v.getParent().requestDisallowInterceptTouchEvent(true);
 
 					// If we're flinging, and the user presses down, cancel
@@ -422,7 +421,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 			
 			}
 		}
-
+		
 		
 		return handled;
 	}

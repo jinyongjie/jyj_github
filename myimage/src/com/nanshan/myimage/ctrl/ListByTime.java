@@ -369,7 +369,7 @@ public class ListByTime extends LinearLayout implements OnClickListener{
 
 					intent.putExtra("array", idarray);
 					intent.putExtra("index", cur);
-					intent.putExtra("count", array.size());
+					
 
 					v.getContext().startActivity(intent);
 				} else {

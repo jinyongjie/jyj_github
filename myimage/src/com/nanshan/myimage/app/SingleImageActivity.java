@@ -61,8 +61,8 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 	View mBarTop;
 	View mBarBottom;
 	private HackyViewPager mViewPager;
-	private int mCount;
-	int mArray[];
+
+	ArrayList<Integer> mArray;
 	// private List<ImageView> mViews;
 	private final int mViewCount = 10;
 	LinkedHashMap<Integer, MySingleView> mViewMap;
@@ -98,26 +98,34 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		mButtonTag.setOnClickListener(this);
 		mButtonLike.setOnClickListener(this);
 
-		mViewPager.setAdapter(new MyAdapter(this));
+		
 		
 
+		mArray = new ArrayList<Integer>();
+		
 		String path = null;
 		Uri tmpUri = (Uri) this.getIntent().getData();
 		if (tmpUri != null) {
 			path = tmpUri.toString();
 			mIndex = 0;
-			mCount = 1;
-			mArray = new int[1];
-			mArray[0] = ImageMgr.GetInstance().AddImage(path);
-			if(mArray[0] == -1)
+			
+			
+			int id = ImageMgr.GetInstance().AddImage(path);
+		
+			if(id == -1)
 			{
 				this.finish();
 			}
+			else mArray.add(id);
 		} else {
 			Intent intent = getIntent();
 			mIndex = intent.getIntExtra("index", 0);
-			mCount = intent.getIntExtra("count", 1);
-			mArray = intent.getIntArrayExtra("array");
+			
+			int[] array = intent.getIntArrayExtra("array");
+			for(int i = 0;i<array.length;i++)
+			{
+				mArray.add(array[i]);
+			}
 		}	
 
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
@@ -143,6 +151,8 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 			}
 
 		});
+		
+		mViewPager.setAdapter(new MyAdapter(this));
 		mViewPager.setCurrentItem(mIndex);
 	
 		UpdateLikeState();
@@ -160,7 +170,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 	}
 	void UpdateLikeState()
 	{
-		int id = mArray[mIndex];
+		int id = mArray.get(mIndex);
 		ImageInfo info = ImageMgr.GetInstance().GetImage(id);
 		if(info != null)
 		{
@@ -201,7 +211,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 
 		@Override
 		public int getCount() {
-			return mCount;
+			return mArray.size();
 		}
 
 		@Override
@@ -215,7 +225,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 			// mCurId = arg1;
 			view.Init(arg1,mViewTapListener);
 
-			ImageInfo imageInfo = ImageMgr.GetInstance().GetImage(mArray[arg1]);
+			ImageInfo imageInfo = ImageMgr.GetInstance().GetImage(mArray.get(arg1));
 
 			if(imageInfo != null)
 			{
@@ -316,7 +326,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				int id = mArray[mIndex];
+				int id = mArray.get(mIndex);
 				
 				ImageMgr.GetInstance().RemoveImage(id);
 			}
@@ -333,7 +343,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 
 	void AddOrDelLike()
 	{
-		int id = mArray[mIndex];
+		int id = mArray.get(mIndex);
 		ImageInfo info = ImageMgr.GetInstance().GetImage(id);
 		if(info != null)
 		{
@@ -361,7 +371,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		// TODO Auto-generated method stub
 		if(type == change_type.add_like)
 		{
-			int curid = mArray[mIndex];
+			int curid = mArray.get(mIndex);
 			if(curid == id)
 			{
 				mButtonLike.setBackgroundResource(R.drawable.imagebrower_like_btn_press);
@@ -369,7 +379,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		}
 		else if(type == change_type.delete_like)
 		{
-			int curid = mArray[mIndex];
+			int curid = mArray.get(mIndex);
 			if(curid == id)
 			{
 				mButtonLike.setBackgroundResource(R.drawable.imagebrower_like_btn_normal);
@@ -377,11 +387,32 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		}
 		else if(type == change_type.delete)
 		{
-			int curid = mArray[mIndex];
-			if(curid == id)
+			int curid = mArray.get(mIndex);
+			ImageInfo info = ImageMgr.GetInstance().GetImage(curid);
+			if(info == null || info.removed == true)
 			{
-				
+				mArray.remove(mIndex);
+				if(mArray.size() == 0)
+				{
+					this.finish();
+				}
+				else
+				{
+					if(mIndex >= mArray.size())
+					{
+						mIndex = mArray.size() -1;
+						
+					}
+					mViewMap.clear();
+					int oldindex = mIndex;
+					mViewPager.setAdapter(new MyAdapter(this));
+					mViewPager.setCurrentItem(oldindex);
+									
+					UpdateLikeState();
+					
+				}
 			}
+
 		}
 	}
 
