@@ -296,6 +296,7 @@ EditModeListener {
 					mViewTag = (ViewTag) new ViewTag(this);
 					mViewContainer.addView(mViewTag, LayoutParams.MATCH_PARENT,
 							LayoutParams.MATCH_PARENT);
+					mViewTag.Init();
 				}
 
 				view = mViewTag;

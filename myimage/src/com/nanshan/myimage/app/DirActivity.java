@@ -31,14 +31,13 @@ import android.widget.TextView;
 
 public class DirActivity extends Activity implements OnClickListener,
 		ImageMgrListener,EditModeListener {
-	DirInfo mDirInfo;
 	ListByTime mList;
 	Button mButtonReturn;
 	Button mButtonOp;
 	TextView mTitle;
 	String mDirName;
 	View mBarBegin;
-
+	int[] mArray;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,30 +55,31 @@ public class DirActivity extends Activity implements OnClickListener,
 
 		Intent intent = getIntent();
 		mDirName = intent.getStringExtra("dir");
-		mDirInfo = ImageMgr.GetInstance().GetDirArray().get(mDirName);
+		mArray = intent.getIntArrayExtra("array");
 
 		ImageMgr.GetInstance().AddListener(this);
-		Init();
+		Init(mArray);
 	}
 
-	private void Init() {
+	private void Init(int[] array) {
 		mList.Init();
 		mList.SetEditModeListener(this);
-		mTitle.setText(String.format("%s(%d)", mDirName, mDirInfo.array.size()));
+		mTitle.setText(String.format("%s(%d)", mDirName, array.length));
 
 		ArrayList<TimeInfo> GroupArray = new ArrayList<TimeInfo>();
 
 		TimeInfo group = null;
 
-		for (int i = 0; i < mDirInfo.array.size(); i++) {
+		for (int i = 0; i < array.length; i++) {
 
+			ImageInfo info = ImageMgr.GetInstance().GetImage(array[i]);
 			if (group == null) {
 				group = ImageMgr.GetInstance().new TimeInfo();
-				group.date = mDirInfo.array.get(i).date;
+				group.date = info.date;
 				GroupArray.add(group);
 			} else {
 				Date last = group.date;
-				Date cur = mDirInfo.array.get(i).date;
+				Date cur = info.date;
 				if (last.getYear() != cur.getYear()
 						|| last.getMonth() != cur.getMonth()
 						|| last.getDay() != cur.getDay()) {
@@ -89,7 +89,7 @@ public class DirActivity extends Activity implements OnClickListener,
 				}
 
 			}
-			group.array.add(mDirInfo.array.get(i));
+			group.array.add(info);
 
 		}
 		mList.SetGroups(GroupArray);
@@ -120,7 +120,7 @@ public class DirActivity extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		if(type == change_type.add || type == change_type.delete)
 			
-		Init();
+		Init(mArray);
 	}
 
 	@Override

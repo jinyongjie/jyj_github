@@ -75,6 +75,12 @@ public class DirItem extends LinearLayout {
 
 				intent.setClass(v.getContext(), DirActivity.class);
 				intent.putExtra("dir", mDirInfo.name);
+				int[] array = new int[mDirInfo.array.size()];
+				for(int i =0;i<array.length;i++)
+				{
+					array[i]=mDirInfo.array.get(i).id;
+				}
+				intent.putExtra("array", array);
 				// intent.putExtra("count",
 				// ImageMgr.GetInstance().GetImageCount());
 				v.getContext().startActivity(intent);
