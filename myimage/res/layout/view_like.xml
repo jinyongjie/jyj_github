@@ -3,7 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <include layout="@layout/view_timelist" >
-    </include>
 
+    <com.nanshan.myimage.ctrl.ListByTime
+        android:id="@+id/list_bytime"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+
+        <include layout="@layout/view_timelist" >
+        </include>
+    </com.nanshan.myimage.ctrl.ListByTime>
+    <TextView 
+        android:id="@+id/tip_no_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_like_tip"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        />
 </com.nanshan.myimage.app.ViewLike>

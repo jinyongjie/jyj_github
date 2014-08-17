@@ -59,7 +59,7 @@
         android:textColor="@color/white"
         android:gravity="left|center"
         android:textSize="@dimen/menu_text_size" 
-        android:visibility="gone">
+        android:visibility="visible">
     </Button>
     
 

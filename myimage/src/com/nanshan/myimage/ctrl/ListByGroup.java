@@ -1,9 +1,11 @@
 package com.nanshan.myimage.ctrl;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import com.nanshan.myimage.R;
 import com.nanshan.myimage.data.ImageMgr;
+import com.nanshan.myimage.data.ImageMgr.DirInfo;
 import com.nanshan.myimage.data.ImageMgr.ImageMgrListener;
 import com.nanshan.myimage.data.ImageMgr.change_type;
 
@@ -19,7 +21,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 
-public class ListByGroup extends GridView implements ImageMgrListener {
+public class ListByGroup extends GridView  {
+	ArrayList<DirInfo> mData;
 	public ListByGroup(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -36,12 +39,17 @@ public class ListByGroup extends GridView implements ImageMgrListener {
 		this.setVerticalSpacing(5 * dm.widthPixels / 160);
 		this.setHorizontalSpacing(0 * dm.widthPixels / 160);
 
-		GridAdapter adapter = new GridAdapter(context);
-		this.setAdapter(adapter);
 
-		ImageMgr.GetInstance().AddListener(this);
+
+		
 	}
 
+	public void SetData(ArrayList<DirInfo> data)
+	{
+		mData = data;
+		GridAdapter adapter = new GridAdapter(this.getContext());
+		this.setAdapter(adapter);
+	}
 	class GridAdapter extends BaseAdapter {
 		LayoutInflater mInflater;
 
@@ -53,12 +61,12 @@ public class ListByGroup extends GridView implements ImageMgrListener {
 
 		@Override
 		public int getCount() {
-			return ImageMgr.GetInstance().GetDirArray().size();
+			return mData.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return ImageMgr.GetInstance().GetDirInfo(position);
+			return mData.get(position);
 		}
 
 		@Override
@@ -78,22 +86,14 @@ public class ListByGroup extends GridView implements ImageMgrListener {
 
 			}
 			DirItem dirItem = (DirItem) view;
-			dirItem.SetDirInfo(ImageMgr.GetInstance().GetDirInfo(position));
+			dirItem.SetDirInfo(mData.get(position));
 
 			return view;
 		}
 
 	}
 
-	@Override
-	public void OnDataChange(ImageMgr.change_type type,int id) {
-		// TODO Auto-generated method stub
-		if(type == change_type.add || type == change_type.delete)
-		{
-			GridAdapter adapter = new GridAdapter(this.getContext());
-			this.setAdapter(adapter);	
-		}
 
-	}
 
+	
 }

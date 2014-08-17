@@ -49,7 +49,7 @@ public class ImageMgr {
 		delete,
 		add_like,
 		delete_like,
-		set_tag,
+		tag,
 		rotate,
 	}
 	public interface ImageMgrListener {
@@ -419,5 +419,14 @@ public class ImageMgr {
 	public void NotifyImageRotate(int id)
 	{
 		this.NotifyListeners(change_type.rotate, id);
+	}
+	public void SetTag(int id,String tag)
+	{
+		ImageInfo info = this.GetImage(id);
+		if(info != null)
+		{
+			info.tag = tag;
+			this.NotifyListeners(change_type.tag, id);
+		}
 	}
 }

@@ -3,7 +3,9 @@ package com.nanshan.myimage.app;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.nanshan.myimage.R;
 import com.nanshan.myimage.ctrl.ListByTime;
+import com.nanshan.myimage.ctrl.ListByTime.EditModeListener;
 import com.nanshan.myimage.data.ImageMgr;
 import com.nanshan.myimage.data.ImageMgr.ImageInfo;
 import com.nanshan.myimage.data.ImageMgr.ImageMgrListener;
@@ -11,10 +13,15 @@ import com.nanshan.myimage.data.ImageMgr.TimeInfo;
 import com.nanshan.myimage.data.ImageMgr.change_type;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 
-public class ViewLike extends ListByTime implements ImageMgrListener {
+public class ViewLike extends FrameLayout implements ImageMgrListener {
 
+	ListByTime mList;
+	TextView mTip;
 	public ViewLike(Context context,android.util.AttributeSet attrs) {
 		super(context,attrs);
 		
@@ -23,7 +30,9 @@ public class ViewLike extends ListByTime implements ImageMgrListener {
 	}
 	public void Init()
 	{
-		super.Init();
+		mList = (ListByTime) findViewById(R.id.list_bytime);
+		mTip = (TextView) findViewById(R.id.tip_no_like);
+		mList.Init();
 		ImageMgr.GetInstance().AddListener(this);
 	
 		RereshData();
@@ -36,7 +45,7 @@ public class ViewLike extends ListByTime implements ImageMgrListener {
 		RereshData();
 		else if(type == change_type.rotate)
 		{
-			OnImageRotate(id);
+			mList.OnImageRotate(id);
 		}
 
 	}
@@ -67,7 +76,20 @@ public class ViewLike extends ListByTime implements ImageMgrListener {
 			group.array.add(array.get(i));
 
 		}
-		this.SetGroups(arrayGroup);
+		mList.SetGroups(arrayGroup);
+		if(arrayGroup.size() == 0)
+		{
+			mTip.setVisibility(View.VISIBLE);
+			mList.setVisibility(View.GONE);
+		}
+		else
+		{
+			mTip.setVisibility(View.GONE);
+			mList.setVisibility(View.VISIBLE);
+		}
 	}
-
+	public void SetEditModeListener(EditModeListener listener)
+	{
+		mList.SetEditModeListener(listener);
+	}
 }

@@ -47,6 +47,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class SingleImageActivity extends Activity implements OnClickListener ,ImageMgrListener,ReleaseBitmapListener{
 
@@ -59,6 +60,13 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 	Button mButtonShare;
 	Button mButtonTag;
 	Button mButtonLike;
+	Button mButtonMore;
+	
+	TextView mTextDel;
+	TextView mTextShare;
+	TextView mTextTag;
+	TextView mTextMore;
+	
 	View mBarTop;
 	View mBarBottom;
 	private HackyViewPager mViewPager;
@@ -84,12 +92,21 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		mButtonReturn = (Button) findViewById(R.id.button_return);
 		mButtonShow = (Button) findViewById(R.id.button_show);
 		mButtonRotate = (Button) findViewById(R.id.button_rotate);
+		
 		mButtonDel = (Button) findViewById(R.id.button_del);
 		mButtonShare = (Button) findViewById(R.id.button_share);
 		mButtonTag = (Button) findViewById(R.id.button_tag);
 		mButtonLike = (Button) findViewById(R.id.button_like);
+		mButtonMore = (Button)findViewById(R.id.button_more);
+		
+		mTextDel = (TextView) findViewById(R.id.text_del);
+		mTextShare = (TextView) findViewById(R.id.text_share);
+		mTextTag = (TextView) findViewById(R.id.text_tag);
+		mTextMore = (TextView)findViewById(R.id.text_more);
+		
 		mBarTop = findViewById(R.id.bar_top);
 		mBarBottom = findViewById(R.id.bar_bottom);
+		
 		// mViewPager.setOnClickListener(this);
 		mButtonReturn.setOnClickListener(this);
 		mButtonShow.setOnClickListener(this);
@@ -98,8 +115,12 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 		mButtonShare.setOnClickListener(this);
 		mButtonTag.setOnClickListener(this);
 		mButtonLike.setOnClickListener(this);
+		mButtonMore.setOnClickListener(this);
 
-		
+		mTextDel.setOnClickListener(this);
+		mTextShare.setOnClickListener(this);
+		mTextTag.setOnClickListener(this);
+		mTextMore.setOnClickListener(this);
 		
 
 		mArray = new ArrayList<Integer>();
@@ -299,9 +320,9 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 
 		} else if (v == mButtonShow) {
 			BeginShow();
-		} else if (v == mButtonDel) {
+		} else if (v == mButtonDel || v== mTextDel) {
 			ShowDelDialog();
-		} else if (v == mButtonShare) {
+		} else if (v == mButtonShare || v==mTextShare) {
 			ImageInfo info = ImageMgr.GetInstance().GetImage(mArray.get(mIndex));
 			if(info != null && info.removed == false)
 			{
@@ -317,9 +338,13 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 
 		} else if (v == mButtonLike) {
 			AddOrDelLike();
-		} else if (v == mButtonTag) {
-			// AddTagDialog();
+		} else if (v == mButtonTag || v==mTextTag) {
+			AddTagDialog();
 
+		}
+		else if(v==mButtonMore || v==mTextMore)
+		{
+			
 		}
 
 	}
@@ -389,7 +414,7 @@ public class SingleImageActivity extends Activity implements OnClickListener ,Im
 	}
 	void AddTagDialog()
 	{
-		final SetTagDialog dialog = new SetTagDialog(this,R.style.SetTagDlg);
+		final SetTagDialog dialog = new SetTagDialog(this,R.style.SetTagDlg,mArray.get(mIndex));
 		dialog.setContentView(R.layout.view_set_tag);
 		dialog.setCancelable(false);
 		

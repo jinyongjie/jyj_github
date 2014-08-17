@@ -268,6 +268,7 @@ EditModeListener {
 					mViewDir = new ViewDir(this);
 					mViewContainer.addView(mViewDir, LayoutParams.MATCH_PARENT,
 							LayoutParams.MATCH_PARENT);
+					mViewDir.Init();
 				}
 				view = mViewDir;
 				buttonIndex = 1;
@@ -292,7 +293,7 @@ EditModeListener {
 				mButtonOp.setVisibility(View.VISIBLE);
 			} else if (type == ViewType.tag) {
 				if (mViewTag == null) {
-					mViewTag = (ViewTag) new View(this);
+					mViewTag = (ViewTag) new ViewTag(this);
 					mViewContainer.addView(mViewTag, LayoutParams.MATCH_PARENT,
 							LayoutParams.MATCH_PARENT);
 				}
