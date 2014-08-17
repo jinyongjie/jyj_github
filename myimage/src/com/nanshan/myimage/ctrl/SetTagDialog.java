@@ -120,7 +120,7 @@ public class SetTagDialog extends Dialog {
 			}
 			view.setText(mTagList[position]);
 			String tag = (String) view.getText();
-			if (tag == mCurTag) {
+			if (tag.compareTo(mCurTag) == 0) {
 				view.setBackgroundResource(R.drawable.shape_tagbutton);
 			} else {
 				view.setBackgroundColor(Color.GRAY);
@@ -154,13 +154,14 @@ public class SetTagDialog extends Dialog {
 				mCurTag = tag;
 				text.setBackgroundResource(R.drawable.shape_tagbutton);
 			} else {
-				if (mCurTag == tag) {
+				if (mCurTag.compareTo(tag)==0) {
 					mCurTag = "";
 					text.setBackgroundColor(Color.GRAY);
 				} else {
 					for (int i = 0; i < mGrid.getChildCount(); i++) {
 						TextView t = (TextView) mGrid.getChildAt(i);
-						if (t.getText() == mCurTag) {
+						
+						if ( mCurTag.compareTo((String) t.getText()) == 0) {
 							t.setBackgroundColor(Color.GRAY);
 						}
 					}

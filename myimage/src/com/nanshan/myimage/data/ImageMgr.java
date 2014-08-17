@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -101,13 +102,25 @@ public class ImageMgr {
 		mDb.execSQL("create table if not exists table_like(_id integer primary key autoincrement,"
 				+ " path nvarchar(255))");
 
-		Cursor cursorDb = mDb.rawQuery("select * from table_like", null);
+		Cursor cursorLike = mDb.rawQuery("select * from table_like", null);
 	
 		HashSet<String> setLike = new HashSet<String>();
-		while(cursorDb.moveToNext())
+		while(cursorLike.moveToNext())
 		{
-			String path = cursorDb.getString(1);
+			String path = cursorLike.getString(1);
 			setLike.add(path);
+		}
+		mDb.execSQL("create table if not exists table_tag(_id integer primary key autoincrement,"
+				+ " path nvarchar(255)," + " tag nvarchar(64))");
+
+		Cursor cursorTag = mDb.rawQuery("select * from table_tag", null);
+	
+		HashMap<String,String> setTag = new HashMap<String,String>();
+		while(cursorTag.moveToNext())
+		{
+			String path = cursorTag.getString(1);
+			String tag = cursorTag.getString(2);
+			setTag.put(path, tag);
 		}
 		// File root = new File("/sdcard");
 		// Search(root,1);
@@ -173,6 +186,11 @@ public class ImageMgr {
 			{
 				mArrayLike.add(image);
 				image.like = true;
+			}
+			String tag = setTag.get(image.path);
+			if(tag != null)
+			{
+				image.tag = tag;
 			}
 			
 		}
@@ -425,7 +443,33 @@ public class ImageMgr {
 		ImageInfo info = this.GetImage(id);
 		if(info != null)
 		{
+			String sql=String.format("select * from table_tag where path='%s'", info.path);
+			Cursor cursorTag = mDb.rawQuery(sql, null);
+			boolean exist = cursorTag!=null && cursorTag.getCount() > 0;
 			info.tag = tag;
+			
+			
+			if(tag != null && tag.length() > 0)
+			{
+				if(exist)
+				{
+					 mDb.execSQL("update table_tag set tag=? where path=?",
+							 new String[]{info.tag,info.path}); 
+				}
+				else
+				{
+					mDb.execSQL("insert into table_tag values(null , ?,? )"
+							, new String[]{info.path,info.tag});
+				}
+			}
+			else
+			{
+				if(exist)
+				{
+					sql =  String.format("delete from table_tag where path='%s'",info.path);
+					mDb.execSQL(sql);
+				}
+			}
 			this.NotifyListeners(change_type.tag, id);
 		}
 	}
