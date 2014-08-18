@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import com.nanshan.myimage.R;
 import com.nanshan.myimage.ctrl.ListByGroup;
 import com.nanshan.myimage.data.ImageMgr;
 import com.nanshan.myimage.data.ImageMgr.DirInfo;
@@ -13,16 +14,40 @@ import com.nanshan.myimage.data.ImageMgr.ImageMgrListener;
 import com.nanshan.myimage.data.ImageMgr.change_type;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class ViewTag extends ListByGroup implements ImageMgrListener {
-
-	public ViewTag(Context context) {
-		super(context);
+public class ViewTag extends FrameLayout implements ImageMgrListener {
+	ListByGroup mList;
+	TextView mTip;
+	public ViewTag(Context context,android.util.AttributeSet attrs) {
+		super(context,attrs);
 		// TODO Auto-generated constructor stub
 		ImageMgr.GetInstance().AddListener(this);
 	}
 	public void Init()
+	{
+		mList = (ListByGroup)findViewById(R.id.list);
+		mTip=(TextView)findViewById(R.id.tip_no_tag);
+		RefreshData();
+		
+	}
+	@Override
+	public void OnDataChange(change_type type, int id) {
+		// TODO Auto-generated method stub
+		if(type == change_type.add ||
+				type==change_type.delete||
+				type==change_type.tag)
+			
+		{
+			RefreshData();
+			
+		}
+	
+	}
+	void RefreshData()
 	{
 		ArrayList<DirInfo> array = new ArrayList<DirInfo>();
 		int count = ImageMgr.GetInstance().GetImageCount();
@@ -55,20 +80,16 @@ public class ViewTag extends ListByGroup implements ImageMgrListener {
 			Entry<String,DirInfo> entry = it.next();
 			array.add(entry.getValue());
 		}
-		this.SetData(array);
-	}
-	@Override
-	public void OnDataChange(change_type type, int id) {
-		// TODO Auto-generated method stub
-		if(type == change_type.add ||
-				type==change_type.delete||
-				type==change_type.tag)
-			
+		mList.SetData(array);
+		if(array.size() == 0)
 		{
-			Init();
-			
+			mTip.setVisibility(View.VISIBLE);
+			mList.setVisibility(View.GONE);
 		}
-	
+		else
+		{
+			mTip.setVisibility(View.GONE);
+			mList.setVisibility(View.VISIBLE);
+		}
 	}
-
 }

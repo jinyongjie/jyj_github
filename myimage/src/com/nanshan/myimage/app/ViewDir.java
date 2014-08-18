@@ -14,8 +14,8 @@ import android.widget.ListView;
 
 public class ViewDir extends ListByGroup implements ImageMgrListener{
 
-	public ViewDir(Context context) {
-		super(context);
+	public ViewDir(Context context,android.util.AttributeSet attrs) {
+		super(context,attrs);
 		// TODO Auto-generated constructor stub
 		ImageMgr.GetInstance().AddListener(this);
 

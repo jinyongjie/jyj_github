@@ -20,5 +20,6 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="no_like_tip">没有标记为喜欢的图片</string>
+    <string name="no_tag_tip">没有标记tag的图片</string>
 
 </resources>

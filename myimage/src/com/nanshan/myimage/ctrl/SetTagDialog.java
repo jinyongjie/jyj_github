@@ -120,7 +120,7 @@ public class SetTagDialog extends Dialog {
 			}
 			view.setText(mTagList[position]);
 			String tag = (String) view.getText();
-			if (tag.compareTo(mCurTag) == 0) {
+			if (mCurTag!= null && tag.compareTo(mCurTag) == 0) {
 				view.setBackgroundResource(R.drawable.shape_tagbutton);
 			} else {
 				view.setBackgroundColor(Color.GRAY);

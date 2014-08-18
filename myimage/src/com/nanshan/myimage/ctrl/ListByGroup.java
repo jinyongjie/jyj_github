@@ -23,8 +23,8 @@ import android.widget.RelativeLayout;
 
 public class ListByGroup extends GridView  {
 	ArrayList<DirInfo> mData;
-	public ListByGroup(Context context) {
-		super(context);
+	public ListByGroup(Context context,android.util.AttributeSet attrs) {
+		super(context,attrs);
 		// TODO Auto-generated constructor stub
 		this.setNumColumns(2);
 

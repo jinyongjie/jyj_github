@@ -265,7 +265,7 @@ EditModeListener {
 			} else if (type == ViewType.dir) {
 				if (mViewDir == null) {
 
-					mViewDir = new ViewDir(this);
+					mViewDir = new ViewDir(this,null);
 					mViewContainer.addView(mViewDir, LayoutParams.MATCH_PARENT,
 							LayoutParams.MATCH_PARENT);
 					mViewDir.Init();
@@ -293,7 +293,8 @@ EditModeListener {
 				mButtonOp.setVisibility(View.VISIBLE);
 			} else if (type == ViewType.tag) {
 				if (mViewTag == null) {
-					mViewTag = (ViewTag) new ViewTag(this);
+					mViewTag = (ViewTag) LayoutInflater.from(this).inflate(R.layout.view_tag, null);
+				
 					mViewContainer.addView(mViewTag, LayoutParams.MATCH_PARENT,
 							LayoutParams.MATCH_PARENT);
 					mViewTag.Init();

@@ -118,10 +118,10 @@ public final class R {
         public static final int umeng_update_wifi_disable=0x7f020056;
     }
     public static final class id {
-        public static final int action_settings=0x7f060042;
+        public static final int action_settings=0x7f060043;
         public static final int bar_begin=0x7f060001;
         public static final int bar_bottom=0x7f060011;
-        public static final int bar_op=0x7f06003f;
+        public static final int bar_op=0x7f060040;
         public static final int bar_top=0x7f06000e;
         public static final int bmp_arrow=0x7f060000;
         public static final int button_camera=0x7f060009;
@@ -161,11 +161,12 @@ public final class R {
         public static final int switcher=0x7f06000c;
         public static final int text_del=0x7f060013;
         public static final int text_more=0x7f060019;
-        public static final int text_sel_num=0x7f060040;
+        public static final int text_sel_num=0x7f060041;
         public static final int text_share=0x7f060015;
         public static final int text_tag=0x7f060017;
-        public static final int timelist=0x7f060041;
+        public static final int timelist=0x7f060042;
         public static final int tip_no_like=0x7f060035;
+        public static final int tip_no_tag=0x7f06003f;
         public static final int title=0x7f060003;
         public static final int umeng_common_icon_view=0x7f060025;
         public static final int umeng_common_notification=0x7f060029;
@@ -201,27 +202,28 @@ public final class R {
         public static final int view_main_menu=0x7f03000b;
         public static final int view_set_tag=0x7f03000c;
         public static final int view_single=0x7f03000d;
-        public static final int view_timelist=0x7f03000e;
+        public static final int view_tag=0x7f03000e;
+        public static final int view_timelist=0x7f03000f;
     }
     public static final class menu {
         public static final int main=0x7f090000;
         public static final int show=0x7f090001;
     }
     public static final class string {
-        public static final int UMAppUpdate=0x7f07002a;
-        public static final int UMBreak_Network=0x7f070022;
-        public static final int UMDialog_InstallAPK=0x7f07002e;
-        public static final int UMGprsCondition=0x7f070028;
-        public static final int UMIgnore=0x7f07002c;
-        public static final int UMNewVersion=0x7f070024;
-        public static final int UMNotNow=0x7f07002b;
-        public static final int UMTargetSize=0x7f070027;
-        public static final int UMToast_IsUpdating=0x7f07002d;
-        public static final int UMUpdateCheck=0x7f07002f;
-        public static final int UMUpdateContent=0x7f070025;
-        public static final int UMUpdateNow=0x7f070029;
-        public static final int UMUpdateSize=0x7f070026;
-        public static final int UMUpdateTitle=0x7f070023;
+        public static final int UMAppUpdate=0x7f07002b;
+        public static final int UMBreak_Network=0x7f070023;
+        public static final int UMDialog_InstallAPK=0x7f07002f;
+        public static final int UMGprsCondition=0x7f070029;
+        public static final int UMIgnore=0x7f07002d;
+        public static final int UMNewVersion=0x7f070025;
+        public static final int UMNotNow=0x7f07002c;
+        public static final int UMTargetSize=0x7f070028;
+        public static final int UMToast_IsUpdating=0x7f07002e;
+        public static final int UMUpdateCheck=0x7f070030;
+        public static final int UMUpdateContent=0x7f070026;
+        public static final int UMUpdateNow=0x7f07002a;
+        public static final int UMUpdateSize=0x7f070027;
+        public static final int UMUpdateTitle=0x7f070024;
         public static final int action_settings=0x7f070010;
         public static final int add_tag=0x7f07000b;
         public static final int app_name=0x7f070000;
@@ -235,27 +237,28 @@ public final class R {
         public static final int menu_tag=0x7f070006;
         public static final int more=0x7f07000a;
         public static final int no_like_tip=0x7f070012;
+        public static final int no_tag_tip=0x7f070013;
         public static final int ok=0x7f07000d;
         public static final int sel_all=0x7f07000e;
         public static final int share=0x7f070008;
         public static final int tag=0x7f070009;
         public static final int title_activity_show=0x7f07000f;
         public static final int title_activity_single_image=0x7f07000c;
-        public static final int umeng_common_action_cancel=0x7f070017;
-        public static final int umeng_common_action_continue=0x7f070016;
-        public static final int umeng_common_action_info_exist=0x7f070013;
-        public static final int umeng_common_action_pause=0x7f070015;
-        public static final int umeng_common_download_failed=0x7f07001d;
-        public static final int umeng_common_download_finish=0x7f07001e;
-        public static final int umeng_common_download_notification_prefix=0x7f070018;
-        public static final int umeng_common_icon=0x7f070021;
-        public static final int umeng_common_info_interrupt=0x7f070014;
-        public static final int umeng_common_network_break_alert=0x7f07001c;
-        public static final int umeng_common_patch_finish=0x7f07001f;
-        public static final int umeng_common_pause_notification_prefix=0x7f070019;
-        public static final int umeng_common_silent_download_finish=0x7f070020;
-        public static final int umeng_common_start_download_notification=0x7f07001a;
-        public static final int umeng_common_start_patch_notification=0x7f07001b;
+        public static final int umeng_common_action_cancel=0x7f070018;
+        public static final int umeng_common_action_continue=0x7f070017;
+        public static final int umeng_common_action_info_exist=0x7f070014;
+        public static final int umeng_common_action_pause=0x7f070016;
+        public static final int umeng_common_download_failed=0x7f07001e;
+        public static final int umeng_common_download_finish=0x7f07001f;
+        public static final int umeng_common_download_notification_prefix=0x7f070019;
+        public static final int umeng_common_icon=0x7f070022;
+        public static final int umeng_common_info_interrupt=0x7f070015;
+        public static final int umeng_common_network_break_alert=0x7f07001d;
+        public static final int umeng_common_patch_finish=0x7f070020;
+        public static final int umeng_common_pause_notification_prefix=0x7f07001a;
+        public static final int umeng_common_silent_download_finish=0x7f070021;
+        public static final int umeng_common_start_download_notification=0x7f07001b;
+        public static final int umeng_common_start_patch_notification=0x7f07001c;
     }
     public static final class style {
         /** 
