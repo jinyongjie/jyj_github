@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DirActivity" >
+    tools:context=".ActivityDir" >
 
     <RelativeLayout
         android:id="@+id/bar_begin"
@@ -15,11 +15,12 @@
         <Button
             android:id="@+id/button_return"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="2dp"
-            android:background="@drawable/selector_button_return" >
+            android:drawableLeft="@drawable/back2"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/selector_button" >
         </Button>
 
         <TextView
@@ -28,7 +29,9 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:ellipsize="middle"
+        	android:singleLine="true"
+            android:textColor="@color/textWhite"
             android:textSize="18sp" >
         </TextView>
 
@@ -37,11 +40,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@drawable/selector_button_op"
+            android:background="@drawable/selector_button"
             android:paddingLeft="10dip"
             android:paddingRight="10dip"
             android:text="@string/button_op"
-            android:textColor="@color/white"
+            android:textColor="@color/textWhite"
             android:textSize="17sp" >
         </Button>
 
@@ -53,13 +56,13 @@
         </View>
     </RelativeLayout>
 
-    <com.nanshan.myimage.ctrl.ListByTime
-        android:id="@+id/list"
+    <com.example.myimage.ctrl.ListByTime
+        android:id="@+id/listbytime"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" >
 
         <include layout="@layout/view_timelist" >
         </include>
-    </com.nanshan.myimage.ctrl.ListByTime>
+    </com.example.myimage.ctrl.ListByTime>
 
 </LinearLayout>

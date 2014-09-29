@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android"> 
-     <item android:state_pressed="true" android:drawable="@drawable/main_camerabtn_press" /> 
-     <item android:drawable="@drawable/main_camerabtn_normal" /> 
-</selector> 
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:constantSize="true" android:dither="true" android:variablePadding="true">
 
+    <item android:state_pressed="true"><layer-list>
+            <item android:drawable="@color/button_down"></item>
+            <item><bitmap android:gravity="center" android:src="@drawable/camera_ic" />
+            </item>
+        </layer-list></item>
+    <item><bitmap android:gravity="center" android:src="@drawable/camera_ic" />
+    </item>
 
+</selector>

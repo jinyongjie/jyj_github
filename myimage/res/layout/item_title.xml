@@ -1,54 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@color/black" >
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:text="2014-08-01"
-        android:textColor="@color/white"
+        android:textColor="#d2d2d2"
         android:textSize="20sp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="false"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@id/date"
+        android:text="|"
+        android:textColor="#646464"
+        android:textSize="18sp" >
     </TextView>
 
     <TextView
         android:id="@+id/week"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/date"
-        android:text="星期五"
-        android:textColor="@color/gray"
-        android:textSize="15sp" >
+        android:layout_toRightOf="@id/line"
+        android:textColor="@color/textGray"
+        android:textSize="18sp" >
     </TextView>
 
     <TextView
         android:id="@+id/count"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:text="10张"
-        android:textColor="@color/gray"
+        android:textColor="#8b8b8b"
         android:textSize="15sp" >
     </TextView>
-    <Button 
+
+    <Button
         android:id="@+id/sel_all"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:text="@string/sel_all"
-        android:textColor="@color/white"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/selector_button_sel_all"
+        android:layout_centerVertical="true"
+        
+        android:background="@drawable/selector_button"
         android:gravity="center"
-        android:visibility="gone"
-        />
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
+        android:text="@string/sel_all"
+        android:drawableRight="@drawable/selall_normal"
+        android:textColor="@color/textWhite"
+        android:visibility="gone" />
 
 </RelativeLayout>

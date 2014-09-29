@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/add_tag"
-            android:textColor="@color/white"
+            android:textColor="@color/textWhite"
             android:textSize="18sp" >
         </TextView>
 
@@ -37,7 +37,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/selector_button_ok"
         android:text="@string/ok"
-        android:textColor="@color/white"
+        android:textColor="@color/textWhite"
         android:textSize="18sp" />
 
     <GridView

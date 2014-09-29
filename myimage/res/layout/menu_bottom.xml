@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/title_bkg_trans"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_copy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_trans"
+            android:drawableTop="@drawable/copy_ic"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/button_copy"
+            android:textColor="@color/textWhite" />
+
+        <Button
+            android:id="@+id/button_move"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_trans"
+            android:drawableTop="@drawable/move_ic"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/button_move"
+            android:textColor="@color/textWhite" />
+
+        <Button
+            android:id="@+id/button_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_trans"
+            android:drawableTop="@drawable/framework_infobtn_normal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/button_info"
+            android:textColor="@color/textWhite" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible" >
+
+        <Button
+            android:id="@+id/button_wallpaper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_trans"
+            android:drawableTop="@drawable/framework_wallpaper_and_contact_normal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/button_wallpaper"
+            android:textColor="@color/textWhite" />
+
+        <Button
+            android:id="@+id/button_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_trans"
+            android:drawableTop="@drawable/icon_edit"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/edit"
+            android:textColor="@color/textWhite"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/button_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_trans"
+            android:drawableTop="@drawable/framework_infobtn_normal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/button_info"
+            android:textColor="@color/textWhite"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</LinearLayout>

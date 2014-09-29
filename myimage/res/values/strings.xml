@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">快速看图</string>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- base -->
+    <string name="confirm_title">确认</string>
+    <string name="app_name">相册</string>
     <string name="menu_quit">退出</string>
     <string name="button_op">操作</string>
-    <string name="menu_all">所有照片</string>
-    <string name="menu_dir">文件夹</string>
-    <string name="menu_like">喜欢</string>
-    <string name="menu_tag">标签</string>
+    <string name="menu_all">&#160;&#160;所有照片</string>
+    <string name="menu_dir">&#160;&#160;相册</string>
+    <string name="menu_like">&#160;&#160;喜欢</string>
+    <string name="menu_cloud">&#160;&#160;云备份</string>
     <string name="delete">删除</string>
     <string name="share">分享</string>
     <string name="tag">标签</string>
-    <string name="more">更多</string>
+    <string name="like">喜欢</string>
     <string name="add_tag">添加标签</string>
     <string name="title_activity_single_image">SingleImageActivity</string>
     <string name="ok">确定</string>
@@ -19,7 +20,37 @@
     <string name="title_activity_show">ShowActivity</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="no_like_tip">没有标记为喜欢的图片</string>
-    <string name="no_tag_tip">没有标记tag的图片</string>
-
+    <string name="no_like_tip">无标记为喜欢的图片</string>
+    <string name="no_tag_tip">无标记tag的图片</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="menu_yun">云备份</string>
+    <string name="title_activity_yun">YunActivity</string>
+    <string name="no_image">无图片</string>
+    <string name="no_sel_image">请选择要操作的图片</string>
+    <string name="list_loading">正在加载</string>
+    <string name="cancel">取消</string>
+    <string name="close">关闭</string>
+    <string name="menu_transfer">传输列表</string>
+    <string name="button_more">更多</string>
+    <string name="button_setlike">&#160;&#160;设为喜欢</string>
+    <string name="button_copy">&#160;&#160;复制到</string>
+    <string name="button_move">&#160;&#160;移动到</string>
+    <string name="set_like_complete">已标记为喜欢</string>
+    <string name="title_activity_activity_sel_dir">ActivitySelDir</string>
+    <string name="sel_dir">请选择相册</string>
+    <string name="new_dir">其他文件夹</string>
+    <string name="copy_complete">完成复制照片</string>
+    <string name="move_complete">完成移动照片</string>
+    <string name="enter_name">请输入相册名</string>
+    <string name="new_dir_pos">相册位置:/SDCARD/DCIM/</string>
+    <string name="more">更多</string>
+    <string name="button_info">详细信息</string>
+    <string name="button_wallpaper">设置壁纸</string>
+    <string name="load_data">正在更新数据..</string>
+    <string name="load_image">加载图片列表..</string>
+    <string name="del_image">正在删除..</string>
+    <string name="button_refresh">刷新</string>
+    <string name="button_new">新建</string>
+    <string name="edit">编辑</string>
+<!-- base end -->
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_bg01"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/menu_all"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:background="@drawable/selector_button_menuitem"
+        android:drawableLeft="@drawable/all_normal"
+        android:gravity="left|center"
+       
+        android:paddingLeft="10dp"
+        android:paddingRight="25dp"
+      
+        android:text="@string/menu_all"
+        android:textColor="@color/textWhite"
+        android:textSize="@dimen/menu_text_size" >
+    </Button>
+
+    <Button
+        android:id="@+id/menu_dir"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_marginTop="1px"
+        android:background="@drawable/selector_button_menuitem"
+        android:drawableLeft="@drawable/album_normal"
+        android:gravity="left|center"
+       
+        android:paddingLeft="10dp"
+     
+        android:text="@string/menu_dir"
+        android:textColor="@color/textWhite"
+        android:textSize="@dimen/menu_text_size" >
+    </Button>
+
+    <Button
+        android:id="@+id/menu_like"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_marginTop="1px"
+        android:background="@drawable/selector_button_menuitem"
+        android:drawableLeft="@drawable/like_normal"
+        android:gravity="left|center"
+       
+        android:paddingLeft="10dp"
+ 
+        android:text="@string/menu_like"
+        android:textColor="@color/textWhite"
+        android:textSize="@dimen/menu_text_size" >
+    </Button>
+
+
+
+</LinearLayout>

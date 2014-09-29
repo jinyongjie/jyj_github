@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="title_bkg">#303030</color>
+
+    <color name="title_bkg">#272d34</color>
+    <color name="title_bkg_trans">#f0272d34</color>
+    <color name="button_down">#252525</color>
+    <color name="button_down_trans">#f0171d24</color>
     <color name="black">#000000</color>
+    <color name="mask">#80000000</color>
     <color name="white">#ffffff</color>
+    <color name="textWhite">#dfdfdf</color>
+    <color name="textGray">#8b8b8b</color>
+    <color name="textBlue">#299cff</color>
     <color name="gray">#808080</color>
+    <color name="blue">#0000ff</color>
+    <color name="yun_tab_sel">#0aa9c1</color>
+    <color name="transparent">#00000000</color>
+    <color name="progress_bg">#dadfe3</color>
+    <color name="trans_group_color">#efefef</color>
+
+
+
+    
+
+
+
 </resources>

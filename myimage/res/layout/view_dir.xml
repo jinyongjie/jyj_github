@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.myimage.app.ViewDir xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    
+    >
+
+
+    <com.example.myimage.ctrl.ListByGroup
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+         >
+
+    </com.example.myimage.ctrl.ListByGroup>
+    <TextView 
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_image"
+        android:textSize="16sp"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        android:visibility="gone"
+        />
+</com.example.myimage.app.ViewDir>

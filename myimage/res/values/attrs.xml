@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  
+    <!-- PullToRefresh -->
+    <declare-styleable name="PullToRefresh">
+        <attr name="ptrAdapterViewBackground" format="reference|color" />
+        <attr name="ptrAdapterViewLayoutBackground" format="reference" />
+        <attr name="ptrHeaderBackground" format="reference|color" />
+        <attr name="ptrHeaderTextColor" format="reference|color" />
+        <attr name="ptrHeaderSubTextColor" format="reference|color" />
+        <attr name="ptrMode">
+            <flag name="pullDownFromTop" value="0x1" />
+            <flag name="pullUpFromBottom" value="0x2" />
+            <flag name="both" value="0x3" />
+        </attr>
+        <attr name="ptrShowIndicator" format="reference|boolean" />
+        <attr name="ptrDrawable" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="TextWithDrawable">
+        <attr name="txt" format="string" />
+        <attr name="txt_color" format="color" />
+        <attr name="txt_pressed_color" format="color" />
+        <attr name="txt_selected_color" format="color" />
+        <attr name="txt_unenabled_color" format="color" />
+        <attr name="txt_size" format="dimension" />
+        <attr name="direct" format="integer" />
+        <attr name="drawable" format="integer" />
+        <attr name="selected_drawable" format="integer" />
+        <attr name="pressed_drawable" format="integer" />
+        <attr name="unenable_drawable" format="integer" />
+        <attr name="drawable_padding" format="dimension" />
+    </declare-styleable>
+</resources>

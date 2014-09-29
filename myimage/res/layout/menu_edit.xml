@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_bg02"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/button_like"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_weight="1"
+        
+        android:background="@drawable/selector_button_menuitem"
+        android:drawableLeft="@drawable/like_ic_1"
+   
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+     
+        android:text="@string/button_setlike"
+        android:textColor="@color/textWhite"
+        android:textSize="18sp" 
+        android:gravity="left|center_vertical"
+        />
+
+    <Button
+        android:layout_marginTop="1px"
+        android:id="@+id/button_copy"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_weight="1"
+        android:background="@drawable/selector_button_menuitem"
+        android:drawableLeft="@drawable/copy_ic"
+    
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+       
+        android:text="@string/button_copy"
+        android:textColor="@color/textWhite"
+        android:textSize="18sp" 
+        android:gravity="left|center_vertical"
+        />
+
+    <Button
+        android:layout_marginTop="1px"
+        android:id="@+id/button_move"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_weight="1"
+        android:background="@drawable/selector_button_menuitem"
+        android:drawableLeft="@drawable/move_ic"
+       
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+      
+        android:text="@string/button_move"
+        android:textColor="@color/textWhite"
+        android:textSize="18sp" 
+        android:gravity="left|center_vertical"
+        />
+
+</LinearLayout>
