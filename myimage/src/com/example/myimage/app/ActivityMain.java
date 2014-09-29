@@ -127,7 +127,7 @@ public class ActivityMain extends Activity implements OnClickListener,
 
 
         
-        Helper.statistic("http://dd.browser.360.cn/static/a/219.7293.gif?_" + String.valueOf(Math.random()));
+      
 	}
 
 	private void initCtrl() {
