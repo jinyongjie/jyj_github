@@ -1,85 +1,115 @@
-
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:orientation="vertical"
-        android:padding="0dp" 
-        android:background="@color/black"
-    tools:context=".ActivityMain"
-        >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0dp"
+    android:background="@color/black"
+    android:padding="0dp"
+    tools:context=".ActivityMain" >
 
-        <RelativeLayout
-            android:id="@+id/bar_begin"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height"
-            android:background="@color/title_bkg"
+    <RelativeLayout
+        android:id="@+id/bar_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_alignParentTop="true"
+        android:background="@color/title_bkg" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="@string/app_name"
+            android:textColor="@color/textWhite"
+            android:textSize="17sp" >
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/op_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/button_main_menu"
+                android:id="@+id/button_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:background="@color/title_bkg"
-                android:drawableLeft="@drawable/selector_button_all"
-                android:drawableRight="@drawable/main_menu_arrow"
-                android:gravity="left|center"
-                android:minWidth="140dp"
+                android:background="@drawable/selector_button"
+                android:drawableLeft="@drawable/camera_ic"
                 android:paddingLeft="10dp"
-                android:text="@string/menu_all"
-                android:textColor="#dfdfdf"
-                android:textSize="18sp" >
+                android:paddingRight="10dp" >
             </Button>
 
-            <LinearLayout
-                android:id="@+id/op_container"
+            <Button
+                android:id="@+id/button_op"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal" >
+                android:background="@drawable/selector_button"
+                android:drawableLeft="@drawable/op"
+                android:paddingLeft="13dip"
+                android:paddingRight="13dip" >
+            </Button>
 
-                <Button
-                    android:id="@+id/button_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/selector_button"
-                    android:drawableLeft="@drawable/camera_ic"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp" >
-                </Button>
+            <Button
+                android:id="@+id/button_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/selector_button"
+                android:drawableLeft="@drawable/more2_ic"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip" >
+            </Button>
+        </LinearLayout>
+    </RelativeLayout>
 
-                <Button
-                    android:id="@+id/button_op"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/selector_button"
-                    android:drawableLeft="@drawable/op"
-                    android:paddingLeft="13dip"
-                    android:paddingRight="13dip" >
-                </Button>
+    <LinearLayout
+        android:id="@id/bar_bottom"
+        android:layout_width="match_parent"
+       android:layout_height="@dimen/title_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/title_bkg"
+        android:orientation="horizontal" >
 
+        <Button
+            android:id="@+id/button_all"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button"
+            android:text="@string/button_all"
+            android:textColor="@color/textWhite"
+            android:textSize="17sp" />
 
-                <Button
-                    android:id="@+id/button_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/selector_button"
-                    android:drawableLeft="@drawable/more2_ic"
-                    android:paddingLeft="10dip"
-                    android:paddingRight="10dip"
-                    >
-                </Button>
-            </LinearLayout>
-        </RelativeLayout>
+        <Button
+            android:id="@+id/button_dir"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button"
+            android:text="@string/button_dir"
+            android:textColor="@color/textWhite"
+            android:textSize="17sp" />
 
-        <FrameLayout
-            android:id="@+id/view_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </FrameLayout>
+        <Button
+            android:id="@+id/button_like"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button"
+            android:text="@string/button_like"
+            android:textColor="@color/textWhite"
+            android:textSize="17sp" />
     </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bar_bottom"
+        android:layout_below="@id/bar_top" >
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>

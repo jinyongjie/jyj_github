@@ -5,10 +5,10 @@
     <string name="app_name">相册</string>
     <string name="menu_quit">退出</string>
     <string name="button_op">操作</string>
-    <string name="menu_all">&#160;&#160;所有照片</string>
-    <string name="menu_dir">&#160;&#160;相册</string>
-    <string name="menu_like">&#160;&#160;喜欢</string>
-    <string name="menu_cloud">&#160;&#160;云备份</string>
+    <string name="button_all">所有照片</string>
+    <string name="button_dir">相簿</string>
+    <string name="button_like">喜欢</string>
+   
     <string name="delete">删除</string>
     <string name="share">分享</string>
     <string name="tag">标签</string>

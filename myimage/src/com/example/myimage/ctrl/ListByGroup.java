@@ -49,7 +49,7 @@ public class ListByGroup extends GridView {
 
 		//this.setGravity(Gravity.CENTER);
 		this.setStretchMode(STRETCH_COLUMN_WIDTH);
-		mPadding = Helper.dp2px(context, 10);
+		mPadding = Helper.dp2px(context, 20);
 		this.setVerticalSpacing(mPadding);
 		this.setHorizontalSpacing(mPadding);
 		mImageWidth = (dm.widthPixels - mPadding)/2 - 2*Helper.dp2px(context, 5);

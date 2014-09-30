@@ -75,7 +75,7 @@ public class DirItem extends LinearLayout {
 				text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		mTextName.setText(ss);
 
-		mFrame.getLayoutParams().height = imagesize + Helper.dp2px(getContext(), 14);
+		mFrame.getLayoutParams().height = imagesize;
 		mFrame.getLayoutParams().width = imagesize;
 		
 		this.setOnClickListener(mClickListener);
@@ -88,41 +88,54 @@ public class DirItem extends LinearLayout {
 		mImage0.getLayoutParams().height = size;
 		
 		
+		mImage1.setImageSize(imagesize, imagesize);
 		
+
+		FrameLayout.LayoutParams param = (android.widget.FrameLayout.LayoutParams) mImage1.getLayoutParams();
+		param.width = size;
+		param.height = size;
+		param.leftMargin = size + spacing;
 		if(mDirInfo.array.size() > 1)
 		{
 	
-			mImage1.setImageSize(imagesize, imagesize);
 			mImage1.setImagePath(dirinfo.array.get(1).path);
-
-			FrameLayout.LayoutParams param = (android.widget.FrameLayout.LayoutParams) mImage1.getLayoutParams();
-			param.width = size;
-			param.height = size;
-			param.leftMargin = size + spacing;
+		}
+		else
+		{
+			mImage1.setImagePath(null);
 		}
 
+		mImage2.setImageSize(imagesize, imagesize);
 		
+		mImage2.getLayoutParams().width = size;
+		mImage2.getLayoutParams().height = size;
+		
+		param = (android.widget.FrameLayout.LayoutParams) mImage2.getLayoutParams();
+		param.width = size;
+		param.height = size;
+		param.topMargin = size + spacing;
 		if(mDirInfo.array.size() > 2)
 		{
-			mImage2.setImageSize(imagesize, imagesize);
 			mImage2.setImagePath(dirinfo.array.get(2).path);
-			mImage2.getLayoutParams().width = size;
-			mImage2.getLayoutParams().height = size;
-			
-			FrameLayout.LayoutParams param = (android.widget.FrameLayout.LayoutParams) mImage2.getLayoutParams();
-			param.width = size;
-			param.height = size;
-			param.topMargin = size + spacing;
 		}
+		else
+		{
+			mImage2.setImagePath(null);
+		}
+		mImage3.setImageSize(imagesize, imagesize);
+		
+		param = (android.widget.FrameLayout.LayoutParams) mImage3.getLayoutParams();
+		param.width = size;
+		param.height = size;
+		param.leftMargin = size + spacing;
+		param.topMargin = size + spacing;
 		if(mDirInfo.array.size() > 3)
 		{
-			mImage3.setImageSize(imagesize, imagesize);
 			mImage3.setImagePath(dirinfo.array.get(3).path);
-			FrameLayout.LayoutParams param = (android.widget.FrameLayout.LayoutParams) mImage3.getLayoutParams();
-			param.width = size;
-			param.height = size;
-			param.leftMargin = size + spacing;
-			param.topMargin = size + spacing;
+		}
+		else
+		{
+			mImage3.setImagePath(null);
 		}
 
 	}

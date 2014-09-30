@@ -142,7 +142,7 @@ public class ThumbImageView extends ImageView implements ImageCallback,
 			int height) {
 		// TODO Auto-generated method stub
 
-		if (mPath.equals(path) && bitmap != null) {
+		if (mPath != null &&mPath.equals(path) && bitmap != null) {
 
 			setImageBitmap(bitmap);
 		}
