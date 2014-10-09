@@ -42,8 +42,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".app.ActivityGallery"
+               <activity
+            android:name="com.imagelib.app.ActivityGallery"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
             <intent-filter>
@@ -55,17 +55,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".app.ActivityDir"
+            android:name="com.imagelib.app.ActivityDir"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
         <activity
-            android:name=".app.ActivityPlay"
+            android:name="com.imagelib.app.ActivityPlay"
             android:label="@string/title_activity_show"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".app.ActivitySelDir"
+            android:name="com.imagelib.app.ActivitySelDir"
             android:label="@string/title_activity_activity_sel_dir"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>

@@ -1,19 +1,15 @@
 
-package com.example.myimage.app;
+package com.imagelib.app;
 
 import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 import android.view.ViewConfiguration;
 
-
-
-
-
-import java.lang.reflect.Field;
-
 import com.imagelib.data.ImageLoader2;
 import com.imagelib.data.ImageMgr;
+
+import java.lang.reflect.Field;
 
 public class AlbumApplication extends Application {
 
