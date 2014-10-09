@@ -8,7 +8,7 @@ import com.example.myimage.ctrl.AdapterTime.EditModeListener;
 import com.example.myimage.data.ImageMgr;
 import com.example.myimage.data.ImageMgr.ImageInfo;
 import com.example.myimage.data.ImageMgr.ImageMgrListener;
-import com.example.myimage.data.ImageMgr.TimeInfo;
+
 import com.example.myimage.R;
 
 
@@ -53,7 +53,7 @@ public class ViewLike extends RelativeLayout implements ImageMgrListener {
 	private void rereshData() {
 		ArrayList<ImageInfo> array = ImageMgr.GetInstance().GetLikeArray();
 
-		mList.setData(array);
+		mList.setArray(array);
 
 	}
 	public void setEditModeListener(EditModeListener listener) {

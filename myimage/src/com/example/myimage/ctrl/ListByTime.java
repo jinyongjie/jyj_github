@@ -14,7 +14,6 @@ import com.example.myimage.app.ActivityMain;
 import com.example.myimage.app.ActivitySelDir;
 import com.example.myimage.ctrl.AdapterTime.EditModeListener;
 import com.example.myimage.ctrl.AdapterTime.IImageItem;
-import com.example.myimage.ctrl.AdapterTime.LineInfo;
 import com.example.myimage.ctrl.PullToRefreshBase.OnRefreshListener;
 import com.example.myimage.data.Helper;
 import com.example.myimage.data.ImageLoader2;
@@ -23,8 +22,10 @@ import com.example.myimage.data.ImageLoader2.ImageCallback;
 import com.example.myimage.data.ImageMgr.FileComparator;
 import com.example.myimage.data.ImageMgr.ImageInfo;
 import com.example.myimage.data.ImageMgr.ImageMgrListener;
-import com.example.myimage.data.ImageMgr.TimeInfo;
+import com.example.myimage.data.ImageMgr.LineInfo;
+
 import com.example.myimage.R;
+
 
 
 
@@ -184,8 +185,17 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 			mListView.setPullToRefreshEnabled(enable);
 		}
 	}
-
-	public void setData(final ArrayList<ImageInfo> array) {
+	public void setLineInfo(ArrayList<LineInfo> array)
+	{
+		if (mAdapter != null)
+			mAdapter.setData(array);
+		
+		if (ImageMgr.GetInstance().getInitState() == ImageMgr.init_complete) {
+			mListView.setEmptyView(mEmpty);
+		}
+		updateSelectNum();
+	}
+	public void setArray(final ArrayList<ImageInfo> array) {
 		/*
 		 * new AsyncTask<Object,Object,Object>(){
 		 * 
@@ -204,6 +214,7 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 		 * 
 		 * }.executeOnExecutor(Executors.newCachedThreadPool());
 		 */
+		this.setTip("初始化列表");
 		showProgress(true);
 		final Handler handler = new Handler() {
 
@@ -228,7 +239,7 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 				super.run();
 				Message msg = new Message();
 				msg.what = 0;
-				msg.obj = mAdapter.parse(array);
+				msg.obj = ImageMgr.GetInstance().parse(array,mAdapter.mColum);
 				handler.sendMessage(msg);
 			}
 
@@ -441,8 +452,8 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 		public void onImageMgrNotify(int type, Object obj) {
 			// TODO Auto-generated method stub
 			if (type == ImageMgr.refresh_begin) {
-				// mProgressText.setText(R.string.load_image);
-				// showProgress(true);
+//				 mProgressText.setText(R.string.load_image);
+	//			 showProgress(true);
 			} else if (type == ImageMgr.refresh_end) {
 				showProgress(false);
 			} else if (type == ImageMgr.delete_begin) {

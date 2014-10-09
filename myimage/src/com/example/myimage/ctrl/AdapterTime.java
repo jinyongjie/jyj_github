@@ -10,10 +10,12 @@ import java.util.HashSet;
 import com.example.myimage.app.ActivityGallery;
 import com.example.myimage.data.Helper;
 import com.example.myimage.data.ImageMgr;
+import com.example.myimage.data.ImageMgr.ImageData;
+import com.example.myimage.data.ImageMgr.LineInfo;
 import com.example.myimage.data.Size;
 import com.example.myimage.data.ImageMgr.FileComparator;
 import com.example.myimage.data.ImageMgr.ImageInfo;
-import com.example.myimage.data.ImageMgr.TimeInfo;
+
 import com.example.myimage.R;
 
 import android.app.Activity;
@@ -50,22 +52,11 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 		public void setData(ImageData data);
 		public ImageData getData();
 	}
-	public class ImageData
-	{
-		public String path;
-		public boolean sel;
-	}
-	public class LineInfo {
-		public boolean isTitle;// 0=tile,1=image
-		public ArrayList<ImageData> imagearray;
-		public Date date;
-		public int childcount;// children num of group
-		
-		int pos;
-	}
+
+
 	private int mImageWidth;
 	private int mSpacing = 10;
-	private final int mColum = 3;
+	public static final int mColum = 3;
 	protected ArrayList<LineInfo> mData = new ArrayList<LineInfo>();
 	protected LayoutInflater mInflator;
 	private boolean mEditMode = false;
@@ -85,74 +76,6 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 		list.setDividerHeight(mSpacing);
 	}
 
-	public  ArrayList<LineInfo> parse(ArrayList<ImageInfo> array) {
-
-		ArrayList<LineInfo> data = new ArrayList<LineInfo>();
-
-		Collections.sort(array, ImageMgr.GetInstance().new FileComparator());
-		ArrayList<TimeInfo> groups = new ArrayList<TimeInfo>();
-
-		TimeInfo group = null;
-
-		for (int i = 0; i < array.size(); i++) {
-
-			ImageInfo info = array.get(i);
-			if (info != null) {
-				if (group == null) {
-					group = ImageMgr.GetInstance().new TimeInfo();
-					group.date = info.date;
-					groups.add(group);
-				} else {
-					Date last = group.date;
-					Date cur = info.date;
-					if (last.getYear() != cur.getYear()
-							|| last.getMonth() != cur.getMonth()
-							|| last.getDay() != cur.getDay()) {
-						group = ImageMgr.GetInstance().new TimeInfo();
-						group.date = cur;
-						groups.add(group);
-					}
-
-				}
-				group.array.add(info);
-			}
-		}
-
-		int groupcount = groups.size();
-
-		for (int i = 0; i < groupcount; i++) {
-			TimeInfo g = groups.get(i);
-			int image_count = g.array.size();
-
-			LineInfo info = new LineInfo();
-			info.isTitle = true;
-			info.date = g.date;
-			info.childcount = image_count;
-
-			data.add(info);
-
-			LineInfo info2 = null;
-			for (int j = 0; j < image_count; j++) {
-				if (j % mColum == 0) {
-					info2 = new LineInfo();
-					info2.isTitle = false;
-					info2.date = info.date;
-					info2.childcount = image_count;
-					info2.imagearray = new ArrayList<ImageData>();
-					
-
-					data.add(info2);
-				}
-				ImageData item = new ImageData();
-				item.path = g.array.get(j).path;
-				item.sel = false;
-				info2.imagearray.add(item);
-			
-			}
-		}
-
-		return data;
-	}
 	public void setData(ArrayList<LineInfo> data)
 	{
 		mData = data;

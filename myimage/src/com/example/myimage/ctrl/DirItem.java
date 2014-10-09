@@ -68,6 +68,10 @@ public class DirItem extends LinearLayout {
 		mSel = findViewById(R.id.sel);
 
 		mDirInfo = dirinfo;
+		if(mDirInfo.name == null)
+			mDirInfo.name = "";
+		if(mDirInfo.dir == null)
+			mDirInfo.dir = "";
 		String text = String.format("%s(%d)", mDirInfo.name,
 				mDirInfo.array.size());
 		SpannableString ss = new SpannableString(text);

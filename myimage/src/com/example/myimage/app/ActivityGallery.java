@@ -10,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.example.myimage.ctrl.DialogSetTag;
 import com.example.myimage.ctrl.ViewSingle;
 import com.example.myimage.data.Helper;
 import com.example.myimage.data.ImageLoader2;
@@ -248,9 +247,9 @@ public class ActivityGallery extends Activity implements OnClickListener,
 		if (mArray == null || mArray.size() == 0)
 			return;
 		String path = mArray.get(mIndex);
-		ImageInfo info = ImageMgr.GetInstance().getImage(path);
-		if (info != null) {
-			if (info.like == true) {
+		
+	boolean like = ImageMgr.GetInstance().isLike(path);
+			if (like) {
 				Drawable d = getResources().getDrawable(R.drawable.like_ic_1);
 				d.setBounds(0, 0, d.getMinimumWidth(), d.getMinimumHeight());
 				mButtonLike.setCompoundDrawables(null, d, null, null);
@@ -265,7 +264,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 				// mTextLike.setText("喜欢");
 			}
 
-		}
+		
 		mTitle.setText(String.format("%d/%d", mIndex + 1, mArray.size()));
 	}
 
@@ -547,16 +546,10 @@ public class ActivityGallery extends Activity implements OnClickListener,
 	}
 
 	private void BeginShow() {
-		String[] idarray = new String[mArray.size() - mIndex];
-		int cur = 0;
-
-		for (int i = mIndex; i < mArray.size(); i++) {
-			idarray[i - mIndex] = mArray.get(i);
-		}
 
 		Intent intent = new Intent();
 		intent.setClass(this, ActivityPlay.class);
-		intent.putExtra("array", idarray);
+		ActivityPlay.setArray(mArray);
 
 		startActivityForResult(intent, 1);
 	}
@@ -612,10 +605,11 @@ public class ActivityGallery extends Activity implements OnClickListener,
 
 	private void AddOrDelLike() {
 		String path = mArray.get(mIndex);
-		ImageInfo info = ImageMgr.GetInstance().getImage(path);
-		if (info != null) {
-			ImageMgr.GetInstance().setLike(info.path, !info.like);
-		}
+	
+		boolean like = ImageMgr.GetInstance().isLike(path);
+		
+			ImageMgr.GetInstance().setLike(path, !like);
+		
 	}
 
 
@@ -634,7 +628,6 @@ public class ActivityGallery extends Activity implements OnClickListener,
 			mTip.setVisibility(View.GONE);
 			handleDelete();
 		}
-
 	}
 
 	private void handleDelete() {

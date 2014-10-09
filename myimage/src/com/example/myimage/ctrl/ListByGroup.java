@@ -75,13 +75,8 @@ public class ListByGroup extends GridView {
 						DirInfo info = dir.GetDirInfo();
 						intent.setClass(v.getContext(), ActivityDir.class);
 						intent.putExtra("dir", info.name);
-						String[] array = new String[info.array.size()];
-						for (int i = 0; i < array.length; i++) {
-							array[i] = info.array.get(i).path;
-						}
-						intent.putExtra("array", array);
-						// intent.putExtra("count",
-						// ImageMgr.GetInstance().GetImageCount());
+						ActivityDir.setArray(info.array);
+						
 						v.getContext().startActivity(intent);		
 					}
 				}

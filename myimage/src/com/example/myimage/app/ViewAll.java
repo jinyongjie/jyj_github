@@ -7,7 +7,9 @@ import com.example.myimage.ctrl.AdapterTime.EditModeListener;
 import com.example.myimage.data.ImageMgr;
 import com.example.myimage.data.ImageMgr.ImageInfo;
 import com.example.myimage.data.ImageMgr.ImageMgrListener;
+import com.example.myimage.data.ImageMgr.LineInfo;
 import com.example.myimage.R;
+
 
 
 
@@ -38,23 +40,20 @@ public class ViewAll extends RelativeLayout implements ImageMgrListener {
 		
 
 		ImageMgr.GetInstance().addListener(this);
-		if(ImageMgr.GetInstance().getInitState() == ImageMgr.init_complete)
+		//if(ImageMgr.GetInstance().getInitState() == ImageMgr.init_complete)
 		{
 			refreshData();
 		}
-		else
-		{
-			mList.showProgress(true);
-		}
+
 	}
 	public void uninit()
 	{
 		ImageMgr.GetInstance().removeListener(this);
 	}
 	private void refreshData() {
-		Log.d("refresh","Viewall");
-		ArrayList<ImageInfo> array = ImageMgr.GetInstance().getImageArray();
-		mList.setData(array);
+		
+		ArrayList<LineInfo> array = ImageMgr.GetInstance().getLineInfoArray();
+		mList.setLineInfo(array);
 
 	}
 

@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import com.example.myimage.ctrl.DialogChooseDir;
-import com.example.myimage.ctrl.DialogSetTag;
+
 import com.example.myimage.ctrl.ListByGroup;
 import com.example.myimage.data.Helper;
 import com.example.myimage.data.ImageMgr;
@@ -89,7 +89,7 @@ public class ActivitySelDir extends Activity implements OnClickListener {
 		map.put("Camera", dirinfo);
 		
 		ArrayList<ImageInfo> array0 = ImageMgr.GetInstance().getImageArray();
-		Collections.sort(array0, ImageMgr.GetInstance().new FileComparator());
+		
 		for (int i = 0; i < array0.size(); i++) {
 			ImageInfo info = array0.get(i);
 			if (info == null)
@@ -229,8 +229,8 @@ public class ActivitySelDir extends Activity implements OnClickListener {
 							if(ret)
 							{
 								Helper.insertImage2MediaStore(this, newPath);
-								ImageInfo info = ImageMgr.GetInstance().getImage(path);
-								if(info != null && info.like)
+								boolean like = ImageMgr.GetInstance().isLike(path);
+								if(like)
 								{
 									ImageMgr.GetInstance().setLike(newPath, true);
 								}	

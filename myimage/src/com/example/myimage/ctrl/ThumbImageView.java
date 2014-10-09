@@ -29,12 +29,13 @@ import android.widget.AdapterView.OnItemClickListener;
 
 
 
+
 import com.example.myimage.ctrl.AdapterTime.IImageItem;
-import com.example.myimage.ctrl.AdapterTime.ImageData;
 import com.example.myimage.data.Helper;
 import com.example.myimage.data.ImageLoader2;
 import com.example.myimage.data.ImageMgr;
 import com.example.myimage.data.ImageLoader2.ImageCallback;
+import com.example.myimage.data.ImageMgr.ImageData;
 import com.example.myimage.data.ImageMgr.ImageInfo;
 import com.example.myimage.photoview.PhotoViewAttacher;
 import com.example.myimage.R;
@@ -100,6 +101,10 @@ public class ThumbImageView extends ImageView implements ImageCallback,
 	}
 	public void setImagePath(String path) {
 
+		if(path != null && mPath != null && path.equals(mPath))
+		{
+			return;
+		}
 		mPath = path;
 
 		updateImage();
@@ -126,7 +131,6 @@ public class ThumbImageView extends ImageView implements ImageCallback,
 			//int n = Helper.dp2px(getContext(), 3);
 			if (mSelect)
 			{	
-				
 				canvas.drawBitmap(mBmpSelYes, getImageWidth()-mBmpSelYes.getWidth(), getImageHeight()-mBmpSelYes.getHeight(), null);
 			}				
 			else

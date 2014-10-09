@@ -26,10 +26,13 @@ import android.widget.ImageView;
 import android.widget.ViewSwitcher.ViewFactory;
 
 public class ActivityPlay extends Activity {
-	private ArrayList<String> mArray = new ArrayList<String>();;
+	private static ArrayList<String> mArray ;
 	private ImageSwitcher mSwitcher;
 	private int mIndex = 0;
-
+	public static void setArray(ArrayList<String> array)
+	{
+		mArray = array;
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,11 +43,6 @@ public class ActivityPlay extends Activity {
 		Intent intent = getIntent();
 		mIndex = 0;
 
-		String[] array = intent.getStringArrayExtra("array");
-
-		for (int i = 0; i < array.length; i++) {
-			mArray.add(array[i]);
-		}
 
 		mSwitcher.setFactory(new ViewFactory() {
 			@Override

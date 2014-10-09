@@ -52,7 +52,7 @@ public class ViewDir extends RelativeLayout implements ImageMgrListener {
 		map.put("Camera", dirinfo);
 		
 		ArrayList<ImageInfo> array0 = ImageMgr.GetInstance().getImageArray();
-		Collections.sort(array0, ImageMgr.GetInstance().new FileComparator());
+		//Collections.sort(array0, ImageMgr.GetInstance().new FileComparator());
 		for (int i = 0; i < array0.size(); i++) {
 			ImageInfo info = array0.get(i);
 			if (info == null)

@@ -9,9 +9,11 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,8 +24,10 @@ import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
 import com.example.myimage.app.ActivityMain;
+import com.example.myimage.ctrl.AdapterTime;
 import com.example.myimage.R;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.ContentObserver;
@@ -42,12 +46,17 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
 public class ImageMgr {
 	private static final String TAG = "ImageMgr";
-	private HashMap<String, ImageInfo> mImages = new HashMap<String, ImageInfo>();
+	// private HashMap<String, ImageInfo> mImages = new HashMap<String,
+	// ImageInfo>();
 
+	private ArrayList<ImageInfo> mArray = new ArrayList<ImageInfo>();
+	private HashSet<String> mArrayLike = new HashSet<String>();
+	private ArrayList<LineInfo> mArrayLineInfo = new ArrayList<LineInfo>();
 	private static ImageMgr instance = null;
 	private Context mContext;
 	private SQLiteDatabase mDb;
@@ -71,17 +80,25 @@ public class ImageMgr {
 	public class ImageInfo {
 		public String path;
 		public Date date;
-		public String tag;
-		public boolean like;
-		public String name;
+		// public String tag;
+		// public boolean like;
+		// public String name;
 		public String dirName;
 		public String dirPath;
 	}
 
-	public class TimeInfo {
-		public ArrayList<ImageInfo> array = new ArrayList<ImageInfo>();
-		public Date date;
+	public class ImageData {
+		public String path;
+		public boolean sel;
+	}
 
+	public class LineInfo {
+		public boolean isTitle;// 0=tile,1=image
+		public ArrayList<ImageData> imagearray;
+		public Date date;
+		public int childcount;// children num of group
+
+		public int pos;
 	}
 
 	public class DirInfo {
@@ -96,12 +113,9 @@ public class ImageMgr {
 		}
 		return instance;
 	}
-
-	private HashMap<String, ImageInfo> loadData(Context context) {
-
-		HashMap<String, ImageInfo> map = new HashMap<String, ImageInfo>();
-
-		mDb = SQLiteDatabase.openOrCreateDatabase(context.getFilesDir()
+	private boolean mFirstRefresh = true;
+	private void loadData() {
+		mDb = SQLiteDatabase.openOrCreateDatabase(mContext.getFilesDir()
 				.toString() + "/data.db3", null);
 
 		mDb.execSQL("create table if not exists table_like(_id integer primary key autoincrement,"
@@ -109,61 +123,142 @@ public class ImageMgr {
 
 		Cursor cursorLike = mDb.rawQuery("select * from table_like", null);
 
-		HashSet<String> setLike = new HashSet<String>();
 		while (cursorLike.moveToNext()) {
 			String path = cursorLike.getString(1);
-			setLike.add(path);
+			mArrayLike.add(path);
 		}
-		HashMap<String, String> setTag = null;
-		if (mEnableTag) {
-			mDb.execSQL("create table if not exists table_tag(_id integer primary key autoincrement,"
-					+ " path nvarchar(255)," + " tag nvarchar(64))");
 
-			Cursor cursorTag = mDb.rawQuery("select * from table_tag", null);
-
-			setTag = new HashMap<String, String>();
-			while (cursorTag.moveToNext()) {
-				String path = cursorTag.getString(1);
-				String tag = cursorTag.getString(2);
-				setTag.put(path, tag);
-			}
-		}
 		Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-		Cursor cursor = context.getContentResolver().query(uri, null, null,
-				null, null);
-		if (cursor != null) {
+		// 获取ContentResolver
+		ContentResolver contentResolver = mContext.getContentResolver();
+		// 查询的字段
+		String[] projection = { MediaStore.Images.Media.DATA,
+				MediaStore.Images.Media.DATE_MODIFIED };
+		// 条件
+		String selection = MediaStore.Images.Media.MIME_TYPE + "=?";
+		// 条件值(這裡的参数不是图片的格式，而是标准，所有不要改动)
+		String[] selectionArgs = { "image/jpeg" };
+		// 排序
+		String sortOrder = MediaStore.Images.Media.DATE_MODIFIED + " desc";
+		// 查询sd卡上的图片
+		Cursor cursor = contentResolver.query(uri, null, null, null, sortOrder);
+
+		ArrayList<ImageInfo> array = new ArrayList<ImageInfo>(cursor.getCount());
+		ArrayList<LineInfo> array2 =  new ArrayList<LineInfo>(cursor.getCount()/AdapterTime.mColum);
+		
+
+
+			int index0 = cursor.getColumnIndex(Media.DATA);
+			int index1 = cursor.getColumnIndex(Media.DATE_MODIFIED);
+			
+			LineInfo title = null;
+			LineInfo line = null;
+
+			GregorianCalendar c = null;
+			
+			int i= 0;
 			while (cursor.moveToNext()) {
 				ImageInfo info = new ImageInfo();
 
-				byte[] data = cursor.getBlob(cursor.getColumnIndex(Media.DATA));
+				byte[] data = cursor.getBlob(index0);
 
 				info.path = new String(data, 0, data.length - 1);
 
-				File file = new File(info.path);
-				if (file.exists() && file.length() > 0) {
-					info.date = new Date(file.lastModified());
-					info.name = file.getName();
+				 File file = new File(info.path);
+				 if (file.exists() )
+				{
+					long t = cursor.getLong(index1);
 
-					File dir = new File(info.path).getParentFile();
-					info.dirName = dir.getName();
-					info.dirPath = dir.getAbsolutePath();
+					info.date = new Date(t * 1000);
 
-					if (setLike.contains(info.path)) {
-						info.like = true;
-					}
-					if (mEnableTag) {
-						String tag = setTag.get(info.path);
-						if (tag != null) {
-							info.tag = tag;
+					// File dir = new File(info.path).getParentFile();
+					int end = info.path.lastIndexOf(File.separator);
+					int begin = info.path.lastIndexOf(File.separator, end - 1);
+					info.dirName = info.path.substring(begin + 1, end);
+					info.dirPath = info.path.substring(0, begin);
+
+					array.add(info);
+					
+					if (title == null) {
+						title = new LineInfo();
+						title.isTitle = true;
+						title.childcount = 0;
+						title.date = info.date;
+						title.pos = array2.size();
+						array2.add(title);
+						c = new GregorianCalendar();
+						c.setTime(info.date);
+						// .get(Calendar.DATE);
+
+						line = new LineInfo();
+						line.isTitle = false;
+						line.date = info.date;
+						line.imagearray = new ArrayList<ImageData>();
+						ImageData idata = new ImageData();
+						idata.sel = false;
+						idata.path = info.path;
+						line.imagearray.add(idata);
+						line.pos = array2.size();
+						array2.add(line);
+						title.childcount++;
+					} else {
+						GregorianCalendar c2 = new GregorianCalendar();
+						c2.setTime(info.date);
+						if (c.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+						
+								c.get(Calendar.DAY_OF_YEAR) == c2
+										.get(Calendar.DAY_OF_YEAR))
+
+						{
+							if (line.imagearray.size() == AdapterTime.mColum) {
+								line = new LineInfo();
+								line.isTitle = false;
+								line.date = info.date;
+								line.imagearray = new ArrayList<ImageData>();
+								line.pos = array2.size();
+								array2.add(line);
+
+								ImageData idata = new ImageData();
+								idata.sel = false;
+								idata.path = info.path;
+								line.imagearray.add(idata);
+
+								title.childcount++;
+							} else {
+								ImageData idata = new ImageData();
+								idata.sel = false;
+								idata.path = info.path;
+								line.imagearray.add(idata);
+
+								title.childcount++;
+							}
+						} else {
+							title = null;
+							line = null;
+							i--;
+							continue;
 						}
 					}
-					map.put(info.path, info);
+					i++;
+					if(mFirstRefresh)
+					{
+						if(i == 100 || i == 1000)
+						{						
+							Pair<Object, Object> p = new Pair<Object, Object>(array.clone(),
+									array2.clone());
+							notifyListeners(ImageMgr.refresh_end, p);
+							
+						}
+						
+					}
+					
 				}
 			}
-		}
-
-		return map;
-
+		
+			mFirstRefresh = false;
+		Pair<Object, Object> p = new Pair<Object, Object>(array,
+				array2);
+		notifyListeners(ImageMgr.refresh_end, p);
 	}
 
 	public static final int init_no = 0;
@@ -185,7 +280,15 @@ public class ImageMgr {
 
 	private class MyHandler extends Handler {
 		public void handleMessage(Message msg) {
-			notifyListenersInternal(msg.what, msg.obj);
+			if (msg.what == ImageMgr.refresh_end) {
+				Pair<Object, Object> p = (Pair<Object, Object>) msg.obj;
+				mArray = (ArrayList<ImageInfo>) p.first;
+				mArrayLineInfo = (ArrayList<LineInfo>) p.second;
+				notifyListenersInternal(msg.what, null);
+			} else {
+				notifyListenersInternal(msg.what, msg.obj);
+			}
+
 		}
 	}
 
@@ -204,8 +307,9 @@ public class ImageMgr {
 
 	private MyHandler mHandler;
 	boolean mInited = false;
+
 	public void init(final Context context) {
-		if(mInited)
+		if (mInited)
 			return;
 		mInited = true;
 		mContext = context;
@@ -225,7 +329,7 @@ public class ImageMgr {
 					}
 				});
 	}
-	
+
 	static final int task_refresh = 0;
 	static final int task_delete = 1;
 
@@ -248,6 +352,83 @@ public class ImageMgr {
 		}
 		addTask(task_refresh, null);
 
+	}
+
+	public ArrayList<LineInfo> parse(ArrayList<ImageInfo> array, int colum) {
+
+		ArrayList<LineInfo> res = new ArrayList<LineInfo>();
+
+		LineInfo title = null;
+		LineInfo line = null;
+
+		GregorianCalendar c = null;
+
+		for (int i = 0; i < array.size(); i++) {
+			ImageInfo info = array.get(i);
+			if (title == null) {
+				title = new LineInfo();
+				title.isTitle = true;
+				title.childcount = 0;
+				title.date = info.date;
+				title.pos = res.size();
+				res.add(title);
+				c = new GregorianCalendar();
+				c.setTime(info.date);
+				// .get(Calendar.DATE);
+
+				line = new LineInfo();
+				line.isTitle = false;
+				line.date = info.date;
+				line.imagearray = new ArrayList<ImageData>();
+				ImageData data = new ImageData();
+				data.sel = false;
+				data.path = info.path;
+				line.imagearray.add(data);
+				line.pos = res.size();
+				res.add(line);
+				title.childcount++;
+			} else {
+				GregorianCalendar c2 = new GregorianCalendar();
+				c2.setTime(info.date);
+				if (c.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+				// c.get(Calendar.MONTH) == c2.get(Calendar.MONTH)&&
+						c.get(Calendar.DAY_OF_YEAR) == c2
+								.get(Calendar.DAY_OF_YEAR))
+
+				{
+					if (line.imagearray.size() == colum) {
+						line = new LineInfo();
+						line.isTitle = false;
+						line.date = info.date;
+						line.imagearray = new ArrayList<ImageData>();
+						line.pos = res.size();
+						res.add(line);
+
+						ImageData data = new ImageData();
+						data.sel = false;
+						data.path = info.path;
+						line.imagearray.add(data);
+
+						title.childcount++;
+					} else {
+						ImageData data = new ImageData();
+						data.sel = false;
+						data.path = info.path;
+						line.imagearray.add(data);
+
+						title.childcount++;
+					}
+				} else {
+					title = null;
+					line = null;
+					i--;
+					continue;
+				}
+			}
+
+		}
+
+		return res;
 	}
 
 	private void addTask(int type, Object obj) {
@@ -283,8 +464,21 @@ public class ImageMgr {
 					continue;
 				if (task.type == task_refresh) {
 					notifyListeners(ImageMgr.refresh_begin, null);
+
+					ArrayList<ImageInfo> array;
+					ArrayList<LineInfo> arrayline;
 					while (true) {
-						refreshInternal();
+
+						synchronized (mLock) {
+							mInitState = init_doing;
+						}
+						loadData();
+					
+
+						synchronized (mLock) {
+
+							mInitState = init_complete;
+						}
 						boolean find = false;
 						synchronized (mTaskArray) {
 							for (int i = 0; i < mTaskArray.size(); i++) {
@@ -300,7 +494,7 @@ public class ImageMgr {
 							break;
 					}
 
-					notifyListeners(ImageMgr.refresh_end, null);
+					
 				} else if (task.type == task_delete) {
 					notifyListeners(ImageMgr.delete_begin, null);
 					ArrayList<String> set = (ArrayList<String>) task.param;
@@ -328,25 +522,11 @@ public class ImageMgr {
 		}
 	};
 
-	private void refreshInternal() {
-		Log.d(TAG, "refreshInternal");
-		synchronized (mLock) {
-			mInitState = init_doing;
-		}
-		HashMap<String, ImageInfo> map = loadData(mContext);
-
-		synchronized (mLock) {
-			mImages.clear();
-			mImages = map;
-			mInitState = init_complete;
-		}
-	}
-
 	public void unInit() {
 		if (mListeners != null)
 			mListeners.clear();
 		synchronized (mLock) {
-			mImages.clear();
+			mArray.clear();
 		}
 
 		if (mDb != null) {
@@ -379,22 +559,24 @@ public class ImageMgr {
 		}
 	}
 
-	private void notifyListeners(int type, String path) {
+	private void notifyListeners(int type, Object obj) {
 
 		if (mHandler != null) {
 			Message msg = new Message();
 			msg.what = type;
-			msg.obj = path;
+			msg.obj = obj;
 			mHandler.sendMessage(msg);
 		}
 	}
 
 	public ImageInfo getImage(String path) {
-		ImageInfo info = null;
-		synchronized (mLock) {
-			info = mImages.get(path);
+
+		for (ImageInfo info : mArray) {
+			if (info.path.equals(path))
+				return info;
 		}
-		return info;
+
+		return null;
 	}
 
 	public class ImageFileFilter implements FileFilter {
@@ -422,20 +604,20 @@ public class ImageMgr {
 	}
 
 	public int getImageCount() {
-		int n = 0;
+
 		synchronized (mLock) {
-			n = mImages.size();
+			return mArray.size();
 		}
-		return n;
+
 	}
 
 	public ArrayList<ImageInfo> GetLikeArray() {
 		ArrayList<ImageInfo> array = new ArrayList<ImageInfo>();
 
 		synchronized (mLock) {
-			for (Entry<String, ImageInfo> entry : mImages.entrySet()) {
-				ImageInfo info = entry.getValue();
-				if (info.like) {
+			for (ImageInfo info : mArray) {
+
+				if (mArrayLike.contains(info.path)) {
 					array.add(info);
 				}
 			}
@@ -450,27 +632,32 @@ public class ImageMgr {
 		setLike(set, like);
 	}
 
+	public boolean isLike(String path) {
+		synchronized (mLock) {
+			return mArrayLike.contains(path);
+		}
+	}
+
 	public void setLike(ArrayList<String> set, boolean like) {
 		for (String path : set) {
-			ImageInfo info = this.getImage(path);
-			if (info != null) {
-				info.like = like;
-			}
 
-			if (like) {
+			synchronized (mLock) {
+				if (like) {
 
-				if (mDb != null) {
-					mDb.execSQL("insert into table_like values(null , ? )",
-							new String[] { path });
+					mArrayLike.add(path);
+					if (mDb != null) {
+						mDb.execSQL("insert into table_like values(null , ? )",
+								new String[] { path });
+
+					}
+
+				} else {
+					mArrayLike.remove(path);
+					String sql = String.format(
+							"delete from table_like where path='%s'", path);
+					mDb.execSQL(sql);
 
 				}
-
-			} else {
-
-				String sql = String.format(
-						"delete from table_like where path='%s'", path);
-				mDb.execSQL(sql);
-
 			}
 
 		}
@@ -483,46 +670,13 @@ public class ImageMgr {
 			this.notifyListeners(ImageMgr.rotate, path);
 	}
 
-	public void setTag(String path, String tag) {
-		ImageInfo info = this.getImage(path);
-		if (info != null) {
-			String sql = String.format(
-					"select * from table_tag where path='%s'", info.path);
-			Cursor cursorTag = mDb.rawQuery(sql, null);
-			boolean exist = cursorTag != null && cursorTag.getCount() > 0;
-			info.tag = tag;
-
-			if (tag != null && tag.length() > 0) {
-				if (exist) {
-					mDb.execSQL("update table_tag set tag=? where path=?",
-							new String[] { info.tag, info.path });
-				} else {
-					mDb.execSQL("insert into table_tag values(null , ?,? )",
-							new String[] { info.path, info.tag });
-				}
-			} else {
-				if (exist) {
-					sql = String.format(
-							"delete from table_tag where path='%s'", info.path);
-					mDb.execSQL(sql);
-				}
-			}
-			this.notifyListeners(ImageMgr.tag, path);
-		}
-	}
-
 	public ArrayList<ImageInfo> getImageArray() {
 
-		ArrayList<ImageInfo> array = new ArrayList<ImageInfo>();
-		synchronized (mLock) {
-			if (mImages == null)
-				return null;
-			for (Entry<String, ImageInfo> entry : mImages.entrySet()) {
-				array.add(entry.getValue());
-			}
-		}
+		return mArray;
+	}
 
-		return array;
+	public ArrayList<LineInfo> getLineInfoArray() {
+		return mArrayLineInfo;
 	}
 
 }

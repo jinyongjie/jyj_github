@@ -11,7 +11,7 @@ import com.example.myimage.data.ImageMgr.DirInfo;
 import com.example.myimage.data.ImageMgr.FileComparator;
 import com.example.myimage.data.ImageMgr.ImageInfo;
 import com.example.myimage.data.ImageMgr.ImageMgrListener;
-import com.example.myimage.data.ImageMgr.TimeInfo;
+
 import com.example.myimage.R;
 import com.example.myimage.R.layout;
 
@@ -39,7 +39,11 @@ public class ActivityDir extends Activity implements OnClickListener,
 	private TextView mTitle;
 	private String mDirName;
 	private View mBarBegin;
-	private String[] mArray;
+	private static ArrayList<ImageInfo> mArray;
+	public static void setArray(ArrayList<ImageInfo> array)
+	{
+		mArray = array;
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,14 +60,14 @@ public class ActivityDir extends Activity implements OnClickListener,
 
 		Intent intent = getIntent();
 		mDirName = intent.getStringExtra("dir");
-		mArray = intent.getStringArrayExtra("array");
+	
 		
 
 		ImageMgr.GetInstance().addListener(this);
-		init(mArray);
+		init();
 	}
 
-	private void init(String[] array) {
+	private void init() {
 		mList.Init();
 		mList.setEditModeListener(this);
 		mList.setEnablePullRefresh(false);
@@ -73,19 +77,8 @@ public class ActivityDir extends Activity implements OnClickListener,
 	}
 	private void refreshData()
 	{
-		ArrayList<ImageInfo> array2 = new ArrayList<ImageInfo>();
-
-		for (int i = 0; i < mArray.length; i++) {
-
-			ImageInfo info = ImageMgr.GetInstance().getImage(mArray[i]);
-			if(info != null)
-			{
-				array2.add(info);
-			}
-		}
-		
-		mTitle.setText(String.format("%s(%d)", mDirName, array2.size()));
-		mList.setData(array2);
+		mTitle.setText(String.format("%s(%d)", mDirName, mArray.size()));
+		mList.setArray(mArray);
 	}
 
 	@Override
