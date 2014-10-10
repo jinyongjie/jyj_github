@@ -166,13 +166,6 @@ public class ActivityMain extends Activity implements OnClickListener,
 	private void initData() {
 		ImageMgr.GetInstance().addListener(this);
 
-		int state = ImageMgr.GetInstance().getInitState();
-
-		if (state == ImageMgr.init_no) {
-			ImageMgr.GetInstance().init(this);
-
-		}
-
 	}
 	private void updateButton()
 	{
@@ -401,8 +394,8 @@ public class ActivityMain extends Activity implements OnClickListener,
 				try {
 					File f = new File(mCameraPicPath);
 					if (f != null && f.exists() && f.isFile()) {
-						Helper.insertImage2MediaStore(this, mCameraPicPath);
-						// this.getContentResolver().notifyChange(uri, null);
+						ImageMgr.GetInstance().addImage(mCameraPicPath);
+						
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -482,9 +475,7 @@ public class ActivityMain extends Activity implements OnClickListener,
 	@Override
 	public void onImageMgrNotify(int type, Object path) {
 		// TODO Auto-generated method stub
-		if (type == ImageMgr.refresh_begin) {
-
-		} else if (type == ImageMgr.refresh_end) {
+		if (type == ImageMgr.refresh) {
 
 		} else if (type == ImageMgr.delete_begin) {
 
