@@ -29,10 +29,14 @@
         <Button
             android:id="@+id/button_confirm"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/selector_button_confirm" >
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/ok"
+            android:textColor="@color/textWhite"
+            android:textSize="16sp"
+            android:background="@drawable/selector_button" >
         </Button>
 
         <TextView

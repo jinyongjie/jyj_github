@@ -44,9 +44,10 @@ public class ViewLike extends RelativeLayout implements ImageMgrListener {
 		// TODO Auto-generated method stub
 		if ( type == ImageMgr.delete_end
 				|| type == ImageMgr.like
-				|| type==ImageMgr.refresh_end)
+				|| type==ImageMgr.refresh)
 			rereshData();
 
+		mList.checkEmpty();
 
 	}
 

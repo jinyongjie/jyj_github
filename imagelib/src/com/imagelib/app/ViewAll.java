@@ -41,10 +41,10 @@ public class ViewAll extends RelativeLayout implements ImageMgrListener {
 		
 
 		ImageMgr.GetInstance().addListener(this);
-		//if(ImageMgr.GetInstance().getInitState() == ImageMgr.init_complete)
-		{
-			refreshData();
-		}
+		
+		
+		refreshData();
+
 
 	}
 	public void uninit()
@@ -52,18 +52,35 @@ public class ViewAll extends RelativeLayout implements ImageMgrListener {
 		ImageMgr.GetInstance().removeListener(this);
 	}
 	private void refreshData() {
+	//	mList.showScrollBar(ImageMgr.GetInstance().isRefreshComplete());
+
 		
 		ArrayList<LineInfo> array = ImageMgr.GetInstance().getLineInfoArray();
-		mList.setLineInfo(array);
+		mList.setLineInfo(array,array.size());
 
 	}
 
 	@Override
-	public void onImageMgrNotify(int type, Object path) {
+	public void onImageMgrNotify(int type, Object param) {
 		// TODO Auto-generated method stub
 		if ( type == ImageMgr.delete_end
-				|| type == ImageMgr.refresh_end) {
+				) {
 			refreshData();
+			mList.checkEmpty();
+		}
+		else if (  type == ImageMgr.refresh) {
+			
+			if(param != null)
+			{
+				ArrayList<LineInfo> array = ImageMgr.GetInstance().getLineInfoArray();
+				mList.setLineInfo(array,(Integer)param);
+			}
+			else
+			{
+				refreshData();
+			}
+			mList.checkEmpty();
+			
 		}
 
 

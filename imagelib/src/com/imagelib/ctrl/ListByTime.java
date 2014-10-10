@@ -136,7 +136,7 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 			}
 		};
 		mListView.getRefreshableView().setAdapter(mAdapter);
-
+		
 		ImageMgr.GetInstance().addListener(mImageMgrListener);
 
 		mAdapter.SetEditModeListener(new EditModeListener() {
@@ -177,7 +177,10 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 
 		});
 	}
-
+	public void showScrollBar(boolean b)
+	{
+		mListView.getRefreshableView().setVerticalScrollBarEnabled(b);
+	}
 	public void setEmptyText(int r) {
 		if (mEmpty != null)
 			mEmpty.setText(r);
@@ -188,16 +191,21 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 			mListView.setPullToRefreshEnabled(enable);
 		}
 	}
-	public void setLineInfo(ArrayList<LineInfo> array)
+	public void setLineInfo(ArrayList<LineInfo> array,int count)
 	{
 		if (mAdapter != null)
-			mAdapter.setData(array);
+			mAdapter.setData(array,count);
 		
-		if (ImageMgr.GetInstance().getInitState() == ImageMgr.init_complete) {
-			mListView.setEmptyView(mEmpty);
-		}
+		
+			
+		
 		updateSelectNum();
 	}
+	public void checkEmpty()
+	{
+		mListView.setEmptyView(mEmpty);
+	}
+	
 	public void setArray(final ArrayList<ImageInfo> array) {
 		/*
 		 * new AsyncTask<Object,Object,Object>(){
@@ -225,13 +233,11 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
-				if (mAdapter != null)
-					mAdapter.setData((ArrayList<LineInfo>) msg.obj);
+				ArrayList<LineInfo> res = (ArrayList<LineInfo>) msg.obj;
+				setLineInfo(res,res.size());
+			
 				showProgress(false);
-				if (ImageMgr.GetInstance().getInitState() == ImageMgr.init_complete) {
-					mListView.setEmptyView(mEmpty);
-				}
-				updateSelectNum();
+
 			}
 
 		};
@@ -454,10 +460,7 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 		@Override
 		public void onImageMgrNotify(int type, Object obj) {
 			// TODO Auto-generated method stub
-			if (type == ImageMgr.refresh_begin) {
-//				 mProgressText.setText(R.string.load_image);
-	//			 showProgress(true);
-			} else if (type == ImageMgr.refresh_end) {
+			 if (type == ImageMgr.refresh) {
 				showProgress(false);
 			} else if (type == ImageMgr.delete_begin) {
 				mProgressText.setText(R.string.del_image);

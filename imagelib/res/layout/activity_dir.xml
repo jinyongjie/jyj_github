@@ -23,17 +23,7 @@
             android:background="@drawable/selector_button" >
         </Button>
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:ellipsize="middle"
-        	android:singleLine="true"
-            android:textColor="@color/textWhite"
-            android:textSize="18sp" >
-        </TextView>
+
 
         <Button
             android:id="@+id/button_op"
@@ -49,11 +39,24 @@
         </Button>
 
         <View
+            android:id="@+id/line"
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/button_op"
             android:background="#0a0a0a" >
         </View>
+                <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/button_return"
+            android:layout_toLeftOf="@id/line"
+            android:gravity="center"
+            android:ellipsize="middle"
+        	android:singleLine="true"
+            android:textColor="@color/textWhite"
+            android:textSize="18sp" >
+        </TextView>
     </RelativeLayout>
 
     <com.imagelib.ctrl.ListByTime

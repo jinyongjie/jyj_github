@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
-
-
 import com.imagelib.R;
 import com.imagelib.ctrl.AdapterTime;
 
@@ -54,18 +52,18 @@ public class ImageMgr {
 	private static final String TAG = "ImageMgr";
 	// private HashMap<String, ImageInfo> mImages = new HashMap<String,
 	// ImageInfo>();
-
+	
 	private ArrayList<ImageInfo> mArray = new ArrayList<ImageInfo>();
-	private HashSet<String> mArrayLike = new HashSet<String>();
+	private HashMap<String,Integer> mArrayLike = new HashMap<String,Integer>();
 	private ArrayList<LineInfo> mArrayLineInfo = new ArrayList<LineInfo>();
 	private static ImageMgr instance = null;
 	private Context mContext;
 	private SQLiteDatabase mDb;
 	private final static boolean mEnableTag = false;
-	private Object mLock = new Object();
+	
 
-	public static final int refresh_begin = 0;
-	public static final int refresh_end = 1;
+	public static final int refresh = 0;
+	
 	public static final int delete_begin = 3;
 	public static final int delete_end = 4;
 	public static final int like = 5;
@@ -114,7 +112,9 @@ public class ImageMgr {
 		}
 		return instance;
 	}
+
 	private boolean mFirstRefresh = true;
+
 	private void loadData() {
 		mDb = SQLiteDatabase.openOrCreateDatabase(mContext.getFilesDir()
 				.toString() + "/data.db3", null);
@@ -126,7 +126,7 @@ public class ImageMgr {
 
 		while (cursorLike.moveToNext()) {
 			String path = cursorLike.getString(1);
-			mArrayLike.add(path);
+			mArrayLike.put(path,cursorLike.getInt(0));
 		}
 
 		Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -145,133 +145,129 @@ public class ImageMgr {
 		Cursor cursor = contentResolver.query(uri, null, null, null, sortOrder);
 
 		ArrayList<ImageInfo> array = new ArrayList<ImageInfo>(cursor.getCount());
-		ArrayList<LineInfo> array2 =  new ArrayList<LineInfo>(cursor.getCount()/AdapterTime.mColum);
+		ArrayList<LineInfo> array2 = new ArrayList<LineInfo>(cursor.getCount()
+				/ AdapterTime.mColum);
+
 		
+		int index0 = cursor.getColumnIndex(Media.DATA);
+		int index1 = cursor.getColumnIndex(Media.DATE_MODIFIED);
 
+		LineInfo title = null;
+		LineInfo line = null;
 
-			int index0 = cursor.getColumnIndex(Media.DATA);
-			int index1 = cursor.getColumnIndex(Media.DATE_MODIFIED);
-			
-			LineInfo title = null;
-			LineInfo line = null;
+		GregorianCalendar c = null;
 
-			GregorianCalendar c = null;
-			
-			int i= 0;
-			while (cursor.moveToNext()) {
-				ImageInfo info = new ImageInfo();
+		int i = 0;
+		while (cursor.moveToNext()) {
+			ImageInfo info = new ImageInfo();
 
-				byte[] data = cursor.getBlob(index0);
+			byte[] data = cursor.getBlob(index0);
 
-				info.path = new String(data, 0, data.length - 1);
+			info.path = new String(data, 0, data.length - 1);
 
-				 File file = new File(info.path);
-				 if (file.exists() )
-				{
-					long t = cursor.getLong(index1);
+			File file = new File(info.path);
+			if (file.exists()) {
+				long t = cursor.getLong(index1);
 
-					info.date = new Date(t * 1000);
+				info.date = new Date(t * 1000);
 
-					// File dir = new File(info.path).getParentFile();
-					int end = info.path.lastIndexOf(File.separator);
-					int begin = info.path.lastIndexOf(File.separator, end - 1);
-					info.dirName = info.path.substring(begin + 1, end);
-					info.dirPath = info.path.substring(0, begin);
+				// File dir = new File(info.path).getParentFile();
+				int end = info.path.lastIndexOf(File.separator);
+				int begin = info.path.lastIndexOf(File.separator, end - 1);
+				info.dirName = info.path.substring(begin + 1, end);
+				info.dirPath = info.path.substring(0, begin);
 
-					array.add(info);
-					
-					if (title == null) {
-						title = new LineInfo();
-						title.isTitle = true;
-						title.childcount = 0;
-						title.date = info.date;
-						title.pos = array2.size();
-						array2.add(title);
-						c = new GregorianCalendar();
-						c.setTime(info.date);
-						// .get(Calendar.DATE);
+				array.add(info);
 
-						line = new LineInfo();
-						line.isTitle = false;
-						line.date = info.date;
-						line.imagearray = new ArrayList<ImageData>();
-						ImageData idata = new ImageData();
-						idata.sel = false;
-						idata.path = info.path;
-						line.imagearray.add(idata);
-						line.pos = array2.size();
-						array2.add(line);
-						title.childcount++;
-					} else {
-						GregorianCalendar c2 = new GregorianCalendar();
-						c2.setTime(info.date);
-						if (c.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
-						
-								c.get(Calendar.DAY_OF_YEAR) == c2
-										.get(Calendar.DAY_OF_YEAR))
+				if (title != null) {
+					GregorianCalendar c2 = new GregorianCalendar();
+					c2.setTime(info.date);
+					if (c.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
 
-						{
-							if (line.imagearray.size() == AdapterTime.mColum) {
-								line = new LineInfo();
-								line.isTitle = false;
-								line.date = info.date;
-								line.imagearray = new ArrayList<ImageData>();
-								line.pos = array2.size();
-								array2.add(line);
+					c.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR))
 
-								ImageData idata = new ImageData();
-								idata.sel = false;
-								idata.path = info.path;
-								line.imagearray.add(idata);
-
-								title.childcount++;
-							} else {
-								ImageData idata = new ImageData();
-								idata.sel = false;
-								idata.path = info.path;
-								line.imagearray.add(idata);
-
-								title.childcount++;
-							}
-						} else {
-							title = null;
-							line = null;
-							i--;
-							continue;
-						}
-					}
-					i++;
-					if(mFirstRefresh)
 					{
-						if(i == 100 || i == 1000)
-						{						
-							Pair<Object, Object> p = new Pair<Object, Object>(array.clone(),
-									array2.clone());
-							notifyListeners(ImageMgr.refresh_end, p);
-							
+						if (line.imagearray.size() == AdapterTime.mColum) {
+							line = new LineInfo();
+							line.isTitle = false;
+							line.date = title.date;
+							line.imagearray = new ArrayList<ImageData>();
+							line.pos = array2.size();
+							array2.add(line);
+
+							ImageData idata = new ImageData();
+							idata.sel = false;
+							idata.path = info.path;
+							line.imagearray.add(idata);
+
+							title.childcount++;
+						} else {
+							ImageData idata = new ImageData();
+							idata.sel = false;
+							idata.path = info.path;
+							line.imagearray.add(idata);
+
+							title.childcount++;
 						}
-						
+					} else {
+						title = null;
+						line = null;
+
 					}
-					
 				}
+				if (title == null) {
+					title = new LineInfo();
+					title.isTitle = true;
+					title.childcount = 0;
+					title.date = info.date;
+					title.pos = array2.size();
+					array2.add(title);
+					c = new GregorianCalendar();
+					c.setTime(info.date);
+					// .get(Calendar.DATE);
+
+					line = new LineInfo();
+					line.isTitle = false;
+					line.date = info.date;
+					line.imagearray = new ArrayList<ImageData>();
+					ImageData idata = new ImageData();
+					idata.sel = false;
+					idata.path = info.path;
+					line.imagearray.add(idata);
+					line.pos = array2.size();
+					array2.add(line);
+					title.childcount++;
+				}
+				i++;
+				if (mFirstRefresh) {
+					if (i == 100 || i == 1000) {
+						
+						ArrayList<Object> param = new ArrayList<Object>(3);
+						param.add(array.clone());
+						param.add(array2.clone());
+						param.add(new Integer(cursor.getCount()/AdapterTime.mColum));
+						notifyListeners(ImageMgr.refresh, param);
+
+					}
+
+				}
+
 			}
-		
-			mFirstRefresh = false;
-		Pair<Object, Object> p = new Pair<Object, Object>(array,
-				array2);
-		notifyListeners(ImageMgr.refresh_end, p);
-	}
-
-	public static final int init_no = 0;
-	public static final int init_doing = 1;
-	public static final int init_complete = 2;
-	private int mInitState = init_no;
-
-	public int getInitState() {
-		synchronized (mLock) {
-			return mInitState;
 		}
+
+		Log.d(TAG,String.format("image count = %d",array.size()));
+		mFirstRefresh = false;
+	
+		ArrayList<Object> param = new ArrayList<Object>(3);
+		param.add(array);
+		param.add(array2);
+		
+		notifyListeners(ImageMgr.refresh, param);
 	}
+
+
+
+
 
 	boolean mEnableRefresh = true;
 
@@ -281,17 +277,40 @@ public class ImageMgr {
 
 	private class MyHandler extends Handler {
 		public void handleMessage(Message msg) {
-			if (msg.what == ImageMgr.refresh_end) {
-				Pair<Object, Object> p = (Pair<Object, Object>) msg.obj;
-				mArray = (ArrayList<ImageInfo>) p.first;
-				mArrayLineInfo = (ArrayList<LineInfo>) p.second;
+			if (msg.what == ImageMgr.refresh) {
+				ArrayList<Object> p = (ArrayList<Object>) msg.obj;
+				mArray = (ArrayList<ImageInfo>)p.get(0);
+				mArrayLineInfo = (ArrayList<LineInfo>) p.get(1);
+				
+				Object obj = null;
+				if(p.size() > 2)
+				{
+					obj = p.get(2);
+				}
+				notifyListenersInternal(msg.what, obj);
+			} 
+			else if(msg.what == delete_begin)
+			{
+				setEnableRefresh(false);
 				notifyListenersInternal(msg.what, null);
-			} else {
+			}
+			else if(msg.what == delete_end)
+			{
+				setEnableRefresh(true);
+			
+				ArrayList<Object> p = (ArrayList<Object>) msg.obj;
+				mArray = (ArrayList<ImageInfo>)p.get(0);
+				mArrayLineInfo = (ArrayList<LineInfo>) p.get(1);
+				
+				notifyListenersInternal(msg.what, null);
+			}
+			else {
 				notifyListenersInternal(msg.what, msg.obj);
 			}
 
 		}
 	}
+
 
 	private void notifyListenersInternal(int type, Object obj) {
 		Iterator it = mListeners.iterator();
@@ -323,9 +342,7 @@ public class ImageMgr {
 				new ContentObserver(new Handler()) {
 					public void onChange(boolean selfChange) {
 						refresh();
-						Log.d(TAG, String.format(
-								"ImageMgr ContentObserver onChange state=%d",
-								getInitState()));
+	
 
 					}
 				});
@@ -333,6 +350,7 @@ public class ImageMgr {
 
 	static final int task_refresh = 0;
 	static final int task_delete = 1;
+	static final int task_add = 2;
 
 	class MyTask {
 		int type;
@@ -364,8 +382,46 @@ public class ImageMgr {
 
 		GregorianCalendar c = null;
 
-		for (int i = 0; i < array.size(); i++) {
-			ImageInfo info = array.get(i);
+		for (ImageInfo info :array) {
+			
+			
+			if(title != null)
+			{
+				GregorianCalendar c2 = new GregorianCalendar();
+				c2.setTime(info.date);
+				if (c.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+				// c.get(Calendar.MONTH) == c2.get(Calendar.MONTH)&&
+						c.get(Calendar.DAY_OF_YEAR) == c2
+								.get(Calendar.DAY_OF_YEAR))
+
+				{
+					if (line.imagearray.size() == colum) {
+						line = new LineInfo();
+						line.isTitle = false;
+						line.date = title.date;
+						line.imagearray = new ArrayList<ImageData>();
+						line.pos = res.size();
+						res.add(line);
+
+						ImageData data = new ImageData();
+						data.sel = false;
+						data.path = info.path;
+						line.imagearray.add(data);
+
+						title.childcount++;
+					} else {
+						ImageData data = new ImageData();
+						data.sel = false;
+						data.path = info.path;
+						line.imagearray.add(data);
+
+						title.childcount++;
+					}
+				} else {
+					title = null;
+					line = null;
+				}
+			}
 			if (title == null) {
 				title = new LineInfo();
 				title.isTitle = true;
@@ -388,50 +444,32 @@ public class ImageMgr {
 				line.pos = res.size();
 				res.add(line);
 				title.childcount++;
-			} else {
-				GregorianCalendar c2 = new GregorianCalendar();
-				c2.setTime(info.date);
-				if (c.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
-				// c.get(Calendar.MONTH) == c2.get(Calendar.MONTH)&&
-						c.get(Calendar.DAY_OF_YEAR) == c2
-								.get(Calendar.DAY_OF_YEAR))
-
-				{
-					if (line.imagearray.size() == colum) {
-						line = new LineInfo();
-						line.isTitle = false;
-						line.date = info.date;
-						line.imagearray = new ArrayList<ImageData>();
-						line.pos = res.size();
-						res.add(line);
-
-						ImageData data = new ImageData();
-						data.sel = false;
-						data.path = info.path;
-						line.imagearray.add(data);
-
-						title.childcount++;
-					} else {
-						ImageData data = new ImageData();
-						data.sel = false;
-						data.path = info.path;
-						line.imagearray.add(data);
-
-						title.childcount++;
-					}
-				} else {
-					title = null;
-					line = null;
-					i--;
-					continue;
-				}
-			}
-
+			} 
 		}
 
 		return res;
 	}
 
+	public void addImage(String path)
+	{		
+	
+		File f = new File(path);
+		if(f.exists() == false)
+			return;
+		
+		if(mArray == null  )
+		{
+			Helper.insertImage2MediaStore(mContext, path);
+			return;
+		}
+
+		ArrayList<Object> array = new ArrayList<Object>();
+		array.add(path);
+		array.add(mArray.clone());
+	
+		addTask(task_add,array);
+	
+	}
 	private void addTask(int type, Object obj) {
 		synchronized (mTaskArray) {
 			MyTask task = new MyTask();
@@ -464,41 +502,14 @@ public class ImageMgr {
 				if (task == null)
 					continue;
 				if (task.type == task_refresh) {
-					notifyListeners(ImageMgr.refresh_begin, null);
-
-					ArrayList<ImageInfo> array;
-					ArrayList<LineInfo> arrayline;
-					while (true) {
-
-						synchronized (mLock) {
-							mInitState = init_doing;
-						}
-						loadData();
 					
-
-						synchronized (mLock) {
-
-							mInitState = init_complete;
-						}
-						boolean find = false;
-						synchronized (mTaskArray) {
-							for (int i = 0; i < mTaskArray.size(); i++) {
-								task = mTaskArray.get(i);
-								if (task.type == task_refresh) {
-									mTaskArray.remove(i);
-									find = true;
-									break;
-								}
-							}
-						}
-						if (!find)
-							break;
-					}
-
-					
+			
+					loadData();
 				} else if (task.type == task_delete) {
 					notifyListeners(ImageMgr.delete_begin, null);
-					ArrayList<String> set = (ArrayList<String>) task.param;
+					ArrayList<Object> param = (ArrayList<Object>) task.param;
+					ArrayList<ImageInfo> array = (ArrayList<ImageInfo>) param.get(0);
+					ArrayList<String> set = (ArrayList<String>) param.get(1);
 
 					for (String path : set) {
 
@@ -512,12 +523,53 @@ public class ImageMgr {
 									path, ret ? 1 : 0));
 							if (ret) {
 								Helper.removeImageFromMediaStore(mContext, path);
+								for(int i=0;i<array.size();i++)
+								{
+									if(array.get(i).path.equals(path))
+									{
+										array.remove(i);
+										break;
+									}
+										
+								}
 							}
 						}
-
+						
 					}
+				
+					ArrayList<LineInfo> array2 = parse(array,AdapterTime.mColum);
+					ArrayList<Object> param2 = new ArrayList<Object>(2);
+					param2.add(array);
+					param2.add(array2);
 
-					notifyListeners(ImageMgr.delete_end, null);
+					notifyListeners(ImageMgr.delete_end, param2);
+				}
+				else if(task.type == task_add)
+				{
+					ArrayList<Object> param =  (ArrayList<Object>) task.param;
+					String path = (String) param.get(0);
+					ArrayList<ImageInfo> array = (ArrayList<ImageInfo>) param.get(1);
+		
+					File f = new File(path);
+					
+					ImageInfo info = new ImageInfo();
+					info.path = path;
+					info.date = new Date(f.lastModified());
+					
+					int end = info.path.lastIndexOf(File.separator);
+					int begin = info.path.lastIndexOf(File.separator, end - 1);
+					info.dirName = info.path.substring(begin + 1, end);
+					info.dirPath = info.path.substring(0, begin);
+					
+					array.add(0, info);
+					ArrayList<LineInfo> array2 = parse(array,AdapterTime.mColum);
+					ArrayList<Object> param2 = new ArrayList<Object>(2);
+					param2.add(array);
+					param2.add(array2);
+					
+					notifyListeners(ImageMgr.refresh, param2);
+					
+					Helper.insertImage2MediaStore(mContext, path);
 				}
 			}
 		}
@@ -526,9 +578,9 @@ public class ImageMgr {
 	public void unInit() {
 		if (mListeners != null)
 			mListeners.clear();
-		synchronized (mLock) {
-			mArray.clear();
-		}
+		
+		
+		
 
 		if (mDb != null) {
 			mDb.close();
@@ -542,7 +594,10 @@ public class ImageMgr {
 	}
 
 	public void deleteImage(ArrayList<String> set) {
-		addTask(task_delete, set);
+		ArrayList<Object> param = new ArrayList<Object>();
+		param.add(mArray.clone());
+		param.add(set);
+		addTask(task_delete, param);
 	}
 
 	public void addListener(ImageMgrListener listener) {
@@ -606,23 +661,23 @@ public class ImageMgr {
 
 	public int getImageCount() {
 
-		synchronized (mLock) {
+		
 			return mArray.size();
-		}
+		
 
 	}
 
 	public ArrayList<ImageInfo> GetLikeArray() {
 		ArrayList<ImageInfo> array = new ArrayList<ImageInfo>();
 
-		synchronized (mLock) {
+		 
 			for (ImageInfo info : mArray) {
 
-				if (mArrayLike.contains(info.path)) {
+				if (mArrayLike.containsKey(info.path)) {
 					array.add(info);
 				}
 			}
-		}
+		
 
 		return array;
 	}
@@ -634,18 +689,18 @@ public class ImageMgr {
 	}
 
 	public boolean isLike(String path) {
-		synchronized (mLock) {
-			return mArrayLike.contains(path);
-		}
+		
+			return mArrayLike.containsKey(path);
+		
 	}
 
 	public void setLike(ArrayList<String> set, boolean like) {
 		for (String path : set) {
 
-			synchronized (mLock) {
+			
 				if (like) {
 
-					mArrayLike.add(path);
+					mArrayLike.put(path,mArrayLike.size());
 					if (mDb != null) {
 						mDb.execSQL("insert into table_like values(null , ? )",
 								new String[] { path });
@@ -653,13 +708,19 @@ public class ImageMgr {
 					}
 
 				} else {
-					mArrayLike.remove(path);
-					String sql = String.format(
-							"delete from table_like where path='%s'", path);
-					mDb.execSQL(sql);
+					if(mArrayLike.containsKey(path))
+					{
+						
+						mArrayLike.remove(path);
+						
+						String sql = String.format(
+								"delete from table_like where path='%s'", path.replace("'", "''"));
+						mDb.execSQL(sql);
+					}
+				
 
 				}
-			}
+			
 
 		}
 		this.notifyListeners(ImageMgr.like, null);
@@ -680,4 +741,5 @@ public class ImageMgr {
 		return mArrayLineInfo;
 	}
 
+	
 }

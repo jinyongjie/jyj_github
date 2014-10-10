@@ -227,6 +227,7 @@ public class ActivitySelDir extends Activity implements OnClickListener {
 							if(ret)
 							{
 								Helper.insertImage2MediaStore(this, newPath);
+								Helper.removeImageFromMediaStore(this, path);
 								boolean like = ImageMgr.GetInstance().isLike(path);
 								if(like)
 								{

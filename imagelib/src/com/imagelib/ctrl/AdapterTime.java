@@ -59,7 +59,8 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 	protected ArrayList<LineInfo> mData = new ArrayList<LineInfo>();
 	protected LayoutInflater mInflator;
 	private boolean mEditMode = false;
-	WeakReference<ListView> mListView;
+	private WeakReference<ListView> mListView;
+	private int mCount = 0;
 
 	public AdapterTime(ListView list) {
 
@@ -75,18 +76,21 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 		list.setDividerHeight(mSpacing);
 	}
 
-	public void setData(ArrayList<LineInfo> data)
+	public void setData(ArrayList<LineInfo> data,int count)
 	{
 		mData = data;
+		mCount = count;
 		notifyDataSetChanged();
 	}
 	@Override
 	public int getCount() {
-		return mData.size();
+		return mCount;
 	}
 
 	@Override
 	public Object getItem(int position) {
+		if(position >= mData.size())
+			return null;
 		return mData.get(position);
 	}
 
@@ -96,6 +100,8 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 	}
 
 	public int getItemViewType(int position) {
+		if(position >= mData.size())
+			return 0;
 		return mData.get(position).isTitle ? 0 : 1;
 	}
 
@@ -117,6 +123,10 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		if(position >= mData.size())
+		{
+			return null;
+		}
 		View v = null;
 
 		LineInfo info = mData.get(position);

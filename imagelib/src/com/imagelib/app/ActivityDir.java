@@ -102,9 +102,10 @@ public class ActivityDir extends Activity implements OnClickListener,
 	@Override
 	public void onImageMgrNotify(int type, Object path) {
 		// TODO Auto-generated method stub
-		if ( type == ImageMgr.delete_end|| type==ImageMgr.refresh_end)
+		if ( type == ImageMgr.delete_end|| type==ImageMgr.refresh)
 
 			refreshData();
+		mList.checkEmpty();
 	}
 
 

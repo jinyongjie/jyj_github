@@ -62,9 +62,17 @@ public class Helper {
 	public static void removeImageFromMediaStore(Context context, String path) {
 	
 		//	context.getContentResolver().query(Media.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, sortOrder)
-		String str = String.format("%s='%s'", Media.DATA,path);
+		try
+		{
+			String str = String.format("%s='%s'", Media.DATA,path);
 			context.getContentResolver().delete(Media.EXTERNAL_CONTENT_URI,str  , null);
 		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 
 	public static void openImage(Context context, String path) {

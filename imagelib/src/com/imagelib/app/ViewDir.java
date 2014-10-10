@@ -86,7 +86,7 @@ public class ViewDir extends RelativeLayout implements ImageMgrListener {
 	@Override
 	public void onImageMgrNotify(int type, Object path) {
 		// TODO Auto-generated method stub
-		if ( type == ImageMgr.delete_end|| type==ImageMgr.refresh_end) {
+		if ( type == ImageMgr.delete_end|| type==ImageMgr.refresh) {
 			refreshData();
 		}
 

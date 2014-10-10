@@ -625,7 +625,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 			this.UpdateButtonState();
 		} else if (type == ImageMgr.delete_begin) {
 			mTip.setVisibility(View.VISIBLE);
-		} else if (type == ImageMgr.delete_end || type == ImageMgr.refresh_end) {
+		} else if (type == ImageMgr.delete_end || type == ImageMgr.refresh) {
 			mTip.setVisibility(View.GONE);
 			handleDelete();
 		}
