@@ -172,12 +172,28 @@ public class ActivityMain extends Activity implements OnClickListener,
 		mButtonAll.setBackgroundResource(R.drawable.selector_button);
 		mButtonDir.setBackgroundResource(R.drawable.selector_button);
 		mButtonLike.setBackgroundResource(R.drawable.selector_button);
+		mButtonAll.setTextColor(this.getResources().getColor(R.color.textWhite));
+		mButtonDir.setTextColor(this.getResources().getColor(R.color.textWhite));
+		mButtonLike.setTextColor(this.getResources().getColor(R.color.textWhite));
+		
 		if(mIndex == view_all)
+		{
 			mButtonAll.setBackgroundResource(R.color.button_down);
+			mButtonAll.setTextColor(this.getResources().getColor(R.color.textBlue));
+		}
+			
 		else if(mIndex == view_dir)
-			mButtonDir.setBackgroundResource(R.color.button_down);
+		{
+				mButtonDir.setBackgroundResource(R.color.button_down);
+			mButtonDir.setTextColor(this.getResources().getColor(R.color.textBlue));
+		}
+		
 		else if(mIndex == view_like)
+		{
 			mButtonLike.setBackgroundResource(R.color.button_down);
+			mButtonLike.setTextColor(this.getResources().getColor(R.color.textBlue));
+		}
+			
 	}
 	private class MyAdapter extends PagerAdapter {
 

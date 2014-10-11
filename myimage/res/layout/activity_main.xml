@@ -47,7 +47,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/selector_button"
-                android:drawableLeft="@drawable/op"
+                android:text="@string/button_op"
+                android:textColor="@color/textWhite"
+                android:textSize="16sp"
                 android:paddingLeft="13dip"
                 android:paddingRight="13dip" >
             </Button>
@@ -60,7 +62,9 @@
                 android:background="@drawable/selector_button"
                 android:drawableLeft="@drawable/more2_ic"
                 android:paddingLeft="10dip"
-                android:paddingRight="10dip" >
+                android:paddingRight="10dip" 
+                android:visibility="gone"
+                >
             </Button>
         </LinearLayout>
     </RelativeLayout>
