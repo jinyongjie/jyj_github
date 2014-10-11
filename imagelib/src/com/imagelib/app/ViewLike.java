@@ -37,6 +37,8 @@ public class ViewLike extends RelativeLayout implements ImageMgrListener {
 		ImageMgr.GetInstance().addListener(this);
 		mList.setEmptyText(R.string.no_like_tip);
 		rereshData();
+		if(ImageMgr.GetInstance().isRefreshed())
+			mList.checkEmpty();
 	}
 
 	@Override
@@ -45,9 +47,12 @@ public class ViewLike extends RelativeLayout implements ImageMgrListener {
 		if ( type == ImageMgr.delete_end
 				|| type == ImageMgr.like
 				|| type==ImageMgr.refresh)
+		{
 			rereshData();
 
-		mList.checkEmpty();
+			mList.checkEmpty();
+		}
+			
 
 	}
 

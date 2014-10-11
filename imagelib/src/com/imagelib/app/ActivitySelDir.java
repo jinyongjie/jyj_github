@@ -94,12 +94,17 @@ public class ActivitySelDir extends Activity implements OnClickListener {
 			if (info == null)
 				continue;
 
-			DirInfo dir = map.get(info.dirName);
+			int end = info.path.lastIndexOf(File.separator);
+			int begin = info.path.lastIndexOf(File.separator, end - 1);
+			String dirName = info.path.substring(begin + 1, end);
+			String dirPath = info.path.substring(0, end);
+			
+			DirInfo dir = map.get(dirName);
 			if (dir == null) {
 				dir = ImageMgr.GetInstance().new DirInfo();
 				dir.array = new ArrayList<ImageInfo>();
-				dir.name = info.dirName;
-				dir.dir = info.dirPath;
+				dir.name = dirName;
+				dir.dir = dirPath;
 				map.put(dir.name, dir);
 			}
 			

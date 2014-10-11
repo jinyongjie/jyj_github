@@ -1,5 +1,6 @@
 package com.imagelib.app;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -79,6 +80,7 @@ public class ActivityDir extends Activity implements OnClickListener,
 	{
 		mTitle.setText(String.format("%s(%d)", mDirName, mArray.size()));
 		mList.setArray(mArray);
+		
 	}
 
 	@Override
@@ -102,10 +104,21 @@ public class ActivityDir extends Activity implements OnClickListener,
 	@Override
 	public void onImageMgrNotify(int type, Object path) {
 		// TODO Auto-generated method stub
-		if ( type == ImageMgr.delete_end|| type==ImageMgr.refresh)
-
+		if ( type == ImageMgr.delete_end)
+		{
+			ArrayList<ImageInfo> array = new ArrayList<ImageInfo>();
+			for(int i = 0;i<mArray.size();i++)
+			{
+				ImageInfo info = mArray.get(i);
+				File f =  new File(info.path);
+				if(f.exists())
+					array.add(info);
+			}
+			mArray = array;
 			refreshData();
-		mList.checkEmpty();
+			mList.checkEmpty();
+		}
+			
 	}
 
 

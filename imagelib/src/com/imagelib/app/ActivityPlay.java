@@ -28,10 +28,12 @@ import android.widget.ViewSwitcher.ViewFactory;
 public class ActivityPlay extends Activity {
 	private static ArrayList<String> mArray ;
 	private ImageSwitcher mSwitcher;
-	private int mIndex = 0;
-	public static void setArray(ArrayList<String> array)
+	private static int mIndex = 0;
+	
+	public static void setArray(ArrayList<String> array,int index)
 	{
 		mArray = array;
+		mIndex = index;
 	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,8 @@ public class ActivityPlay extends Activity {
 
 		mSwitcher = (ImageSwitcher) findViewById(R.id.switcher);
 
-		Intent intent = getIntent();
-		mIndex = 0;
+		
+		
 
 
 		mSwitcher.setFactory(new ViewFactory() {

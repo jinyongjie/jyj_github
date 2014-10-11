@@ -54,7 +54,7 @@ public class ImageMgr {
 	// ImageInfo>();
 	
 	private ArrayList<ImageInfo> mArray = new ArrayList<ImageInfo>();
-	private HashMap<String,Integer> mArrayLike = new HashMap<String,Integer>();
+	private HashSet<String> mArrayLike = new HashSet<String>();
 	private ArrayList<LineInfo> mArrayLineInfo = new ArrayList<LineInfo>();
 	private static ImageMgr instance = null;
 	private Context mContext;
@@ -79,11 +79,6 @@ public class ImageMgr {
 	public class ImageInfo {
 		public String path;
 		public Date date;
-		// public String tag;
-		// public boolean like;
-		// public String name;
-		public String dirName;
-		public String dirPath;
 	}
 
 	public class ImageData {
@@ -113,8 +108,21 @@ public class ImageMgr {
 		return instance;
 	}
 
-	private boolean mFirstRefresh = true;
-
+	private Boolean mRefreshed = false;
+	public boolean isRefreshed()
+	{
+		synchronized(mRefreshed)
+		{
+			return mRefreshed;
+		}
+	}
+	public void setRefreshed()
+	{
+		synchronized(mRefreshed)
+		{
+			mRefreshed = true;
+		}
+	}
 	private void loadData() {
 		mDb = SQLiteDatabase.openOrCreateDatabase(mContext.getFilesDir()
 				.toString() + "/data.db3", null);
@@ -126,7 +134,7 @@ public class ImageMgr {
 
 		while (cursorLike.moveToNext()) {
 			String path = cursorLike.getString(1);
-			mArrayLike.put(path,cursorLike.getInt(0));
+			mArrayLike.add(path);
 		}
 
 		Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -171,12 +179,13 @@ public class ImageMgr {
 
 				info.date = new Date(t * 1000);
 
-				// File dir = new File(info.path).getParentFile();
+		
+			/*
 				int end = info.path.lastIndexOf(File.separator);
 				int begin = info.path.lastIndexOf(File.separator, end - 1);
 				info.dirName = info.path.substring(begin + 1, end);
-				info.dirPath = info.path.substring(0, begin);
-
+				info.dirPath = info.path.substring(0, end);
+*/
 				array.add(info);
 
 				if (title != null) {
@@ -239,7 +248,7 @@ public class ImageMgr {
 					title.childcount++;
 				}
 				i++;
-				if (mFirstRefresh) {
+				if (!isRefreshed()) {
 					if (i == 100 || i == 1000) {
 						
 						ArrayList<Object> param = new ArrayList<Object>(3);
@@ -256,13 +265,17 @@ public class ImageMgr {
 		}
 
 		Log.d(TAG,String.format("image count = %d",array.size()));
-		mFirstRefresh = false;
+		
 	
+		setRefreshed();
+		
 		ArrayList<Object> param = new ArrayList<Object>(3);
 		param.add(array);
 		param.add(array2);
 		
+		
 		notifyListeners(ImageMgr.refresh, param);
+		
 	}
 
 
@@ -556,10 +569,7 @@ public class ImageMgr {
 					info.path = path;
 					info.date = new Date(f.lastModified());
 					
-					int end = info.path.lastIndexOf(File.separator);
-					int begin = info.path.lastIndexOf(File.separator, end - 1);
-					info.dirName = info.path.substring(begin + 1, end);
-					info.dirPath = info.path.substring(0, begin);
+
 					
 					array.add(0, info);
 					ArrayList<LineInfo> array2 = parse(array,AdapterTime.mColum);
@@ -634,7 +644,7 @@ public class ImageMgr {
 
 		return null;
 	}
-
+/*
 	public class ImageFileFilter implements FileFilter {
 
 		@Override
@@ -652,7 +662,7 @@ public class ImageMgr {
 			}
 		}
 	}
-
+*/
 	public class FileComparator implements Comparator<ImageInfo> {
 		public int compare(ImageInfo file1, ImageInfo file2) {
 			return file2.date.compareTo(file1.date);
@@ -673,7 +683,7 @@ public class ImageMgr {
 		 
 			for (ImageInfo info : mArray) {
 
-				if (mArrayLike.containsKey(info.path)) {
+				if (mArrayLike.contains(info.path)) {
 					array.add(info);
 				}
 			}
@@ -690,7 +700,7 @@ public class ImageMgr {
 
 	public boolean isLike(String path) {
 		
-			return mArrayLike.containsKey(path);
+			return mArrayLike.contains(path);
 		
 	}
 
@@ -700,7 +710,7 @@ public class ImageMgr {
 			
 				if (like) {
 
-					mArrayLike.put(path,mArrayLike.size());
+					mArrayLike.add(path);
 					if (mDb != null) {
 						mDb.execSQL("insert into table_like values(null , ? )",
 								new String[] { path });
@@ -708,7 +718,7 @@ public class ImageMgr {
 					}
 
 				} else {
-					if(mArrayLike.containsKey(path))
+					if(mArrayLike.contains(path))
 					{
 						
 						mArrayLike.remove(path);

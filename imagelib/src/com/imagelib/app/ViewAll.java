@@ -45,7 +45,8 @@ public class ViewAll extends RelativeLayout implements ImageMgrListener {
 		
 		refreshData();
 
-
+		if(ImageMgr.GetInstance().isRefreshed())
+			mList.checkEmpty();
 	}
 	public void uninit()
 	{

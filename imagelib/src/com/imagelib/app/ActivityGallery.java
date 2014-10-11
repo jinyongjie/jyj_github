@@ -74,6 +74,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 	// private ImageView mImageView;
 	private static int mIndex;
 	private static ArrayList<String> mArray;
+
 	private Button mButtonReturn;
 	private Button mButtonRotate;
 	private Button mButtonShow;
@@ -130,6 +131,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 		mBarTop = findViewById(R.id.bar_top);
 		mBarBottom = findViewById(R.id.bar_bottom);
 		mTitle = (TextView) findViewById(R.id.title);
+		
 
 		// mViewPager.setOnClickListener(this);
 		mButtonReturn.setOnClickListener(this);
@@ -550,7 +552,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 
 		Intent intent = new Intent();
 		intent.setClass(this, ActivityPlay.class);
-		ActivityPlay.setArray(mArray);
+		ActivityPlay.setArray(mArray,mIndex);
 
 		startActivityForResult(intent, 1);
 	}

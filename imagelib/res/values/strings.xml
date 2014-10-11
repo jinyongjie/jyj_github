@@ -22,9 +22,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="no_like_tip">无标记为喜欢的图片</string>
     <string name="no_tag_tip">无标记tag的图片</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="menu_yun">云备份</string>
-    <string name="title_activity_yun">YunActivity</string>
     <string name="no_image">无图片</string>
     <string name="no_sel_image">请选择要操作的图片</string>
     <string name="list_loading">正在加载</string>
