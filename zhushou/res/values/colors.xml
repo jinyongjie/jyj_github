@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="title_bkg">#272d34</color>
+    <color name="title_bkg_trans">#f0272d34</color>
+    <color name="button_down">#252525</color>
+    <color name="button_down_trans">#f0171d24</color>
+    <color name="black">#000000</color>
+    <color name="mask">#80000000</color>
+    <color name="white">#ffffff</color>
+    <color name="gray">#808080</color>
+    <color name="blue">#0000ff</color>
+    <color name="yun_tab_sel">#0aa9c1</color>
+    <color name="transparent">#00000000</color>
+    <color name="progress_bg">#dadfe3</color>
+    <color name="trans_group_color">#efefef</color>
+    <color name="trans_bottom_color">#e8e8e8</color>
+    <color name="del_job_not_work">#acacac</color>
+    <color name="trans_list_back">#fafafb</color>
+    <color name="trans_progress_start">#4bb736</color>
+    <color name="trans_progress_end">#8fce35</color>
+    <color name="trans_progress_failed">#ee752c</color>
+    <color name="downloaded_bottom_back">#6d6d6d</color>
+    <color name="downloaded_title_back">#484848</color>
+    <color name="trans_button_text">#eceff0</color>
+    <color name="trans_finish_title_text">#757575</color>
+    <color name="trans_title_back">#d3e7f2</color>
+    <color name="trans_failed_txt">#323232</color>
+    <color name="trans_progress_bg">#dadfe3</color>
+    <color name="trans_btn_txt">#eceff0</color>
+    <color name="trans_failed_status">#ed620e</color>
+
+    <!-- File list -->
+    <color name="file_list_divider">#d7d7d7</color>
+    <color name="file_list_default">#fafafa</color>
+    <color name="file_list_pressed">#eaeaea</color>
+    <color name="file_list_selected">#f0faff</color>
+    <color name="file_list_highlight">#fffeee</color>
+    <color name="filelist_transfer">#041c39</color>
+    <color name="file_list_status">#30a718</color>
+    <color name="bottom_menu_text">#4d5c65</color>
+    <color name="tab_2_item_pressed">#3387939d</color>
+    <color name="upload_dialog_bg">#e8e8e8</color>
+    <color name="sumary_color">#969696</color>
+    <color name="bottom_dialog_item_text">#c33636</color>
+    <color name="green">#2bceac</color>
+    
+    <!-- 弹出框 -->
+    <color name="dialog_button_text">#464646</color>
+    <color name="dialog_retry">#2394d5</color>
+    <color name="dialog_line">#dbdbdb</color>
+    <color name="vertical_dialog_item_text">#e5e5e5</color>
+    <color name="open_file_bottom_title">#7e7229</color>
+    <color name="upload2cloud_blue">#2394d5</color>
+    <color name="upload2cloud_gray">#929292</color>
+    <color name="upload2cloud_black">#323232</color>
+    <color name="upload2cloud_upload2">#222222</color>
+    <color name="upload2cloud_change">#2394d5</color>
+    <color name="upload2cloud_divider">#c8c8c8</color>
+    <color name="upload2cloud_notice_text">#8b7734</color>
+    <color name="upload2cloud_notice_bg">#f4eacb</color>
+    <color name="ab_bar_title">#706c0c</color>
+    <color name="new_dialog_text_color">#3294d5</color>
+    <color name="new_dialog_edittext_highlight">#c9ebff</color>
+    <color name="dialog_button_text_blue">#2394d5</color>
+
+    <!-- 密码锁背景色 -->
+    <color name="set_password_prompt">#696969</color>
+    <color name="share_unfinished_info">#bcc9cf</color>
+    <color name="divider">#e0e0e0</color>
+    <color name="main_tab_bg">#fafafa</color>
+    <color name="dlg_blue">#449eee</color>
+    <color name="dlg_black">#464646</color>
+    <color name="dlg_yellow">#ED620E</color>
+    <color name="agreement_text">#2394d5</color>
+    
+
+</resources>

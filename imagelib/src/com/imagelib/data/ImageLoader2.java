@@ -895,8 +895,8 @@ public class ImageLoader2 {
 			if (file == null || bitmap == null)
 				return false;
 			try {
-				BufferedOutputStream out = new BufferedOutputStream(
-						new FileOutputStream(file));
+				FileOutputStream os = new FileOutputStream(file);
+				BufferedOutputStream out = new BufferedOutputStream(os);
 				return bitmap.compress(CompressFormat.JPEG, 100, out);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

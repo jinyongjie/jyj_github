@@ -1,0 +1,110 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityMain" 
+  
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:orientation="vertical"
+        android:padding="0dp" >
+
+        <RelativeLayout
+            android:id="@+id/bar_begin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height"
+            android:background="@color/title_bkg"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_main_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:background="@color/title_bkg"
+                android:drawableLeft="@drawable/selector_button_all"
+                android:drawableRight="@drawable/main_menu_arrow"
+                android:gravity="left|center"
+                android:minWidth="140dp"
+                android:text="@string/menu_all"
+                android:textColor="@color/white"
+                android:textSize="18sp" >
+            </Button>
+
+            <LinearLayout
+                android:id="@+id/op_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/button_op"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_button"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:text="@string/button_op"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" >
+                </Button>
+
+                 <Button
+                    android:id="@+id/button_selall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_button"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:text="@string/sel_all"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" >
+                </Button>
+                <Button
+                    android:id="@+id/button_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/selector_button"
+                    android:drawableLeft="@drawable/more2_ic"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:visibility="gone" >
+                </Button>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/op_container"
+                android:background="#0a0a0a" >
+            </View>
+
+            <Button
+                android:id="@+id/button_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/line"
+                android:background="@drawable/selector_button"
+                android:drawableLeft="@drawable/camera_ic"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+            </Button>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+    </LinearLayout>
+
+  
+
+</FrameLayout>
