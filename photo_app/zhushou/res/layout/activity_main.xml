@@ -1,110 +1,124 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityMain" 
-  
-    >
+    android:layout_margin="0dp"
+    android:background="@color/list_bkg"
+    android:orientation="vertical"
+    android:padding="0dp"
+    tools:context=".ActivityMain" >
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/bar_top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:orientation="vertical"
-        android:padding="0dp" >
+        android:layout_height="@dimen/title_height"
+        android:background="@color/title_bkg" >
 
-        <RelativeLayout
-            android:id="@+id/bar_begin"
+        <TextView
+            android:id="@+id/top_title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height"
-            android:background="@color/title_bkg"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="20sp" >
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/op_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/button_main_menu"
+                android:id="@+id/button_op"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:background="@color/title_bkg"
-                android:drawableLeft="@drawable/selector_button_all"
-                android:drawableRight="@drawable/main_menu_arrow"
-                android:gravity="left|center"
-                android:minWidth="140dp"
-                android:text="@string/menu_all"
-                android:textColor="@color/white"
-                android:textSize="18sp" >
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="13dip"
+                android:layout_marginRight="13dip"
+                android:background="@drawable/selector_button_op" >
             </Button>
-
-            <LinearLayout
-                android:id="@+id/op_container"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/button_op"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/selector_button"
-                    android:paddingLeft="10dip"
-                    android:paddingRight="10dip"
-                    android:text="@string/button_op"
-                    android:textColor="@color/white"
-                    android:textSize="17sp" >
-                </Button>
-
-                 <Button
-                    android:id="@+id/button_selall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/selector_button"
-                    android:paddingLeft="10dip"
-                    android:paddingRight="10dip"
-                    android:text="@string/sel_all"
-                    android:textColor="@color/white"
-                    android:textSize="17sp" >
-                </Button>
-                <Button
-                    android:id="@+id/button_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/selector_button"
-                    android:drawableLeft="@drawable/more2_ic"
-                    android:paddingLeft="10dip"
-                    android:paddingRight="10dip"
-                    android:visibility="gone" >
-                </Button>
-            </LinearLayout>
-
-            <View
-                android:id="@+id/line"
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@id/op_container"
-                android:background="#0a0a0a" >
-            </View>
 
             <Button
-                android:id="@+id/button_camera"
+                android:id="@+id/button_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toLeftOf="@id/line"
+                android:layout_gravity="center_vertical"
                 android:background="@drawable/selector_button"
-                android:drawableLeft="@drawable/camera_ic"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" >
+                android:drawableLeft="@drawable/more2_ic"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:visibility="gone" >
             </Button>
-        </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
-        <FrameLayout
-            android:id="@+id/view_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </FrameLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d2d2d2" >
+    </View>
+
+    <LinearLayout
+        android:id="@id/bar_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bottom_bar"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <Button
+            android:id="@+id/button_all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:drawableTop="@drawable/photo_normal"
+            android:text="@string/photo"
+            android:textColor="@color/bottom_text"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/button_dir"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:drawableTop="@drawable/folder_normal"
+            android:text="@string/album"
+            android:textColor="@color/bottom_text"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/button_like"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:drawableTop="@drawable/favorite_normal"
+            android:text="@string/favorite"
+            android:textColor="@color/bottom_text"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/button_camera"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:drawableTop="@drawable/selector_button_camera"
+            android:text="@string/camera"
+            android:textColor="@color/bottom_text"
+            android:textSize="17sp" />
     </LinearLayout>
 
-  
-
-</FrameLayout>
+</LinearLayout>

@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -34,6 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 
 import com.imagelib.R;
+import com.imagelib.app.AppSetting;
 import com.imagelib.ctrl.AdapterTime.IImageItem;
 import com.imagelib.data.Helper;
 import com.imagelib.data.ImageLoader2;
@@ -56,9 +58,10 @@ public class ThumbImageView extends ImageView implements ImageCallback,
 	private boolean mSelMode = false;
 	private static Bitmap mBmpSelYes = null;
 	private static Bitmap mBmpSelNo = null;
+	private int mEmptyColor = 0xFF323232;
 	public ThumbImageView(Context context) {
 		super(context);
-
+		mEmptyColor = AppSetting.instance().getInt("color_thumb_empty");
 		// TODO Auto-generated constructor stub
 		// this.addOnLayoutChangeListener(this);
 		if(mBmpSelYes == null)
@@ -122,13 +125,16 @@ public class ThumbImageView extends ImageView implements ImageCallback,
 	 * 
 	 * setMeasuredDimension(mImageWidth, mImageHeight); }
 	 */
-
+	
 	protected void onDraw(Canvas canvas) {
 		if (this.getDrawable() != null) {
 			super.onDraw(canvas);
 
 		} else {
-			canvas.drawRGB(50, 50, 50);
+			int r = Color.red(mEmptyColor);
+			int g = Color.green(mEmptyColor);
+			int b = Color.blue(mEmptyColor);
+			canvas.drawRGB(r,g,b);
 		}
 		if (mSelMode) {
 			//int n = Helper.dp2px(getContext(), 3);

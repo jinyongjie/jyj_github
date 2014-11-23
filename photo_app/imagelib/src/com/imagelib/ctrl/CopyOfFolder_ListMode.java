@@ -29,7 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 
-public class ListByGroup extends GridView {
+public class CopyOfFolder_ListMode extends GridView {
 	private ArrayList<DirInfo> mData = new ArrayList<DirInfo>();
 	private GridAdapter mAdapter;
 	int mPadding = 10;
@@ -37,7 +37,7 @@ public class ListByGroup extends GridView {
 	private OnClickListener	mClickListener;
 	private String mSelDir;
 	
-	public ListByGroup(Context context, android.util.AttributeSet attrs) {
+	public CopyOfFolder_ListMode(Context context, android.util.AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 		this.setNumColumns(2);
@@ -70,7 +70,7 @@ public class ListByGroup extends GridView {
 
 					Intent intent = new Intent();
 					// Bundle data = new Bundle();
-					DirItem dir = (DirItem)v;
+					DirItemGrid dir = (DirItemGrid)v;
 					if(dir != null)
 					{
 						DirInfo info = dir.GetDirInfo();
@@ -90,12 +90,12 @@ public class ListByGroup extends GridView {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					for(int i = 0;i<ListByGroup.this.getChildCount();i++)
+					for(int i = 0;i<CopyOfFolder_ListMode.this.getChildCount();i++)
 					{
-						DirItem item = (DirItem) ListByGroup.this.getChildAt(i);
+						DirItemGrid item = (DirItemGrid) CopyOfFolder_ListMode.this.getChildAt(i);
 						item.setSel(false);
 					}
-					DirItem item = (DirItem) v;
+					DirItemGrid item = (DirItemGrid) v;
 					item.setSel(true);
 					mSelDir = item.GetDirInfo().dir;
 				}
@@ -142,13 +142,13 @@ public class ListByGroup extends GridView {
 			View view = null;
 
 			if (convertView == null) {
-				view = mInflater.inflate(R.layout.item_dir, null);
+				view = mInflater.inflate(R.layout.item_dir_grid, null);
 
 			} else {
 				view = convertView;
 
 			}
-			DirItem dirItem = (DirItem) view;
+			DirItemGrid dirItem = (DirItemGrid) view;
 			DirInfo info = mData.get(position);
 			dirItem.init(info,mImageWidth,mClickListener);
 			if(mSelDir != null && info.dir.equals(mSelDir))

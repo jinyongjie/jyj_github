@@ -26,7 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class DirItem extends LinearLayout {
+public class DirItemGrid extends LinearLayout {
 	private ThumbImageView mImage0;
 	private ThumbImageView mImage1;
 	private ThumbImageView mImage2;
@@ -37,19 +37,19 @@ public class DirItem extends LinearLayout {
 	private View mFrame = null;
 	private View mSel ;
 
-	public DirItem(Context context) {
+	public DirItemGrid(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 
 	}
 
-	public DirItem(android.content.Context context,
+	public DirItemGrid(android.content.Context context,
 			android.util.AttributeSet attrs) {
 		super(context, attrs);
 
 	}
 
-	public DirItem(Context context, AttributeSet attrs, Map inflateParams) {
+	public DirItemGrid(Context context, AttributeSet attrs, Map inflateParams) {
 		super(context, attrs);
 	}
 

@@ -13,7 +13,9 @@ import com.imagelib.R;
 
 
 
-import com.imagelib.ctrl.ListByGroup;
+import com.imagelib.ctrl.Folder_GridMode;
+import com.imagelib.ctrl.Folder_ListMode;
+import com.imagelib.ctrl.Folder_Mode;
 import com.imagelib.data.ImageMgr;
 import com.imagelib.data.ImageMgr.DirInfo;
 import com.imagelib.data.ImageMgr.FileComparator;
@@ -24,11 +26,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public class ViewDir extends RelativeLayout implements ImageMgrListener {
-	private	ListByGroup mList;
+public class ViewDir extends FrameLayout implements ImageMgrListener {
+	public static final int mode_list = 0;
+	public static final int mode_grid = 1;
+	private int mShowMode = mode_list; 
+	private	Folder_Mode mList;
+	
+	public void setShowMode(int mode)
+	{
+		mShowMode = mode;
+		if(mList != null)
+		{
+			this.removeView(mList.getView());
+		}
+		if(mShowMode == mode_list)
+		{
+			mList = new Folder_ListMode(this.getContext(),null);
+		}
+		else
+		{
+			mList = new Folder_GridMode(this.getContext(),null);
+		}
+		addView(mList.getView());
+		mList.init(false);
+		mList.setEmptyView(findViewById(R.id.empty));
+	}
 	public ViewDir(Context context, android.util.AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
@@ -37,9 +63,7 @@ public class ViewDir extends RelativeLayout implements ImageMgrListener {
 	}
 
 	public void init() {
-		mList = (ListByGroup)findViewById(R.id.list);
-		mList.setEmptyView(findViewById(R.id.empty));
-		mList.init(false);
+		setShowMode(mode_list);
 		refreshData();
 	}
 

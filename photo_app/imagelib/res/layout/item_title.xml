@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/black" >
+    android:layout_height="wrap_content" >
 
     <TextView
         android:id="@+id/date"
@@ -53,11 +52,10 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        
-        android:background="@drawable/selector_button"
+        android:background="@null"
         android:gravity="center"
         android:paddingLeft="10dp"
-        android:paddingRight="20dp"
+        android:paddingRight="10dp"
         android:text="@string/sel_all"
         android:drawableRight="@drawable/selall_normal"
         android:textColor="@color/textWhite"

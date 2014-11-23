@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 import com.imagelib.R;
 import com.imagelib.R.layout;
 import com.imagelib.ctrl.DialogChooseDir;
-import com.imagelib.ctrl.ListByGroup;
+import com.imagelib.ctrl.Folder_GridMode;
 import com.imagelib.data.Helper;
 import com.imagelib.data.ImageMgr;
 import com.imagelib.data.ImageLoader2.ReleaseBitmapListener;
@@ -41,7 +41,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class ActivitySelDir extends Activity implements OnClickListener {
-	private ListByGroup mList;
+	private Folder_GridMode mList;
 	private Button mButtonReturn;
 	private Button mButtonConfirm;
 	private Button mButtonNewDir;
@@ -58,7 +58,7 @@ public class ActivitySelDir extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sel_dir);
 
-		mList = (ListByGroup) findViewById(R.id.list);
+		mList = (Folder_GridMode) findViewById(R.id.list);
 		mButtonReturn = (Button) findViewById(R.id.button_return);
 		mButtonConfirm = (Button) findViewById(R.id.button_confirm);
 		mButtonNewDir = (Button) findViewById(R.id.button_newdir);

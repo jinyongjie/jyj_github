@@ -2,9 +2,12 @@ package com.nanshan.myimage.app;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
-
+import com.nanshan.myimage.R;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import android.net.Uri;
 import android.opengl.GLES10;
@@ -12,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.annotation.SuppressLint;
@@ -23,12 +27,21 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,58 +62,35 @@ import com.imagelib.data.Helper;
 import com.imagelib.data.ImageLoader2;
 import com.imagelib.data.ImageMgr;
 import com.imagelib.data.ImageMgr.ImageMgrListener;
-import com.nanshan.myimage.R;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
-
 
 public class ActivityMain extends Activity implements OnClickListener,
-		EditModeListener,ImageMgrListener{
-    
-    private long mLastUpdateRequest = 0;
-    
-	private final static String TAG="MainActivity";
+		EditModeListener, ImageMgrListener {
+
+	private final static String TAG = "MainActivity";
 	private View mBarBegin;
 
-	private PopupWindow mMenuMain;
-	private Button mButtonMainMenu;
+	private TextView mTitle;
 	private Button mButtonOp;
 	private Button mButtonCamera;
-	private Button mButtonLogout;
-	private Button mButtonSelAll;
-
-	private ViewGroup mViewContainer;
-
-	private Button mMenuItemAll;
-	private Button mMenuItemDir;
-	private Button mMenuItemLike;
+	private Button mButtonMenu;
+	private Button mButtonAll;
+	private Button mButtonDir;
+	private Button mButtonLike;
+	private ViewPager mViewPager;
 
 	private ViewAll mViewAll;
 	private ViewDir mViewDir;
 	private ViewLike mViewLike;
-	
 	private View mCurView;
+	private HashMap<Integer, View> mViewMap = new HashMap<Integer, View>();
 
-
-	enum ViewType {
-		none, all, dir, like, tag, yun,
-	}
+	private static final int view_all = 0;
+	private static final int view_dir = 1;
+	private static final int view_like = 2;
 
 	public static final int req_capture = 0;
-	public static final int req_login = 1;
-	public static final int req_reg = 2;
-	private ViewType mViewType = ViewType.none;
-	private int normal_left[] = { R.drawable.selector_button_all,
-			R.drawable.selector_button_dir, R.drawable.selector_button_like,
-			};
-	private int hilight_left[] = { R.drawable.main_menu_icon_all_folder_title,
-			R.drawable.main_menu_icon_folder_title,
-			R.drawable.main_menu_icon_favorite_title,
-			R.drawable.main_menu_icon_tags_title };
-	private int mButtonIndex = 0;
-	private int button_text[] = { R.string.menu_all, R.string.menu_dir,
-			R.string.menu_like, R.string.menu_tag, R.string.menu_yun };
-	private Button buttons[];
+
+	private int mIndex = 0;
 
 	private boolean mEditMode = false;
 
@@ -108,249 +98,286 @@ public class ActivityMain extends Activity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		UmengUpdateAgent.update(this);
-
 		setContentView(R.layout.activity_main);
 
 		initCtrl();
 		initData();
-		
+
+	}
+
+	public void onResume() {
+		super.onResume();
+
+		MobclickAgent.onResume(this);
+
+	}
+
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 
 	}
 
 	private void initCtrl() {
+		mTitle = (TextView) findViewById(R.id.top_title);
+		mBarBegin = findViewById(R.id.bar_top);
 
-		mBarBegin = findViewById(R.id.bar_begin);
+		mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-		mButtonMainMenu = (Button) findViewById(R.id.button_main_menu);
-		mViewContainer = (ViewGroup) findViewById(R.id.view_container);
-		
 		mButtonCamera = (Button) findViewById(R.id.button_camera);
 		mButtonOp = (Button) findViewById(R.id.button_op);
-		mButtonLogout = (Button)findViewById(R.id.button_logout);
+		mButtonMenu = (Button) findViewById(R.id.button_menu);
 
-		mButtonMainMenu.setOnClickListener(this);
 		mButtonCamera.setOnClickListener(this);
 		mButtonOp.setOnClickListener(this);
-		mButtonLogout.setOnClickListener(this);
+		mButtonMenu.setOnClickListener(this);
+		mButtonAll = (Button) findViewById(R.id.button_all);
+		mButtonAll.setOnClickListener(this);
+		mButtonDir = (Button) findViewById(R.id.button_dir);
+		mButtonDir.setOnClickListener(this);
+		mButtonLike = (Button) findViewById(R.id.button_like);
+		mButtonLike.setOnClickListener(this);
 
-		mButtonSelAll = (Button)findViewById(R.id.button_selall);
+		// mGridView = (GridView) findViewById(R.id.gridView1);
 
-		// mGridView = (GridView) findViewById(R.id.gridView1);	
+		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onPageSelected(int arg0) {
+				// TODO Auto-generated method stub
+
+				mIndex = arg0;
+				updateButton();
+
+				if (mViewAll != null && mViewAll.getEditMode() == true) {
+					mViewAll.setEditMode(false);
+				}
+
+				if (mViewLike != null && mViewLike.getEditMode() == true) {
+					mViewLike.setEditMode(false);
+
+				}
+/*
+				if(mIndex == view_dir)
+					mButtonOp.setVisibility(View.GONE);
+				else
+					mButtonOp.setVisibility(View.VISIBLE);
+	*/		}
+
+		});
+
+		mViewPager.setAdapter(new MyAdapter(this));
+		updateButton();
 	}
 
 	private void initData() {
 		ImageMgr.GetInstance().addListener(this);
-		setCurView(ViewType.all);
-	
 
-
-			
 	}
 
+	private void updateButton() {
+		mButtonAll.setTextColor(this.getResources().getColor(
+				R.color.bottom_text));
+		mButtonDir.setTextColor(this.getResources().getColor(
+				R.color.bottom_text));
+		mButtonLike.setTextColor(this.getResources().getColor(
+				R.color.bottom_text));
 
+		Drawable d = getResources().getDrawable(R.drawable.photo_normal);
+		d.setBounds(0, 0, d.getMinimumWidth(), d.getMinimumHeight());
+		mButtonAll.setCompoundDrawables(null, d, null, null);
 
-	private void showMainMenu() {
-		if (mMenuMain == null) {
-			LayoutInflater inflater = LayoutInflater.from(this);
-		
-			View view = inflater.inflate(R.layout.menu_main, null);
+		d = getResources().getDrawable(R.drawable.folder_normal);
+		d.setBounds(0, 0, d.getMinimumWidth(), d.getMinimumHeight());
+		mButtonDir.setCompoundDrawables(null, d, null, null);
 
-			view.measure(0, 0);
-
-			mMenuMain = new PopupWindow(view, LayoutParams.WRAP_CONTENT,
-					LayoutParams.WRAP_CONTENT, false);
-
-			mMenuMain.setBackgroundDrawable(new BitmapDrawable());
-	
-			mMenuMain.setFocusable(true);
-			mMenuMain.setOutsideTouchable(true);
-			mMenuMain.setOnDismissListener(new OnDismissListener() {
-
-				@Override
-				public void onDismiss() {
-					// TODO Auto-generated method stub
-					Drawable left = getResources().getDrawable(
-							normal_left[mButtonIndex]);
-					left.setBounds(new Rect(0, 0, left.getMinimumWidth(), left
-							.getMinimumHeight()));
-
-					Drawable right = getResources().getDrawable(
-							R.drawable.main_menu_arrow);
-					right.setBounds(new Rect(0, 0, right.getMinimumWidth(),
-							right.getMinimumHeight()));
-					mButtonMainMenu.setCompoundDrawables(left, null, right,
-							null);
-
-					mButtonMainMenu.setText(button_text[mButtonIndex]);
-
-				}
-
-			});
-			mMenuItemAll = (Button) view.findViewById(R.id.menu_all);
-			mMenuItemDir = (Button) view.findViewById(R.id.menu_dir);
-			mMenuItemLike = (Button) view.findViewById(R.id.menu_like);
-	
-
-			mMenuItemAll.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-				    
-			        //int x = 0;
-			        //int y = 100 / x;
-
-					mMenuMain.dismiss();
-
-					setCurView(ViewType.all);
-					setButtonIndex(0);
-				}
-			});
-			mMenuItemDir.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					mMenuMain.dismiss();
-					setCurView(ViewType.dir);
-
-				}
-			});
-			mMenuItemLike.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					mMenuMain.dismiss();
-					setCurView(ViewType.like);
-				}
-			});
-
-
+		d = getResources().getDrawable(R.drawable.favorite_normal);
+		d.setBounds(0, 0, d.getMinimumWidth(), d.getMinimumHeight());
+		mButtonLike.setCompoundDrawables(null, d, null, null);
+		if (mIndex == view_all) {
+			d = getResources().getDrawable(R.drawable.photo_hover);
+			d.setBounds(0, 0, d.getMinimumWidth(), d.getMinimumHeight());
+			mButtonAll.setCompoundDrawables(null, d, null, null);
+			// mButtonAll.setBackgroundResource(R.color.button_down);
+			mButtonAll.setTextColor(Color.rgb(253, 183, 48));
+			mTitle.setText(R.string.photo);
 		}
-		mMenuMain.showAsDropDown(mButtonMainMenu, 0, 0);
+
+		else if (mIndex == view_dir) {
+			d = getResources().getDrawable(R.drawable.folder_hover);
+			d.setBounds(0, 0, d.getMinimumWidth(), d.getMinimumHeight());
+			mButtonDir.setCompoundDrawables(null, d, null, null);
+			// mButtonDir.setBackgroundResource(R.color.button_down);
+			mButtonDir.setTextColor(Color.rgb(76, 199, 237));
+			mTitle.setText(R.string.album);
+		}
+
+		else if (mIndex == view_like) {
+			d = getResources().getDrawable(R.drawable.favorite_hover);
+			d.setBounds(0, 0, d.getMinimumWidth(), d.getMinimumHeight());
+			mButtonLike.setCompoundDrawables(null, d, null, null);
+			// mButtonLike.setBackgroundResource(R.color.button_down);
+			mButtonLike.setTextColor(Color.rgb(243, 128, 139));
+			mTitle.setText(R.string.favorite);
+		}
+
 	}
 
-	private void setCurView(ViewType type) {
-		if (mViewType != type) {
-			if (mCurView != null) {
-				mCurView.setVisibility(View.INVISIBLE);
-			}
-			mViewType = type;
-			View view = null;
-			int buttonIndex = 0;
-			
-			if (type == ViewType.all) {
-				if (mViewAll == null) {
+	private class MyAdapter extends PagerAdapter {
+
+		private LayoutInflater mInflater;
+
+		public MyAdapter(Context context) {
+			mInflater = LayoutInflater.from(context);
+		}
+
+		@Override
+		public int getCount() {
+			return 3;
+		}
+
+		@Override
+		public Object instantiateItem(View arg0, int arg1) {
+
+			View view = mViewMap.get(arg1);
+
+			if (view == null) {
+				if (arg1 == view_all) {
+
 					// mViewAll = new ViewAll(this);
 
-					mViewAll = (ViewAll) LayoutInflater.from(this).inflate(
-							R.layout.view_all, null);
+					mViewAll = (ViewAll) mInflater.inflate(R.layout.view_all,
+							null);
 
 					mViewAll.init();
 
-					mViewAll.setEditModeListener(this);
-					mViewContainer.addView(mViewAll, LayoutParams.MATCH_PARENT,
-							LayoutParams.MATCH_PARENT);
-				}
-				view = mViewAll;
-				buttonIndex = 0;
-				mButtonOp.setVisibility(View.VISIBLE);
-				
-				mButtonCamera.setVisibility(View.VISIBLE);
+					mViewAll.setEditModeListener(ActivityMain.this);
 
-			} else if (type == ViewType.dir) {
-				if (mViewDir == null) {
+					view = mViewAll;
 
-					mViewDir = (ViewDir) LayoutInflater.from(this).inflate(
-							R.layout.view_dir, null);
-					mViewContainer.addView(mViewDir, LayoutParams.MATCH_PARENT,
-							LayoutParams.MATCH_PARENT);
+				} else if (arg1 == view_dir) {
+
+					mViewDir = (ViewDir) mInflater.inflate(R.layout.view_dir,
+							null);
+
 					mViewDir.init();
-					
-				}
-				view = mViewDir;
-				buttonIndex = 1;
-				mButtonOp.setVisibility(View.GONE);
-			
-				mButtonCamera.setVisibility(View.VISIBLE);
-			} else if (type == ViewType.like) {
-				if (mViewLike == null) {
 
-					mViewLike = (ViewLike) LayoutInflater.from(this).inflate(
+					view = mViewDir;
+
+				} else if (arg1 == view_like) {
+
+					mViewLike = (ViewLike) mInflater.inflate(
 							R.layout.view_like, null);
 
 					mViewLike.init();
 
-					mViewLike.setEditModeListener(this);
+					mViewLike.setEditModeListener(ActivityMain.this);
 
-					mViewContainer.addView(mViewLike,
-							LayoutParams.MATCH_PARENT,
-							LayoutParams.MATCH_PARENT);
+					view = mViewLike;
+
 				}
-
-				view = mViewLike;
-				buttonIndex = 2;
-				mButtonOp.setVisibility(View.VISIBLE);
-				
-				mButtonCamera.setVisibility(View.VISIBLE);
+				mViewMap.put(arg1, view);
+				((ViewPager) arg0).addView(view);
 			}
 
-			mCurView = view;
-			if (mCurView != null)
-				mCurView.setVisibility(View.VISIBLE);
-			setButtonIndex(buttonIndex);
+			return view;
+		}
 
+		@Override
+		public void destroyItem(View arg0, int arg1, Object arg2) {
 
-			{
-				mButtonSelAll.setVisibility(View.GONE);
-				mButtonLogout.setVisibility(View.GONE);
-			}
+			// ((ViewPager) arg0).removeView((View) arg2);
+
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return arg0 == arg1;
+		}
+
+		@Override
+		public void restoreState(Parcelable arg0, ClassLoader arg1) {
+
+		}
+
+		@Override
+		public Parcelable saveState() {
+			return null;
+		}
+
+		@Override
+		public void startUpdate(View arg0) {
+
+		}
+
+		@Override
+		public void finishUpdate(View arg0) {
+
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		// getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	private void showSettingMenu() {
 
-	}
+		LayoutInflater inflater = LayoutInflater.from(this);
 
-	private void setButtonIndex(int index) {
-		if (index != mButtonIndex) {
-			Drawable left = getResources().getDrawable(normal_left[index]);
-			left.setBounds(new Rect(0, 0, left.getMinimumWidth(), left
-					.getMinimumHeight()));
+		View view = inflater.inflate(R.layout.menu_setting, null);
 
-			Drawable right = getResources().getDrawable(
-					R.drawable.main_menu_arrow);
-			right.setBounds(new Rect(0, 0, right.getMinimumWidth(), right
-					.getMinimumHeight()));
-			mButtonMainMenu.setCompoundDrawables(left, null, right, null);
+		view.measure(0, 0);
 
-			mButtonMainMenu.setText(button_text[index]);
-			mButtonIndex = index;
-		}
+		final PopupWindow menu = new PopupWindow(view,
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, false);
+
+		menu.setBackgroundDrawable(new BitmapDrawable());
+
+		menu.setFocusable(true);
+		menu.setOutsideTouchable(true);
+		menu.setOnDismissListener(new OnDismissListener() {
+
+			@Override
+			public void onDismiss() {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
+		view.findViewById(R.id.button_refresh).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+
+						ImageMgr.GetInstance().refresh();
+
+						menu.dismiss();
+
+					}
+				});
+
+		menu.showAsDropDown(mButtonMenu, 0, -Helper.dp2px(this, 2) - 6);
+
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		if (v == mButtonMainMenu) {
-			// TODO Auto-generated method stub
-			Drawable left = getResources().getDrawable(
-					hilight_left[mButtonIndex]);
-			left.setBounds(new Rect(0, 0, left.getMinimumWidth(), left
-					.getMinimumHeight()));
-
-			Drawable right = getResources().getDrawable(
-					R.drawable.main_menu_arrow);
-			right.setBounds(new Rect(0, 0, right.getMinimumWidth(), right
-					.getMinimumHeight()));
-			mButtonMainMenu.setCompoundDrawables(left, null, right, null);
-			showMainMenu();
-		} else if (v == mButtonCamera) {
+		int id = v.getId();
+		if (id == R.id.button_camera) {
 
 			String sdStatus = Environment.getExternalStorageState();
-			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ���sd�Ƿ����
+			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { //
 				Log.d("MainActivity",
 						"SD card is not avaiable/writeable right now.");
 				return;
@@ -365,44 +392,44 @@ public class ActivityMain extends Activity implements OnClickListener,
 						Calendar.getInstance(Locale.CHINA))
 						+ ".jpg";
 
-				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				
-				//Intent intent = Intent.createChooser(intent0,null);
-				
 				File f = new File(dir, name);
-				mCameraPicPath = f.getAbsolutePath();
-				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-				intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-				startActivityForResult(intent, req_capture);
-				
-				/*
-				   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				Intent intent0 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				intent0.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+				intent0.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
 
-			        Intent chooser = Intent.createChooser(intent,null);
-			        startActivityForResult(chooser, req_capture);
-				*/
+				Intent intent = Intent.createChooser(intent0, null);
+
+				mCameraPicPath = f.getAbsolutePath();
+
+				startActivityForResult(intent, req_capture);
+
 			} catch (ActivityNotFoundException e) {
 				e.printStackTrace();
 			}
 
-		} else if (v == mButtonOp) {
-		
-			if(mViewType == ViewType.all)
-			{
-				if(mViewAll.haveData())
-				mViewAll.setEditMode(true);
+		} else if (id == R.id.button_op) {
+
+			if (mIndex == view_all) {
+				if (mViewAll.haveData())
+					mViewAll.setEditMode(true);
+			} else if (mIndex == view_like) {
+				if (mViewLike.haveData())
+					mViewLike.setEditMode(true);
 			}
-			else if(mViewType == ViewType.like)
+
+		} else if (id == R.id.button_menu) {
+
 			{
-				if(mViewLike.haveData())
-				mViewLike.setEditMode(true);
+				showSettingMenu();
 			}
-			
-			
+		} else if (id == R.id.button_all) {
+			mViewPager.setCurrentItem(view_all);
+		} else if (id == R.id.button_dir) {
+			mViewPager.setCurrentItem(view_dir);
+		} else if (id == R.id.button_like) {
+			mViewPager.setCurrentItem(view_like);
 		}
-
 	}
-
 
 	String mCameraPicPath;
 
@@ -412,42 +439,30 @@ public class ActivityMain extends Activity implements OnClickListener,
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == req_capture) {
 			if (resultCode == Activity.RESULT_OK) {
-				try{
+				try {
 					File f = new File(mCameraPicPath);
-					if(f!=null && f.exists() && f.isFile())
-					{
+					if (f != null && f.exists() && f.isFile()) {
 						ImageMgr.GetInstance().addImage(mCameraPicPath);
-					//	this.getContentResolver().notifyChange(uri, null);
+
 					}
-				}
-				catch(Exception e)
-				{
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				
+
 			}
 		}
-
 	}
-
-
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK/* && event.getRepeatCount() == 0 */) {
-			if(mViewType == ViewType.all)
-			{
-				if(mViewAll.getEditMode() == true)
-				{
+			if (mIndex == view_all) {
+				if (mViewAll.getEditMode() == true) {
 					mViewAll.setEditMode(false);
 					return true;
 				}
-			}
-			else if(mViewType == ViewType.like)
-			{
-				if(mViewLike.getEditMode() == true)
-				{
+			} else if (mIndex == view_like) {
+				if (mViewLike.getEditMode() == true) {
 					mViewLike.setEditMode(false);
 					return true;
 				}
@@ -456,42 +471,27 @@ public class ActivityMain extends Activity implements OnClickListener,
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void onResume() {
-		super.onResume();
-		
-		MobclickAgent.onResume(this);
-
-	}
-
-	public void onPause() {
-		super.onPause();
-		MobclickAgent.onPause(this);
-
-	}	
-
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		
-		//GlobalManager.getInstance().uploadManager().stopNow();
-		//GlobalManager.getInstance().destroyNow();
+
+		// GlobalManager.getInstance().uploadManager().stopNow();
+		// GlobalManager.getInstance().destroyNow();
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		ImageLoader2.GetInstance().clearCache();
-		
 
-	        
 		super.onDestroy();
 	}
 
 	@Override
 	public void onSelCountChange(int count) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -499,32 +499,27 @@ public class ActivityMain extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		mBarBegin.setVisibility(View.GONE);
 	}
+
 	@Override
 	public void onEditModeFinish() {
 		// TODO Auto-generated method stub
 		mBarBegin.setVisibility(View.VISIBLE);
-		if(mViewType == ViewType.all)
+		if (mIndex == view_all)
 			mViewAll.setEditMode(false);
-		else if(mViewType == ViewType.like)
+		else if (mIndex == view_like)
 			mViewLike.setEditMode(false);
 	}
 
 	@Override
 	public void onImageMgrNotify(int type, Object path) {
 		// TODO Auto-generated method stub
-		if(type == ImageMgr.refresh)
-		{
-			
-		}
-		else if(type == ImageMgr.delete_begin)
-		{
-		
-		}
-		else if(type == ImageMgr.delete_end)
-		{
-			
+		if (type == ImageMgr.refresh) {
+
+		} else if (type == ImageMgr.delete_begin) {
+
+		} else if (type == ImageMgr.delete_end) {
+
 		}
 	}
-
 
 }

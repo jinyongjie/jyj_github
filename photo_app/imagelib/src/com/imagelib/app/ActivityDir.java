@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,7 +50,10 @@ public class ActivityDir extends Activity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_dir);
+		LayoutInflater inflater = LayoutInflater.from(this);
+		View root = inflater.inflate(R.layout.activity_dir, null);
+		root.setBackgroundColor(AppSetting.instance().getInt("list_bkg"));
+		setContentView(root);
 		mList = (ListByTime) findViewById(R.id.listbytime);
 		mButtonReturn = (Button) findViewById(R.id.button_return);
 		mTitle = (TextView) findViewById(R.id.title);

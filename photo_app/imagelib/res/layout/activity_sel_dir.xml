@@ -65,13 +65,13 @@
         android:textColor="@color/textWhite"
         android:textSize="17sp" />
 
-    <com.imagelib.ctrl.ListByGroup
+    <com.imagelib.ctrl.Folder_GridMode
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/button_newdir"
         android:layout_below="@id/title" >
-    </com.imagelib.ctrl.ListByGroup>
+    </com.imagelib.ctrl.Folder_GridMode>
 	</RelativeLayout>
 	    <RelativeLayout
         android:id="@+id/mask"

@@ -64,7 +64,7 @@ public class ImageLoader2 {
 	public interface ReleaseBitmapListener {
 		public void ReleaseBitmap();
 	}
-
+	static final boolean mEnableFileCache = false;
 	private LinkedList<WeakReference<ReleaseBitmapListener>> mReleaseListeners = new LinkedList<WeakReference<ReleaseBitmapListener>>();
 
 	class ImageTask {
@@ -599,19 +599,23 @@ public class ImageLoader2 {
 
 		try {
 			String key = getFileKey(imagePath);
-			File fCache = mFileCache.getFile(key);
+			if(mEnableFileCache)
+			{
+				File fCache = mFileCache.getFile(key);
 
-			if (fCache != null) {
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inJustDecodeBounds = false; // ��Ϊ false
-				options.inSampleSize = 1;
-				FileInputStream fi = 	new FileInputStream(fCache.getAbsoluteFile());
+				if (fCache != null) {
+					BitmapFactory.Options options = new BitmapFactory.Options();
+					options.inJustDecodeBounds = false; // ��Ϊ false
+					options.inSampleSize = 1;
+					FileInputStream fi = 	new FileInputStream(fCache.getAbsoluteFile());
+					
+					bitmap = BitmapFactory.decodeFileDescriptor(fi.getFD(),null,options);
 				
-				bitmap = BitmapFactory.decodeFileDescriptor(fi.getFD(),null,options);
-			
-				if(bitmap != null)
-					return bitmap;
+					if(bitmap != null)
+						return bitmap;
+				}
 			}
+
 
 			BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -657,10 +661,15 @@ public class ImageLoader2 {
 			bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
 					ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
 
-			if(bitmap != null)
+			if(mEnableFileCache)
 			{
-				mFileCache.put(key, bitmap);
+				if(bitmap != null)
+				{
+					mFileCache.put(key, bitmap);
+				}
 			}
+
+			
 			return bitmap;
 
 		} catch (OutOfMemoryError err) {

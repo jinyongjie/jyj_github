@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 import com.imagelib.R;
 import com.imagelib.app.ActivityGallery;
+import com.imagelib.app.AppSetting;
 import com.imagelib.data.Helper;
 import com.imagelib.data.ImageMgr;
 import com.imagelib.data.Size;
@@ -61,9 +62,14 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 	private boolean mEditMode = false;
 	private WeakReference<ListView> mListView;
 	private int mCount = 0;
+	private boolean mShowWeek = true;
+	private int mTextColor = 0xffd2d2d2;
 
 	public AdapterTime(ListView list) {
+		mShowWeek = AppSetting.instance().getInt("list_time_show_week") == 1;
 
+		mTextColor = AppSetting.instance().getInt("list_time_date_color");
+				
 		mListView = new WeakReference<ListView>(list);
 		mInflator = LayoutInflater.from(list.getContext());
 
@@ -141,6 +147,17 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 			if (info.isTitle == true) {
 				v = mInflator.inflate(R.layout.item_title, null);
 				
+				TextView textDate = (TextView) v.findViewById(R.id.date);
+				TextView textLine = (TextView) v.findViewById(R.id.line);
+				TextView textWeek = (TextView) v.findViewById(R.id.week);
+				TextView textCount = (TextView) v.findViewById(R.id.count);
+				Button buttonSelAll = (Button) v.findViewById(R.id.sel_all);
+				buttonSelAll.setTextColor(mTextColor);
+				
+				int showweek = mShowWeek?View.VISIBLE:View.GONE;
+				textLine.setVisibility(showweek);
+				textWeek.setVisibility(showweek);
+				textDate.setTextColor(mTextColor);
 			} else {
 				LinearLayout layout = new LinearLayout(getContext());
 				v = layout;
@@ -168,15 +185,17 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 		if (info.isTitle == true) {// title
 
 			TextView textDate = (TextView) v.findViewById(R.id.date);
+			TextView textLine = (TextView) v.findViewById(R.id.line);
 			TextView textWeek = (TextView) v.findViewById(R.id.week);
 			TextView textCount = (TextView) v.findViewById(R.id.count);
 			Button buttonSelAll = (Button) v.findViewById(R.id.sel_all);
 			buttonSelAll.setOnClickListener(this);
-			
+					
 			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat sdw = new SimpleDateFormat("E");
 
 			textDate.setText(sd.format(info.date));
+			
 
 			textWeek.setText(sdw.format(info.date));
 			textCount.setText(String.format("%d张", info.childcount));
@@ -188,6 +207,7 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 
 			boolean all = checkGroupAllSel(tag.pos);//todo 效率
 		
+			
 			updateSelButton(all,buttonSelAll);
 
 		} else {// 4image
