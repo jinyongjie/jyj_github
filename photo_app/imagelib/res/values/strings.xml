@@ -6,17 +6,17 @@
     <string name="button_op">操作</string>
     <string name="button_all">所有照片</string>
     <string name="button_dir">相簿</string>
-    <string name="button_like">喜欢</string>
+    <string name="button_like">收藏</string>
    
     <string name="delete">删除</string>
     <string name="share">分享</string>
     <string name="tag">标签</string>
-    <string name="like">喜欢</string>
+    <string name="like">收藏</string>
     <string name="add_tag">添加标签</string>
     <string name="title_activity_single_image">SingleImageActivity</string>
     <string name="ok">确定</string>
     <string name="sel_all">全选</string>
-    <string name="no_like_tip">无标记为喜欢的图片</string>
+    <string name="no_like_tip">无标收藏的图片</string>
     <string name="no_tag_tip">无标记tag的图片</string>
     <string name="no_image">无图片</string>
     <string name="no_sel_image">请选择要操作的图片</string>
@@ -25,10 +25,10 @@
     <string name="close">关闭</string>
     <string name="menu_transfer">传输列表</string>
     <string name="button_more">更多</string>
-    <string name="button_setlike">&#160;&#160;设为喜欢</string>
+    <string name="button_setlike">&#160;&#160;收藏</string>
     <string name="button_copy">&#160;&#160;复制到</string>
     <string name="button_move">&#160;&#160;移动到</string>
-    <string name="set_like_complete">已标记为喜欢</string>
+    <string name="set_like_complete">已收藏</string>
     <string name="title_activity_activity_sel_dir">ActivitySelDir</string>
     <string name="sel_dir">请选择相册</string>
     <string name="new_dir">其他文件夹</string>

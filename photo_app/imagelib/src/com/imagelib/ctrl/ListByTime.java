@@ -106,7 +106,7 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 		mEnableToolbar = enable;
 	}
 
-	public void Init() {
+	public void Init(int colum) {
 		mTextSelNum = (TextView) findViewById(R.id.text_sel_num);
 		mButtonSelAll = (Button) findViewById(R.id.button_selall);
 		mBarOp = findViewById(R.id.bar_op);
@@ -124,7 +124,7 @@ public class ListByTime extends FrameLayout implements OnClickListener {
 		mListView = (PullToRefreshListView) findViewById(R.id.list);
 		mListView.getRefreshableView().setSelector(R.drawable.selector_grid);
 
-		mAdapter = new AdapterTime(mListView.getRefreshableView()) {
+		mAdapter = new AdapterTime(mListView.getRefreshableView(),colum) {
 			protected IImageItem createImageItem() {
 				return new ThumbImageView(getContext());
 			}

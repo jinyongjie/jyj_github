@@ -56,7 +56,8 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 
 	private int mImageWidth;
 	private int mSpacing = 10;
-	public static final int mColum = 3;
+	public int mColum = 3;
+	public static final int mDefaultColum = 3;
 	protected ArrayList<LineInfo> mData = new ArrayList<LineInfo>();
 	protected LayoutInflater mInflator;
 	private boolean mEditMode = false;
@@ -65,7 +66,8 @@ public abstract class AdapterTime extends BaseAdapter implements OnClickListener
 	private boolean mShowWeek = true;
 	private int mTextColor = 0xffd2d2d2;
 
-	public AdapterTime(ListView list) {
+	public AdapterTime(ListView list,int colum) {
+		mColum = colum;
 		mShowWeek = AppSetting.instance().getInt("list_time_show_week") == 1;
 
 		mTextColor = AppSetting.instance().getInt("list_time_date_color");

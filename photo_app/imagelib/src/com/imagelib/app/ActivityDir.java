@@ -73,7 +73,7 @@ public class ActivityDir extends Activity implements OnClickListener,
 	}
 
 	private void init() {
-		mList.Init();
+		mList.Init(3);
 		mList.setEditModeListener(this);
 		mList.setEnablePullRefresh(false);
 		

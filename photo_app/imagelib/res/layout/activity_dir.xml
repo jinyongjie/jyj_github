@@ -28,14 +28,11 @@
         <Button
             android:id="@+id/button_op"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/selector_button"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:text="@string/button_op"
-            android:textColor="@color/textWhite"
-            android:textSize="17sp" >
+            android:background="@drawable/selector_button_op"
+            android:layout_marginRight="10dip" >
         </Button>
 
         <View

@@ -35,7 +35,7 @@ public class ViewAll extends RelativeLayout implements ImageMgrListener {
 
 	public void init() {
 		mList = (ListByTime) findViewById(R.id.listbytime);
-		mList.Init();
+		mList.Init(3);
 		mList.setEnablePullRefresh(false);
 		mList.setEmptyText(R.string.no_image);
 		

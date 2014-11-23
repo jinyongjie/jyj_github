@@ -154,7 +154,7 @@ public class ImageMgr {
 
 		ArrayList<ImageInfo> array = new ArrayList<ImageInfo>(cursor.getCount());
 		ArrayList<LineInfo> array2 = new ArrayList<LineInfo>(cursor.getCount()
-				/ AdapterTime.mColum);
+				/ AdapterTime.mDefaultColum);
 
 		
 		int index0 = cursor.getColumnIndex(Media.DATA);
@@ -196,7 +196,7 @@ public class ImageMgr {
 					c.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR))
 
 					{
-						if (line.imagearray.size() == AdapterTime.mColum) {
+						if (line.imagearray.size() == AdapterTime.mDefaultColum) {
 							line = new LineInfo();
 							line.isTitle = false;
 							line.date = title.date;
@@ -254,7 +254,7 @@ public class ImageMgr {
 						ArrayList<Object> param = new ArrayList<Object>(3);
 						param.add(array.clone());
 						param.add(array2.clone());
-						param.add(new Integer(cursor.getCount()/AdapterTime.mColum));
+						param.add(new Integer(cursor.getCount()/AdapterTime.mDefaultColum));
 						notifyListeners(ImageMgr.refresh, param);
 
 					}
@@ -550,7 +550,7 @@ public class ImageMgr {
 						
 					}
 				
-					ArrayList<LineInfo> array2 = parse(array,AdapterTime.mColum);
+					ArrayList<LineInfo> array2 = parse(array,AdapterTime.mDefaultColum);
 					ArrayList<Object> param2 = new ArrayList<Object>(2);
 					param2.add(array);
 					param2.add(array2);
@@ -572,7 +572,7 @@ public class ImageMgr {
 
 					
 					array.add(0, info);
-					ArrayList<LineInfo> array2 = parse(array,AdapterTime.mColum);
+					ArrayList<LineInfo> array2 = parse(array,AdapterTime.mDefaultColum);
 					ArrayList<Object> param2 = new ArrayList<Object>(2);
 					param2.add(array);
 					param2.add(array2);

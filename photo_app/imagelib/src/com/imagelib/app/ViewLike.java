@@ -32,7 +32,7 @@ public class ViewLike extends RelativeLayout implements ImageMgrListener {
 
 	public void init() {
 		mList = (ListByTime)findViewById(R.id.listbytime);
-		mList.Init();
+		mList.Init(1);
 		mList.setEnablePullRefresh(false);
 		ImageMgr.GetInstance().addListener(this);
 		mList.setEmptyText(R.string.no_like_tip);

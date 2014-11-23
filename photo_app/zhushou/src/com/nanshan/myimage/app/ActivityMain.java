@@ -77,13 +77,13 @@ public class ActivityMain extends Activity implements OnClickListener,
 	private Button mButtonDir;
 	private Button mButtonLike;
 	private ViewPager mViewPager;
-
+	private View mProgress;
 	private ViewAll mViewAll;
 	private ViewDir mViewDir;
 	private ViewLike mViewLike;
 	private View mCurView;
 	private HashMap<Integer, View> mViewMap = new HashMap<Integer, View>();
-
+	
 	private static final int view_all = 0;
 	private static final int view_dir = 1;
 	private static final int view_like = 2;
@@ -94,6 +94,7 @@ public class ActivityMain extends Activity implements OnClickListener,
 
 	private boolean mEditMode = false;
 
+	static boolean mInited = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,6 +104,8 @@ public class ActivityMain extends Activity implements OnClickListener,
 		initCtrl();
 		initData();
 
+		if(mInited == false)
+			mProgress.setVisibility(View.VISIBLE);
 	}
 
 	public void onResume() {
@@ -127,6 +130,7 @@ public class ActivityMain extends Activity implements OnClickListener,
 		mButtonCamera = (Button) findViewById(R.id.button_camera);
 		mButtonOp = (Button) findViewById(R.id.button_op);
 		mButtonMenu = (Button) findViewById(R.id.button_menu);
+		mProgress = findViewById(R.id.progress);
 
 		mButtonCamera.setOnClickListener(this);
 		mButtonOp.setOnClickListener(this);
@@ -514,7 +518,9 @@ public class ActivityMain extends Activity implements OnClickListener,
 	public void onImageMgrNotify(int type, Object path) {
 		// TODO Auto-generated method stub
 		if (type == ImageMgr.refresh) {
-
+			if(mProgress != null)
+			mProgress.setVisibility(View.GONE);
+			mInited = true;
 		} else if (type == ImageMgr.delete_begin) {
 
 		} else if (type == ImageMgr.delete_end) {
