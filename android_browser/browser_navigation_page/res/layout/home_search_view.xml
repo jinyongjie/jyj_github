@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="6.0dip" >
 
-        <ImageView
+        <com.browser.home.ColorImageView
             android:id="@+id/home_search_logo"
             android:layout_width="130.0dip"
             android:layout_height="44.0dip"

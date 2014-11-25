@@ -3,6 +3,7 @@ package com.browser.home.model;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +11,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 
 public class GridModel {
-
+	public static List getGridList(Context context)
+	{
+		try {
+			return parse(new String(readBytes(context.getAssets().open("home_grid/home_grid.json")), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public static byte[] readBytes(InputStream paramInputStream) {
 		if (paramInputStream == null)
 			return null;

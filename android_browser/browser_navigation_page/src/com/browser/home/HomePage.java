@@ -7,20 +7,20 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.browser.home.model.GridItemData;
+import com.browser.home.model.GridModel;
 import com.example.browser_navigation_page.R;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -33,7 +33,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 public class HomePage extends FrameLayout {
 	private LinearLayout mGridLayout;
-
+	private static final int mColumCount = 5;
 	public HomePage(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
@@ -43,128 +43,112 @@ public class HomePage extends FrameLayout {
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		inflater.inflate(R.layout.home_view, this);
 		mGridLayout = (LinearLayout) findViewById(R.id.grid_layout);
-		initData();
-		
+		initGrid();
 	}
+	public static int dp2px(Context context, float dpValue) {
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (dpValue * scale + 0.5f);
+	}
+	private void initGrid() {
+		ArrayList<GridItemData> localList = (ArrayList<GridItemData>) GridModel
+				.getGridList(getContext());
 
-	private void initData() {
-		try {
-			ArrayList<GridItemData> localList = (ArrayList<GridItemData>) parse(new String(readBytes(getContext()
-					.getAssets().open("home_grid/home_grid.json")), "UTF-8"));
-			
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-			int colum = 5;
-			int line = localList.size()/colum + ((localList.size()%colum) > 0 ?1:0);
-			
-			for(int i = 0;i<line;i++)
-			{
-				LinearLayout lineitem = new LinearLayout(getContext());
-				lineitem.setOrientation(LinearLayout.HORIZONTAL);
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-				mGridLayout.addView(lineitem,params);
-				for(int j = 0;j<colum && (i*colum + j) < localList.size();j++)
+		LayoutInflater inflater = LayoutInflater.from(getContext());
+		int colum = mColumCount;
+		int space = dp2px(getContext(),10);
+		int line = localList.size() / colum
+				+ ((localList.size() % colum) > 0 ? 1 : 0);
+
+		for (int i = 0; i < line; i++) {
+			GridRow row = new GridRow(getContext(),null);
+			row.init(colum,space);
+			row.setOrientation(LinearLayout.HORIZONTAL);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
+			mGridLayout.addView(row, params);
+			for (int j = 0; j < colum ; j++) {
+				GridItemData data = null;
+				if((i*colum+j) < localList.size())
 				{
-					GridItemData data = localList.get(i*colum+j);
-					LinearLayout item = (LinearLayout) inflater.inflate(R.layout.home_grid_item,null);
-					
-					params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-					params.weight = 1;
-					lineitem.addView(item,params);
-					
-					TextView text = (TextView) item.findViewById(R.id.grid_item_title);
-					text.setText(data.getTitle());
-					
-					GridItemImage image = (GridItemImage) item.findViewById(R.id.grid_item_image);
-					String icon = data.getIcon();
-					int index = icon.indexOf("/");//todo
-					String sub = icon.substring(index + 2);
-					InputStream is = getContext().getAssets().open(sub);
-					Bitmap bmp = BitmapFactory.decodeStream(is);
-					Drawable background = createBackgroundDrawable(data.getBgcolor(),40);
-					//image.setBackgroundDrawable(background);
-					BitmapDrawable foreground = new BitmapDrawable(bmp);
-					foreground.setBounds(0, 0, bmp.getWidth(), bmp.getHeight());
-					image.setDrawable(background, foreground);
-					
+					data = localList.get(i * colum + j);
 				}
 				
-			}
-			
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+				LinearLayout item = (LinearLayout) inflater.inflate(
+						R.layout.home_grid_item, null);
 
-	public static byte[] readBytes(InputStream paramInputStream) {
-		if (paramInputStream == null)
-			return null;
-		ByteArrayOutputStream localByteArrayOutputStream = new ByteArrayOutputStream();
-		byte[] arrayOfByte = new byte[5120];
-		try {
-			while (paramInputStream.read(arrayOfByte) != -1)
-				localByteArrayOutputStream.write(arrayOfByte);
-		} catch (IOException localIOException) {
-		}
-		return localByteArrayOutputStream.toByteArray();
-	}
+				params = new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.WRAP_CONTENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT);
+				params.bottomMargin = space;
+				row.addView(item, params);
 
-	public static List parse(String paramString) {
-		ArrayList localArrayList = new ArrayList();
-		if (TextUtils.isEmpty(paramString))
-			return localArrayList;
-		JSONArray localJSONArray = null;
-		try {
-			localJSONArray = new JSONObject(paramString).optJSONArray("data");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if ((localJSONArray == null) || (localJSONArray.length() == 0))
-			return localArrayList;
-		int i = 0;
-		while (i < localJSONArray.length()) {
-			JSONObject localJSONObject = localJSONArray.optJSONObject(i);
-			if (localJSONObject == null)
-				;
-			 
-				i++;
-
-				if (localJSONObject.optString("grid_type").equals("normal")) {
-					GridItemData localo = new GridItemData();
-					localo.setBgcolor(parseColor(
-							localJSONObject.optString("bgcolor"), 16777215));
-					localo.setFgcolor(parseColor(
-							localJSONObject.optString("fgcolor"), 0));
-					localo.setIcon(localJSONObject.optString("icon"));
-					localo.setId(localJSONObject.optString("id"));
-
-					localo.setUrl(localJSONObject.optString("url"));
-					localo.setTitle(localJSONObject.optString("title"));
-					localArrayList.add(localo);
+				
+				TextView text = (TextView) item
+						.findViewById(R.id.grid_item_title);
+				if(data != null)
+				{
+					text.setText(data.getTitle());
 				}
-			
+				else
+				{
+					text.setText("Ìí¼Ó");
+				}
+				
+
+				GridItemImage image = (GridItemImage) item
+						.findViewById(R.id.grid_item_image);
+				if(data != null)
+				{
+					String icon = data.getIcon();
+					int index = icon.indexOf("/");// todo
+					String sub = icon.substring(index + 2);
+					InputStream is = null;
+					try {
+						is = getContext().getAssets().open(sub);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Bitmap bmp = BitmapFactory.decodeStream(is);
+					Drawable background = createBackgroundDrawable(
+							data.getBgcolor(), 50);
+					
+					
+					image.setDrawable(background, bmp);
+					image.setTag(data);
+					image.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							GridItemData data = (GridItemData) v.getTag();
+							
+							 Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(data.getUrl()));  
+						       // it.setClassName("com.android.browser", "com.android.browser.BrowserActivity");  
+						        getContext().startActivity(it);  
+						        
+						}
+						
+					});
+				}
+				else
+				{
+					Drawable background = createBackgroundDrawable(
+							Color.WHITE, 40);
+					Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.shortcut_add);
+					image.setDrawable(background, bmp);
+				}
+
+
+			}
 		}
-		return localArrayList;
 	}
 
-	public static int parseColor(String paramString, int paramInt) {
-		try {
-			int i = Color.parseColor(paramString);
-			return i;
-		} catch (Exception localException) {
-		}
-		return paramInt;
+	public static Drawable createBackgroundDrawable(int color, int radius) {
+		GradientDrawable localGradientDrawable = new GradientDrawable();
+		localGradientDrawable.setColor(color);
+		localGradientDrawable.setCornerRadius(radius);
+		return localGradientDrawable;
 	}
-	
-	  public static Drawable createBackgroundDrawable(int color, int radius)
-	  {
-	    GradientDrawable localGradientDrawable = new GradientDrawable();
-	    localGradientDrawable.setColor(color);
-	    localGradientDrawable.setCornerRadius(radius);
-	    return localGradientDrawable;
-	  }
 }

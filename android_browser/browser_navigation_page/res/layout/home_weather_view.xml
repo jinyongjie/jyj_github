@@ -33,7 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2.0dip"
             android:textColor="@color/home_weather_textcolor"
-            android:textSize="@dimen/home_weather_textsize" />
+            android:textSize="@dimen/home_weather_textsize"
+            android:text="北京"
+             />
     </LinearLayout>
 
     <LinearLayout
@@ -54,14 +56,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/home_weather_textcolor"
-            android:textSize="@dimen/home_weather_textsize" />
+            android:textSize="@dimen/home_weather_textsize"
+            android:text="4℃" />
 
         <ImageView
             android:id="@+id/weather_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/home_weather_group_inside_margin"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:src="@drawable/weather_icon_wu_small" />
 
         <TextView
             android:id="@+id/pm25_value"
@@ -72,7 +76,9 @@
             android:paddingRight="4.0dip"
             android:singleLine="true"
             android:textColor="#ffffffff"
-            android:textSize="@dimen/home_weather_textsize" />
+            android:background="@drawable/weather"
+            android:textSize="@dimen/home_weather_textsize"
+            android:text="重度污染" />
     </LinearLayout>
 
     <LinearLayout
@@ -86,7 +92,7 @@
         android:paddingLeft="@dimen/home_weather_left_right_padding"
         android:paddingRight="@dimen/home_weather_left_right_padding"
         android:paddingTop="10.0dip"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/warning_img"
