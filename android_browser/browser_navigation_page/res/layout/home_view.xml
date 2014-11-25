@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_group"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:descendantFocusability="blocksDescendants"
+    android:minHeight="640.0dip"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/home_bottom_margin" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.0dip"
+        android:orientation="horizontal" 
+        >
+
+        <include
+            android:id="@+id/home_weather_view_stub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/home_weather_view" />
+
+        <View
+            android:layout_width="0.0dip"
+            android:layout_height="1.0dp"
+            android:layout_weight="1.0"
+		 />
+
+        <include
+            android:id="@+id/message_center_group"
+            android:layout_width="@dimen/message_hint_width"
+            android:layout_height="@dimen/message_hint_height"
+            android:layout_gravity="right|center"
+            layout="@layout/home_message_group" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/home_search_view_stub"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.0dip"
+        layout="@layout/home_search_view" />
+
+    <LinearLayout
+        android:id="@+id/grid_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/home_grid_bottom_padding"
+        android:layout_marginLeft="@dimen/home_nav_hor_margin"
+        android:layout_marginRight="@dimen/home_nav_hor_margin"
+        android:layout_marginTop="@dimen/home_grid_top_padding"
+        android:orientation="vertical" />
+
+</LinearLayout>

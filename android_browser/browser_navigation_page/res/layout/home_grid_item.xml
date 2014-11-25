@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:hapticFeedbackEnabled="false"
+    android:orientation="vertical" >
+
+    <com.browser.home.GridItemImage
+        android:id="@+id/grid_item_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="visible" />
+
+
+
+    <TextView
+        android:id="@+id/grid_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingTop="5.0dip"
+        android:textColor="@color/black_alpha60"
+        android:textSize="@dimen/home_grid_item_text_size" />
+
+</LinearLayout>

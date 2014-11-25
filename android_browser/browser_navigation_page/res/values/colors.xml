@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#ffffffff</color>
+    <color name="white_alpha90">#e5ffffff</color>
+    <color name="white_alpha40">#66ffffff</color>
+    <color name="white_alpha50">#80ffffff</color>
+    <color name="white_alpha60">#99ffffff</color>
+    <color name="white_alpha15">#26ffffff</color>
+    <color name="black_alpha10">#1a000000</color>
+    <color name="black_alpha50">#80000000</color>
+    <color name="black">#ff000000</color>
+    <color name="black_four_half_alpha">#66000000</color>
+    <color name="black_eighty_alpha">#cc000000</color>
+    <color name="black_half_alpha">#7f000000</color>
+    <color name="black_thirty_alpha">#55000000</color>
+    <color name="dark_blue">#ff3d6cd7</color>
+    <color name="transparent">#00000000</color>
+    <color name="yellow_text">#ffff7715</color>
+    <color name="homepage_section_content_text_color">#cc000000</color>
+    <color name="homepage_mostvisit_content_text_color">#b3000000</color>
+    <color name="home_hot_video_update_text_color">#fff58a17</color>
+    <color name="home_grid_item_text_color">#b2000000</color>
+    <color name="home_grid_image_default_bg_color">#ff4b93d4</color>
+    <color name="home_grid_image_add_bg_color">#ffffffff</color>
+    <color name="home_address_bar_separate">#ffcfcfcf</color>
+    <color name="black_alpha90">#e6000000</color>
+    <color name="black_alpha80">#cc000000</color>
+    <color name="black_alpha40">#66000000</color>
+    <color name="black_alpha30">#4d000000</color>
+    <color name="black_alpha60">#99000000</color>
+    <color name="home_weather_textcolor">#ff484848</color>
+    <color name="home_video_card_header_view_title_color">#ffff344f</color>
+
+</resources>
