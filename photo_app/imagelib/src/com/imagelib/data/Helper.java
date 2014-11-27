@@ -115,18 +115,7 @@ public class Helper {
 		return result;
 	}
 
-	public static void statistic(String str) {
-		new AsyncTask<String, String, String>() {
 
-			@Override
-			protected String doInBackground(String... params) {
-				// TODO Auto-generated method stub
-				executeHttpGet(params[0]);
-				return null;
-			}
-		}.execute(str);
-
-	}
 
 	public static Size getScreenSize(Context context)
 	{
@@ -365,6 +354,20 @@ public class Helper {
 	            }
 	        }
 	        return fileSizeString;
+	    }
+	    public interface StatisticHelper
+	    {
+	    	void send(String id);
+	    }
+	    static private StatisticHelper sHelper = null;
+	    static public void setStatisticHelper(StatisticHelper helper)
+	    {
+	    	sHelper = helper;
+	    }
+	    static public void statistic(String id)
+	    {
+	    	if(sHelper != null)
+	    		sHelper.send(id);
 	    }
 	/* 
     static {

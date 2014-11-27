@@ -106,6 +106,8 @@ public class ActivityGallery extends Activity implements OnClickListener,
 
 		super.onCreate(savedInstanceState);
 
+		Helper.statistic("detail_page");
+		
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		mDefaultWidth = dm.widthPixels;
@@ -367,8 +369,10 @@ public class ActivityGallery extends Activity implements OnClickListener,
 		} else if (id == R.id.button_show) {
 			BeginShow();
 		} else if (id == R.id.button_del) {
+			Helper.statistic("detail_btn_delete");
 			ShowDelDialog();
 		} else if (id == R.id.button_share) {
+			Helper.statistic("detail_btn_share");
 			ImageInfo info = ImageMgr.GetInstance()
 					.getImage(mArray.get(mIndex));
 			if (info != null) {
@@ -383,10 +387,13 @@ public class ActivityGallery extends Activity implements OnClickListener,
 			}
 
 		} else if (id == R.id.button_like) {
+			Helper.statistic("detail_btn_like");
 			AddOrDelLike();
 		} else if (id == R.id.button_more) {
+			Helper.statistic("detail_btn_more");
 			showMoreMenu(mBarBottom);
 		} else if (id == R.id.button_copy) {
+			Helper.statistic("detail_btn_copy");
 			Intent intent = new Intent();
 			intent.setClass(this, ActivitySelDir.class);
 
@@ -398,6 +405,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 
 			mOpMenu.dismiss();
 		} else if (id == R.id.button_move) {
+			Helper.statistic("detail_btn_move");
 			Intent intent = new Intent();
 			intent.setClass(this, ActivitySelDir.class);
 
@@ -409,6 +417,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 
 			mOpMenu.dismiss();
 		} else if (id == R.id.button_info) {
+			Helper.statistic("detail_btn_info");
 			ExifInterface exif = null;
 			try {
 				exif = new ExifInterface(mArray.get(mIndex));
@@ -474,6 +483,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 			mOpMenu.dismiss();
 		} else if (id == R.id.button_wallpaper) {
 
+			Helper.statistic("detail_btn_wallpaper");
 			File file = new File(mArray.get(mIndex));
 			Intent intent = createSetAsIntent(Uri.fromFile(file), null);
 			intent.setAction(Intent.ACTION_ATTACH_DATA);
@@ -485,6 +495,7 @@ public class ActivityGallery extends Activity implements OnClickListener,
 		}
 	 else if (id == R.id.button_edit) {
 
+		 Helper.statistic("detail_btn_edit");
 		File file = new File(mArray.get(mIndex));
 		Intent intent = createSetAsIntent(Uri.fromFile(file), null);
 		intent.setAction(Intent.ACTION_EDIT);
