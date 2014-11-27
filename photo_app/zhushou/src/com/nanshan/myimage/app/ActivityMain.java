@@ -59,6 +59,7 @@ import com.imagelib.app.ViewDir;
 import com.imagelib.app.ViewLike;
 import com.imagelib.ctrl.AdapterTime.EditModeListener;
 import com.imagelib.data.Helper;
+import com.imagelib.data.Helper.StatisticHelper;
 import com.imagelib.data.ImageLoader2;
 import com.imagelib.data.ImageMgr;
 import com.imagelib.data.ImageMgr.ImageMgrListener;
@@ -95,12 +96,22 @@ public class ActivityMain extends Activity implements OnClickListener,
 	private boolean mEditMode = false;
 
 	static boolean mInited = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		UmengUpdateAgent.update(this);
 		setContentView(R.layout.activity_main);
 
+		Helper.setStatisticHelper(new StatisticHelper(){
+
+			@Override
+			public void send(String id) {
+				// TODO Auto-generated method stub
+				MobclickAgent.onEvent(ActivityMain.this, id);
+			}
+			
+		});
 		initCtrl();
 		initData();
 
@@ -173,12 +184,12 @@ public class ActivityMain extends Activity implements OnClickListener,
 					mViewLike.setEditMode(false);
 
 				}
-/*
+
 				if(mIndex == view_dir)
 					mButtonOp.setVisibility(View.GONE);
 				else
 					mButtonOp.setVisibility(View.VISIBLE);
-	*/		}
+			}
 
 		});
 
@@ -379,7 +390,8 @@ public class ActivityMain extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		int id = v.getId();
 		if (id == R.id.button_camera) {
-
+			
+			Helper.statistic("tab_camera");
 			String sdStatus = Environment.getExternalStorageState();
 			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { //
 				Log.d("MainActivity",
@@ -412,7 +424,7 @@ public class ActivityMain extends Activity implements OnClickListener,
 			}
 
 		} else if (id == R.id.button_op) {
-
+			Helper.statistic("btn_edit");
 			if (mIndex == view_all) {
 				if (mViewAll.haveData())
 					mViewAll.setEditMode(true);
@@ -428,10 +440,15 @@ public class ActivityMain extends Activity implements OnClickListener,
 			}
 		} else if (id == R.id.button_all) {
 			mViewPager.setCurrentItem(view_all);
+			
+			Helper.statistic("tab_photo");
 		} else if (id == R.id.button_dir) {
 			mViewPager.setCurrentItem(view_dir);
+			Helper.statistic("tab_album");
 		} else if (id == R.id.button_like) {
 			mViewPager.setCurrentItem(view_like);
+			//MobclickAgent.onEventValue(this, "tab_collect", new HashMap<String,String>(), 0);
+			Helper.statistic("tab_collect");
 		}
 	}
 

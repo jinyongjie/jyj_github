@@ -91,7 +91,7 @@
                 android:drawableTop="@drawable/photo_normal"
                 android:text="@string/photo"
                 android:textColor="@color/bottom_text"
-                android:textSize="17sp" />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/button_dir"
@@ -102,7 +102,7 @@
                 android:drawableTop="@drawable/folder_normal"
                 android:text="@string/album"
                 android:textColor="@color/bottom_text"
-                android:textSize="17sp" />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/button_like"
@@ -113,7 +113,7 @@
                 android:drawableTop="@drawable/favorite_normal"
                 android:text="@string/favorite"
                 android:textColor="@color/bottom_text"
-                android:textSize="17sp" />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/button_camera"
@@ -124,7 +124,7 @@
                 android:drawableTop="@drawable/selector_button_camera"
                 android:text="@string/camera"
                 android:textColor="@color/bottom_text"
-                android:textSize="17sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
