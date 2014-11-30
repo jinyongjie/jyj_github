@@ -108,7 +108,9 @@ public class ActivityMain extends Activity implements OnClickListener,
 			@Override
 			public void send(String id) {
 				// TODO Auto-generated method stub
-				MobclickAgent.onEvent(ActivityMain.this, id);
+				//MobclickAgent.onEvent(ActivityMain.this, id);
+				
+				MobclickAgent.onEventValue(ActivityMain.this, id, new HashMap<String,String>(), 0);
 			}
 			
 		});
