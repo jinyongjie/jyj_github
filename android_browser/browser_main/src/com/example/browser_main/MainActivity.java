@@ -28,7 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 public class MainActivity extends Activity implements OnClickListener {
-	private MenuWindow mMenuWindow;
+	private MenuWindow2 mMenuWindow;
 	private ViewGroup mContainer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +44,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		//initTestRotate();
 		//testPopup();
 		findViewById(R.id.button_menu).setOnClickListener(this);
-		mMenuWindow = (MenuWindow) findViewById(R.id.menu_widow);
+		mMenuWindow = (MenuWindow2) findViewById(R.id.menu_widow);
 		mContainer = (ViewGroup)findViewById(R.id.container);
 		
 		initHomePage();
 
 	}
 
-	private void testHomePage()
+	private void initHomePage()
 	{
 		HomePage page = new HomePage(this,null);
 		mContainer.addView(page);
@@ -144,6 +144,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	private void popup_menuwindow()
 	{
+		/*
 		if(mMenuWindow.getVisibility() == View.VISIBLE)
 		{
 			//mMenuWindow.setVisibility(View.GONE);
@@ -154,5 +155,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			mMenuWindow.animShow();
 			//mMenuWindow.setVisibility(View.VISIBLE);
 		}
+		*/
 	}
 }
