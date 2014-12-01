@@ -60,6 +60,9 @@ public class TabSwitch extends View implements OnGestureListener,
 
 	public void setAngle(float angle) {
 		mAngle = angle;
+		Log.d(TAG,String.format("setAngle %f",angle));
+		calc();
+		invalidate();
 	}
 
 	private Bitmap drawImageDropShadow(Bitmap originalBitmap) {
@@ -157,12 +160,13 @@ public class TabSwitch extends View implements OnGestureListener,
 		 */
 		if (mAnim != null)
 			mAnim.cancel();
-		mAnim = ObjectAnimator.ofFloat(this, "angle", mAngle, -mAngleSpace
-				* index);
-		mAnim.setDuration(500);
-		mAnim.setInterpolator(new AccelerateInterpolator());
+		float dest = (float)(-mAngleSpace* index);
+		mAnim = ObjectAnimator.ofFloat(this, "angle", mAngle,dest );
+		mAnim.setDuration(200);
+		//mAnim.setInterpolator(new AccelerateInterpolator());
 		mAnim.addUpdateListener(this);
 		mAnim.start();
+		Log.d(TAG,String.format("begin anim %f %f", mAngle,dest));
 	}
 
 	private boolean mDraging = false;
@@ -253,8 +257,8 @@ public class TabSwitch extends View implements OnGestureListener,
 	@Override
 	public void onAnimationUpdate(ValueAnimator animation) {
 		// TODO Auto-generated method stub
-		calc();
-		invalidate();
+		Log.d(TAG,String.format("onAnimationUpdate %f", mAngle));
+
 	}
 
 }

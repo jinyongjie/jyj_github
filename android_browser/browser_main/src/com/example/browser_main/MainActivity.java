@@ -6,6 +6,7 @@ import com.browser.home.HomePage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -44,6 +45,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		//initTestRotate();
 		//testPopup();
 		findViewById(R.id.button_menu).setOnClickListener(this);
+		findViewById(R.id.button_tab).setOnClickListener(this);
 		mMenuWindow = (MenuWindow2) findViewById(R.id.menu_widow);
 		mContainer = (ViewGroup)findViewById(R.id.container);
 		
@@ -139,6 +141,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		{
 		case R.id.button_menu:
 			popup_menuwindow();
+			break;
+		case R.id.button_tab:
+			Intent intent = new Intent();
+			intent.setClass(this, TabSwitchActivity.class);
+			startActivity(intent);
 			break;
 		}
 	}

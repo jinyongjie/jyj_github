@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.browser_main xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.browser_main.MenuWindow2 xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sector_multi_window_background"
     android:orientation="vertical">
-</com.example.browser_main>
+</com.example.browser_main.MenuWindow2>
 
