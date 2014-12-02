@@ -19,31 +19,28 @@ import android.graphics.RectF;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.View.OnClickListener;
-
 import android.view.ViewGroup;
 
 public class MainActivity extends Activity implements OnClickListener {
 	private MenuWindow mMenuWindow;
 	private ViewGroup mContainer;
+	private ViewGroup mRoot;
+	private View mTabSwitch;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	
-
-	//	View v = new ImageEffect(this);
+		LayoutInflater inflater = LayoutInflater.from(this);
+		mRoot = (ViewGroup) inflater.inflate(R.layout.activity_main, null);
+		setContentView(mRoot);
 		
-	//	setContentView(v);
 
-		setContentView(R.layout.activity_main);
-		
-		//initTestRotate();
-		//testPopup();
 		findViewById(R.id.button_menu).setOnClickListener(this);
 		findViewById(R.id.button_tab).setOnClickListener(this);
 		mMenuWindow = (MenuWindow) findViewById(R.id.menu_widow);
@@ -143,9 +140,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			popup_menuwindow();
 			break;
 		case R.id.button_tab:
-			Intent intent = new Intent();
+		/*	Intent intent = new Intent();
 			intent.setClass(this, TabSwitchActivity.class);
 			startActivity(intent);
+			*/showTabSwitch();
 			break;
 		}
 	}
@@ -163,5 +161,32 @@ public class MainActivity extends Activity implements OnClickListener {
 			//mMenuWindow.setVisibility(View.VISIBLE);
 		}
 		
+	}
+	private void showTabSwitch()
+	{
+		if(mTabSwitch == null)
+		{
+			LayoutInflater inflater = LayoutInflater.from(this);
+			mTabSwitch =  inflater.inflate(R.layout.tab_switch, null);
+			mRoot.addView(mTabSwitch);
+			TabSwitch t = (TabSwitch) mTabSwitch.findViewById(R.id.tab_switch);
+			t.init();
+
+		}
+		mTabSwitch.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if(keyCode == event.KEYCODE_BACK)
+		{
+			if(mTabSwitch != null && mTabSwitch.getVisibility() == View.VISIBLE)
+			{
+				mTabSwitch.setVisibility(View.GONE);
+				return true;
+			}
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }
