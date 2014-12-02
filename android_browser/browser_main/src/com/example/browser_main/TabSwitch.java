@@ -35,7 +35,7 @@ import android.graphics.PorterDuff;
 
 public class TabSwitch extends View implements OnGestureListener,
 		AnimatorUpdateListener {
-	private int mCount = 4;
+	private int mCount = 8;
 	private Bitmap[] mBitmap = new Bitmap[mCount];
 	private Matrix[] mMatrix = new Matrix[mCount];
 	private int mCurrentIndex = 0;
@@ -44,7 +44,6 @@ public class TabSwitch extends View implements OnGestureListener,
 	static private String TAG = "TabSwitch";
 	private GestureDetector mGestureDetector;
 	private String mTitle = "新建标签页";
-	private int mOffsetY = 500;
 	// private int mOffsetX = 200;
 	private float mAngle = 0;
 	private int mScreenX = 600;
@@ -69,10 +68,10 @@ public class TabSwitch extends View implements OnGestureListener,
 		mCenterX = mScreenX/2;
 		mCenterY = mScreenY*2;
 		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize = 2;
+		options.inSampleSize = 1;
 
 		for (int i = 0; i < mCount; i++) {
-			Bitmap bmp = (BitmapFactory.decodeResource(getResources(), mIds[i],
+			Bitmap bmp = (BitmapFactory.decodeResource(getResources(), mIds[i%4],
 					options));
 			Matrix m = new Matrix();
 			float sx = (float) (mScreenX / (2.0 * bmp.getWidth()));
@@ -129,14 +128,25 @@ public class TabSwitch extends View implements OnGestureListener,
 
 		// paint.setBitmapFilter(true);
 		for (int i = 0; i < mCount; i++)
+		{
 			canvas.drawBitmap(mBitmap[i], mMatrix[i], paint);
+			
+			Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			textPaint.setTextSize(50);
+			textPaint.setColor(Color.WHITE);
+			float textW = (int) textPaint.measureText(mTitle); 
+			
+			float angle = mAngle + mAngleSpace * i;
+			
+			float left = (float) (Math.tan(Math.toRadians(angle)) * mScreenY*5) + mScreenX/2 - textW/2;
+			canvas.drawText(mTitle, left, getHeight()/4, textPaint);
+			
+		}
+			
 
-		Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		textPaint.setTextSize(50);
-		textPaint.setColor(Color.WHITE);
-		canvas.drawText(mTitle, 400, 300, textPaint);
-		
+		Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);		
 		textPaint.setColor(Color.rgb(123, 148, 174));
+		
 		Rect r = new Rect(0,getHeight() - 20,mScreenX,getHeight());
 		canvas.drawRect(r, textPaint);
 
@@ -155,12 +165,13 @@ public class TabSwitch extends View implements OnGestureListener,
 
 
 	public void calc() {
+		int offset = (int) (mScreenY*0.75) + Helper.dp2px(getContext(), 20);
 		for (int i = 0; i < mCount; i++) {
 
 			float angle = mAngle + mAngleSpace * i;
 			mMatrix[i] = new Matrix();
 			mMatrix[i].setTranslate((mScreenX - mBitmap[i].getWidth()) / 2,
-					mOffsetY);
+					offset  - mBitmap[i].getHeight());
 			mMatrix[i].postRotate(angle, mCenterX, mCenterY);
 
 		}
@@ -200,7 +211,7 @@ public class TabSwitch extends View implements OnGestureListener,
 	{
 		cancelAllAnim();
 		mRestoreAnim = ObjectAnimator.ofFloat(this, "angle", mAngle,dest );
-		mRestoreAnim.setDuration(200);
+		mRestoreAnim.setDuration(100);
 		
 		mRestoreAnim.addUpdateListener(this);
 		mRestoreAnim.start();
@@ -315,17 +326,39 @@ public class TabSwitch extends View implements OnGestureListener,
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 		// TODO Auto-generated method stub
-		Log.d(TAG, String.format("onFling %f %f", velocityX, velocityY));
-		float speed = velocityX;
-		if(speed > 0 &&  speed < 4000)
-			speed = 4000;
-		if(speed < 0 && speed > -4000)
-			speed = -4000;
 		
-		float angle = speed*mAngleSpace/4000;
-		animFling(mAngle+angle,200);
+		float speed = velocityX;
+		int titem = 2000;
+		if(speed > 0 &&  speed < titem)
+			speed = titem;
+		if(speed < 0 && speed > -titem)
+			speed = -titem;
+
+		
+		float angle =mAngleSpace *(speed/titem);
+		if(Math.abs(speed) >= 4000)
+		{
+			angle = angle*(speed/4000);
+			if(speed < 0)
+				angle = -angle;
+		}
+		
+		float angle_max =  0;
+		if(angle > 0)
+		{
+			angle_max = (float) ((mCurrentIndex + 0.5)*mAngleSpace);
+			if(angle > angle_max)
+				angle = angle_max;
+		}
+		else
+		{
+			angle_max = (float) (-(mCount - mCurrentIndex -0.5)*mAngleSpace);
+			if(angle < angle_max)
+				angle = angle_max;
+		}
+		animFling(mAngle+angle,100);
 			
-	
+		Log.d(TAG, String.format("onFling x=%f angle=%f max=%f", velocityX,angle,angle_max));
 		return false;
 	}
 
