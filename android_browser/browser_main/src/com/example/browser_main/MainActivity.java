@@ -29,7 +29,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 public class MainActivity extends Activity implements OnClickListener {
-	private MenuWindow2 mMenuWindow;
+	private MenuWindow mMenuWindow;
 	private ViewGroup mContainer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		//testPopup();
 		findViewById(R.id.button_menu).setOnClickListener(this);
 		findViewById(R.id.button_tab).setOnClickListener(this);
-		mMenuWindow = (MenuWindow2) findViewById(R.id.menu_widow);
+		mMenuWindow = (MenuWindow) findViewById(R.id.menu_widow);
 		mContainer = (ViewGroup)findViewById(R.id.container);
 		
 		initHomePage();
@@ -71,9 +71,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		public ImageEffect(Context context) {
 			super(context);
-			paint = new Paint(); // ³õÊ¼»¯»­±Ê£¬ÎªºóÃæÒõÓ°Ð§¹ûÊ¹ÓÃ¡£
-			paint.setAntiAlias(true);// È¥³ý¾â³Ý¡£
-			paint.setShadowLayer(5f, 5.0f, 5.0f, Color.BLACK); // ÉèÖÃÒõÓ°²ã£¬ÕâÊÇ¹Ø¼ü¡£
+			paint = new Paint(); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°Ð§ï¿½ï¿½Ê¹ï¿½Ã¡ï¿½
+			paint.setAntiAlias(true);// È¥ï¿½ï¿½ï¿½Ý¡ï¿½
+			paint.setShadowLayer(5f, 5.0f, 5.0f, Color.BLACK); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ã£¬ï¿½ï¿½ï¿½Ç¹Ø¼ï¿½
 			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
 
 		}
@@ -86,7 +86,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			Drawable drawable = getResources().getDrawable(R.drawable.ic_launcher);
 			Drawable dbe = getResources().getDrawable(R.drawable.ic_launcher)
-					.mutate();// Èç¹û²»µ÷ÓÃmutate·½·¨£¬ÔòÔ­Í¼Ò²»á±»¸Ä±ä£¬ÒòÎªµ÷ÓÃµÄ×ÊÔ´ÊÇÍ¬Ò»¸ö£¬ËùÓÐ¶ÔÏóÊÇ¹²Ïí×´Ì¬µÄ¡£
+					.mutate();// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mutateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­Í¼Ò²ï¿½á±»ï¿½Ä±ä£¬ï¿½ï¿½Îªï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Ô´ï¿½ï¿½Í¬Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ç¹ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä¡ï¿½
 			Drawable drawTest = getResources().getDrawable(R.drawable.ic_launcher);
 			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 					R.drawable.ic_launcher);
@@ -98,36 +98,36 @@ public class MainActivity extends Activity implements OnClickListener {
 			drawable.setBounds(posX, posY, posX + PicWidth, posY + PicHeight);
 			dbe.setBounds(0, 0, PicWidth, PicHeight);
 
-			canvas.drawColor(Color.WHITE);// ÉèÖÃ»­²¼ÑÕÉ«
+			canvas.drawColor(Color.WHITE);// ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½É«
 			canvas.save(Canvas.MATRIX_SAVE_FLAG);
 			dbe.setColorFilter(0x7f000000, PorterDuff.Mode.SRC_IN);
 			canvas.translate(posX + (int) (0.9 * PicWidth / 2), posY
-					+ PicHeight / 2);// Í¼ÏñÆ½ÒÆÎªÁË¸ÕºÃÔÚÔ­Í¼ºóÐÎ³ÉÓ°×ÓÐ§¹û¡£
-			canvas.skew(-0.9F, 0.0F);// Í¼ÏñÇãÐ±Ð§¹û¡£
-			canvas.scale(1.0f, 0.5f);// Í¼Ïñ£¨ÆäÊµÊÇ»­²¼£©Ëõ·Å£¬Y·½ÏòËõÐ¡Îª1/2¡£
-			dbe.draw(canvas);// ´Ë´¦Îª»­Ô­Í¼ÏñÓ°×ÓÐ§¹ûÍ¼£¬±ÈÔ­Í¼ÏÈ»­£¬Ôò»áÔÚÏÂ²ã¡£
+					+ PicHeight / 2);// Í¼ï¿½ï¿½Æ½ï¿½ï¿½Îªï¿½Ë¸Õºï¿½ï¿½ï¿½Ô­Í¼ï¿½ï¿½ï¿½Î³ï¿½Ó°ï¿½ï¿½Ð§ï¿½ï¿½
+			canvas.skew(-0.9F, 0.0F);// Í¼ï¿½ï¿½ï¿½ï¿½Ð±Ð§ï¿½ï¿½
+			canvas.scale(1.0f, 0.5f);// Í¼ï¿½ï¿½ï¿½ï¿½Êµï¿½Ç»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡Îª1/2ï¿½ï¿½
+			dbe.draw(canvas);// ï¿½Ë´ï¿½Îªï¿½ï¿½Ô­Í¼ï¿½ï¿½Ó°ï¿½ï¿½Ð§ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ô­Í¼ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â²ã¡£
 			drawable.clearColorFilter();
 			canvas.restore();
 
 			canvas.save(Canvas.MATRIX_SAVE_FLAG);
-			drawable.draw(canvas);// ´Ë´¦Îª»­Ô­Í¼Ïñ£¬ÓÉÓÚcanvasÓÐ²ã´ÎÐ§¹û£¬Òò´Ë»á¸ÇÔÚÓ°×ÓÖ®ÉÏ¡£
+			drawable.draw(canvas);// ï¿½Ë´ï¿½Îªï¿½ï¿½Ô­Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½canvasï¿½Ð²ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½Ö®ï¿½Ï¡ï¿½
 			canvas.restore();
 
-			// Ä¬ÈÏÎÞÐ§¹ûÔ­Í¼
+			// Ä¬ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½Ô­Í¼
 			canvas.save(Canvas.MATRIX_SAVE_FLAG);
 			drawTest.draw(canvas);
 			canvas.restore();
 
-			// Í¼Æ¬ÒõÓ°Ð§¹û
+			// Í¼Æ¬ï¿½ï¿½Ó°Ð§ï¿½ï¿½
 			Rect rect = new Rect(2 * posX + PicWidth + 3, 2 * posY + PicHeight
 					+ 3, 2 * posX + 2 * PicWidth - 2, 2 * posY + 2 * PicHeight
 					- 2);
-			// ÓÉÓÚÍ¼Æ¬µÄÊµ¼Ê³ß´ç±ÈÏÔÊ¾³öÀ´µÄÍ¼ÏñÒª´óÒ»Ð©£¬Òò´ËÐèÒªÊÊµ±¸ü¸ÄÏÂ´óÐ¡£¬ÒÔ´ïµ½½ÏºÃµÄÐ§¹û
+			// ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Êµï¿½Ê³ß´ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Òªï¿½ï¿½Ò»Ð©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½Ð¡ï¿½ï¿½ï¿½Ô´ïµ½ï¿½ÏºÃµï¿½Ð§ï¿½ï¿½
 
 			RectF rectF = new RectF(rect);
-			canvas.drawRoundRect(rectF, 10f, 10f, paint);// ÔÚÔ­ÓÐ¾ØÐÎ»ù´¡ÉÏ£¬»­³ÉÔ²½Ç¾ØÐÎ£¬Í¬Ê±´øÓÐÒõÓ°²ã¡£
+			canvas.drawRoundRect(rectF, 10f, 10f, paint);// ï¿½ï¿½Ô­ï¿½Ð¾ï¿½ï¿½Î»ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½Ô²ï¿½Ç¾ï¿½ï¿½Î£ï¿½Í¬Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ã¡£
 			canvas.drawBitmap(bmp, 2 * posX + PicWidth, 2 * posY + PicHeight,
-					null);// »­ÉÏÔ­Í¼¡£
+					null);// ï¿½ï¿½ï¿½ï¿½Ô­Í¼ï¿½ï¿½
 			canvas.restore();
 		}
 	}
@@ -151,7 +151,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	private void popup_menuwindow()
 	{
-		/*
+		
 		if(mMenuWindow.getVisibility() == View.VISIBLE)
 		{
 			//mMenuWindow.setVisibility(View.GONE);
@@ -162,6 +162,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			mMenuWindow.animShow();
 			//mMenuWindow.setVisibility(View.VISIBLE);
 		}
-		*/
+		
 	}
 }

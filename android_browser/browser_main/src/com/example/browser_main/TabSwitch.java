@@ -104,7 +104,7 @@ public class TabSwitch extends View implements OnGestureListener,
 		Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		textPaint.setTextSize(50);
 		textPaint.setColor(Color.WHITE);
-		canvas.drawText("ĞÂ½¨±êÇ©Ò³", 400, 300, textPaint);
+		canvas.drawText("æ–°å»ºçª—å£", 400, 300, textPaint);
 	}
 
 	public void init() {
