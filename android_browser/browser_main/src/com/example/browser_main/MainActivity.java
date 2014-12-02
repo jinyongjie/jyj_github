@@ -43,6 +43,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		findViewById(R.id.button_menu).setOnClickListener(this);
 		findViewById(R.id.button_tab).setOnClickListener(this);
+		findViewById(R.id.button_back).setOnClickListener(this);
 		mMenuWindow = (MenuWindow) findViewById(R.id.menu_widow);
 		mContainer = (ViewGroup)findViewById(R.id.container);
 		
@@ -144,6 +145,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			intent.setClass(this, TabSwitchActivity.class);
 			startActivity(intent);
 			*/showTabSwitch();
+			break;
+		case R.id.button_back:
+			testSurfaceView view = new testSurfaceView(this);
+			mRoot.addView(view);
+		
 			break;
 		}
 	}

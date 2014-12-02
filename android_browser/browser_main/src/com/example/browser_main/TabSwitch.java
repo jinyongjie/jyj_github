@@ -124,11 +124,19 @@ public class TabSwitch extends View implements OnGestureListener,
 		canvas.setDrawFilter(pfd);
 
 		Paint paint = new Paint();
-		paint.setShadowLayer(5, 8, 7, Color.DKGRAY);
+		//paint.setShadowLayer(5, 8, 7, Color.DKGRAY);
 
+		BlurMaskFilter blurFilter = new BlurMaskFilter(3,
+				BlurMaskFilter.Blur.NORMAL);
+		
+		paint.setAlpha(50);
+		paint.setColor(Color.GRAY);
+		paint.setMaskFilter(blurFilter);
+		
 		// paint.setBitmapFilter(true);
 		for (int i = 0; i < mCount; i++)
 		{
+			
 			canvas.drawBitmap(mBitmap[i], mMatrix[i], paint);
 			
 			Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -336,9 +344,9 @@ public class TabSwitch extends View implements OnGestureListener,
 
 		
 		float angle =mAngleSpace *(speed/titem);
-		if(Math.abs(speed) >= 4000)
+		if(Math.abs(speed) >= 3000)
 		{
-			angle = angle*(speed/4000);
+			angle = angle*(speed/3000);
 			if(speed < 0)
 				angle = -angle;
 		}
