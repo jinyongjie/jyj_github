@@ -19,18 +19,19 @@ import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
-public class testSurfaceView extends SurfaceView implements
+public class testSurfaceView extends View implements
 		SurfaceHolder.Callback {
 
-	public SurfaceHolder holder;
+	
 	public Bitmap bp3;
 
 	public testSurfaceView(Context context) {
 		super(context);
 
-		holder = this.getHolder();
-		holder.addCallback(this);
+		
+
 		try {
 			bp3 = getImageFromAssetsFile("jiu_dian.png");
 		} catch (IOException e) {
@@ -41,16 +42,18 @@ public class testSurfaceView extends SurfaceView implements
 
 	Paint paint = new Paint();
 
-	protected void onDraw() {
+	@Override
+	protected void onDraw(Canvas canvas) {
 
-		Canvas canvas = holder.lockCanvas();
+
 		canvas.drawColor(Color.WHITE);
 
 		// 画原图
-		canvas.drawBitmap(bp3, 350, 0, paint);
+		canvas.drawBitmap(bp3, 350, 10, paint);
 
 		// 设置Mask过滤器(模糊)
-		BlurMaskFilter blurFilter = new BlurMaskFilter(20,
+		int shadow_width = 10;
+		BlurMaskFilter blurFilter = new BlurMaskFilter(shadow_width,
 				BlurMaskFilter.Blur.OUTER);
 		// BlurMaskFilter blurFilter = new BlurMaskFilter(20,
 		// BlurMaskFilter.Blur.NORMAL);
@@ -61,8 +64,10 @@ public class testSurfaceView extends SurfaceView implements
 		Paint shadowPaint = new Paint();
 		shadowPaint.setMaskFilter(blurFilter); // 为画笔设置过滤器
 		Bitmap shadowBitmap = bp3.extractAlpha(shadowPaint, null);
-		paint.setColor(Color.BLUE);
-		canvas.drawBitmap(shadowBitmap, 50, 0, paint);
+		paint.setColor(Color.BLACK);
+		canvas.drawBitmap(shadowBitmap, 50, 10, paint);
+		
+		canvas.drawBitmap(bp3, 50+shadow_width, 10+shadow_width, paint);
 
 		BlurMaskFilter blurFilter2 = new BlurMaskFilter(20,
 				BlurMaskFilter.Blur.INNER);
@@ -70,7 +75,7 @@ public class testSurfaceView extends SurfaceView implements
 		shadowPaint.setMaskFilter(blurFilter2); // 为画笔设置过滤器
 		Bitmap shadowBitmap2 = bp3.extractAlpha(shadowPaint2, null);
 		paint.setColor(Color.YELLOW);
-		canvas.drawBitmap(shadowBitmap2, 650, 0, paint);
+		canvas.drawBitmap(shadowBitmap2, 650, 10, paint);
 
 		// 三种shader方式
 		RadialGradient radialGradientShader = new RadialGradient(10, 10, 2,
@@ -83,15 +88,13 @@ public class testSurfaceView extends SurfaceView implements
 				Shader.TileMode.MIRROR);
 
 		paint.setShader(sweepGradient);
-		canvas.drawBitmap(shadowBitmap2, 50, 250, paint);
+		canvas.drawBitmap(shadowBitmap2, 50, 500, paint);
 		paint.setShader(linearGradient);
-		canvas.drawBitmap(shadowBitmap2, 650, 250, paint);
+		canvas.drawBitmap(shadowBitmap2, 650, 500, paint);
 		paint.setShader(radialGradientShader);
-		canvas.drawBitmap(shadowBitmap2, 350, 250, paint);
+		canvas.drawBitmap(shadowBitmap2, 350, 500, paint);
 
-		if (canvas != null) {
-			holder.unlockCanvasAndPost(canvas);
-		}
+
 
 	}
 
@@ -118,7 +121,7 @@ public class testSurfaceView extends SurfaceView implements
 	public Bitmap getImageFromAssetsFile(String fileName) throws IOException {
 		Bitmap image = null;
 		BitmapFactory.Options o = new BitmapFactory.Options();
-		o.inSampleSize = 3;
+		o.inSampleSize = 8;
 		image = BitmapFactory.decodeResource(getContext().getResources(),
 				R.drawable.image1,o);
 
