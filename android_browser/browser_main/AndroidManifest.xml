@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TabSwitchActivity"></activity>
+        <activity android:name=".ViewTest"></activity>
     </application>
 
 </manifest>

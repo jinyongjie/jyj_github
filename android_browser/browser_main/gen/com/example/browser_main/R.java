@@ -1117,6 +1117,7 @@ containing a value of this type.
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
+        public static final int button=0x7f050068;
         public static final int button_back=0x7f05003e;
         public static final int button_forward=0x7f05003f;
         public static final int button_home=0x7f050041;
@@ -1136,6 +1137,8 @@ containing a value of this type.
         public static final int end=0x7f050013;
         public static final int expand_activities_button=0x7f050026;
         public static final int expanded_menu=0x7f05002c;
+        public static final int frame1=0x7f050066;
+        public static final int frame2=0x7f050067;
         public static final int grid_item_image=0x7f050043;
         public static final int grid_item_title=0x7f050044;
         public static final int grid_layout=0x7f050051;
@@ -1264,6 +1267,7 @@ containing a value of this type.
         public static final int menu_window=0x7f03001d;
         public static final int support_simple_spinner_dropdown_item=0x7f03001e;
         public static final int tab_switch=0x7f03001f;
+        public static final int test_surface=0x7f030020;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 

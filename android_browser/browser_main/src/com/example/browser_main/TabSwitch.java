@@ -53,6 +53,7 @@ public class TabSwitch extends View implements OnGestureListener,
 	private int mAngleSpace = 10;
 	private int mCenterX = 0;
 	private int mCenterY = 0;
+	private int mBitmapOffsetY;
 	private int mBottomLineHeight = 2;
 	private int mBottomBarHeight = 20;
 	private int mBottomShadowHeight = 3;
@@ -73,6 +74,7 @@ public class TabSwitch extends View implements OnGestureListener,
 				.getMetrics(dm);
 		mScreenX = dm.widthPixels;
 		mScreenY = dm.heightPixels;
+		mBitmapOffsetY = (int) (mScreenY * 0.75) + Helper.dp2px(getContext(), 20);
 		mCenterX = mScreenX / 2;
 		mCenterY = mScreenY * 2;
 		mBottomLineHeight = Helper.dp2px(getContext(), 1);
@@ -195,13 +197,13 @@ public class TabSwitch extends View implements OnGestureListener,
 	}
 
 	public void calc() {
-		int offset = (int) (mScreenY * 0.75) + Helper.dp2px(getContext(), 20);
+		
 		for (int i = 0; i < mCount; i++) {
 
 			float angle = mAngle + mAngleSpace * i;
 			mMatrix[i] = new Matrix();
 			mMatrix[i].setTranslate((mScreenX - mBitmap[i].getWidth()) / 2,
-					offset - mBitmap[i].getHeight());
+					mBitmapOffsetY - mBitmap[i].getHeight());
 			mMatrix[i].postRotate(angle, mCenterX, mCenterY);
 
 		}
@@ -236,6 +238,14 @@ public class TabSwitch extends View implements OnGestureListener,
 			mRestoreAnim.cancel();
 		if (mFlingAnim != null && mFlingAnim.isRunning())
 			mFlingAnim.cancel();
+	}
+	private boolean isAnimRunning()
+	{
+		if(mRestoreAnim != null && mRestoreAnim.isRunning())
+			return true;
+		if(mFlingAnim != null && mFlingAnim.isRunning())
+			return true;
+		return false;
 	}
 
 	private void animRestore(float dest) {
@@ -325,6 +335,32 @@ public class TabSwitch extends View implements OnGestureListener,
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		// TODO Auto-generated method stub
+		//if(isAnimRunning())
+		//	return false;
+		float x = e.getX();
+		float y = e.getY();
+	
+		Bitmap bmp = mBitmap[mCurrentIndex];
+		if(y < mBitmapOffsetY - bmp.getHeight())
+			return false;
+		
+		int offsetX = mScreenX/2;
+		int left =  (offsetX - bmp.getWidth()/2) ;
+		int right = (offsetX + bmp.getWidth()/2);
+		if(x > left&& x < right)
+		{
+			Log.d(TAG,"singletab 0");
+		}
+		else if(x < left)
+		{
+			Log.d(TAG,"singletab -1");
+		}
+		else if(x > right)
+		{
+			Log.d(TAG,"singletab 1");
+		}
+		
+		
 		return false;
 	}
 

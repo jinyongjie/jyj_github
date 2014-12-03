@@ -147,8 +147,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			*/showTabSwitch();
 			break;
 		case R.id.button_back:
-			testSurfaceView view = new testSurfaceView(this);
-			mRoot.addView(view);
+			
+			Intent intent = new Intent();
+			intent.setClass(this, ViewTest.class);
+			this.startActivity(intent);
 		
 			break;
 		}
