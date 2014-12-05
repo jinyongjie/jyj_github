@@ -57,12 +57,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		mContainer.addView(page);
 		page.init();
 	}
-	private void initTestRotate()
-	{
-		TabSwitch v = (TabSwitch) findViewById(R.id.tab_switch);
-		
-		v.init();
-	}
+
 	
 	class ImageEffect extends View {
 		Paint paint;
@@ -177,9 +172,30 @@ public class MainActivity extends Activity implements OnClickListener {
 			LayoutInflater inflater = LayoutInflater.from(this);
 			mTabSwitch =  inflater.inflate(R.layout.tab_switch, null);
 			mRoot.addView(mTabSwitch);
-			TabSwitch t = (TabSwitch) mTabSwitch.findViewById(R.id.tab_switch);
-			t.init();
-
+			TabSwitchRotateCtrl ctrl = (TabSwitchRotateCtrl) mTabSwitch.findViewById(R.id.tab_switch);
+			
+			ArrayList<Bitmap> bmps = new ArrayList<Bitmap>();
+			ArrayList<String> titles = new ArrayList<String>();
+			for(int i= 0;i<8;i++)
+			{
+				bmps.add(BitmapFactory.decodeResource(getResources(), R.drawable.image1));
+				titles.add("就是这么任性");
+			}
+			ctrl.setData(bmps, titles, 3);
+			ctrl.setObserver(new TabSwitchRotateCtrl.Observer() {
+				
+				@Override
+				public void onSwitch(int index) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onClose(int index) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 		}
 		mTabSwitch.setVisibility(View.VISIBLE);
 	}

@@ -64,6 +64,7 @@ public class ViewTest extends Activity implements OnClickListener{
             holder = this.getHolder();
             holder.addCallback(this);
             myThread = new MyThread(holder);//创建一个绘图线程
+            
         }
 
         @Override

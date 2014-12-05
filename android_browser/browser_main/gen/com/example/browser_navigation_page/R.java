@@ -347,10 +347,10 @@ public final class R {
 		public static final int message_center_selector = 0x7f020067;
 		public static final int message_icon_solid = 0x7f020068;
 		public static final int message_num_bg = 0x7f020069;
-		public static final int shortcut_add = 0x7f02006d;
-		public static final int warning_text_bg = 0x7f020071;
-		public static final int weather = 0x7f020072;
-		public static final int weather_icon_wu_small = 0x7f020073;
+		public static final int shortcut_add = 0x7f02006e;
+		public static final int warning_text_bg = 0x7f020072;
+		public static final int weather = 0x7f020073;
+		public static final int weather_icon_wu_small = 0x7f020074;
 	}
 	public static final class id {
 		public static final int action_bar = 0x7f05001c;

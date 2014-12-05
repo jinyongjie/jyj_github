@@ -5,7 +5,7 @@
     android:background="@drawable/sector_multi_window_background"
     android:orientation="vertical" >
 
-    <com.example.browser_main.TabSwitch
+    <com.example.browser_main.TabSwitchRotateCtrl
         android:id="@+id/tab_switch"
         android:layout_width="fill_parent"
         android:layout_height="0.0dip"
